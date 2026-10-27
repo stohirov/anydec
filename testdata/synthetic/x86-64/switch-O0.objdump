@@ -1,0 +1,97 @@
+
+testdata/synthetic/x86-64/switch-O0.o:	file format elf64-x86-64
+
+Disassembly of section .text:
+
+0000000000000000 <dense>:
+       0: 55                           	push	rbp
+       1: 48 89 e5                     	mov	rbp, rsp
+       4: 89 7d f8                     	mov	dword ptr [rbp - 8], edi
+       7: 8b 45 f8                     	mov	eax, dword ptr [rbp - 8]
+       a: 48 89 45 f0                  	mov	qword ptr [rbp - 16], rax
+       e: 48 83 e8 06                  	sub	rax, 6
+      12: 77 4d                        	ja	0x61 <dense+0x61>
+      14: 48 8b 45 f0                  	mov	rax, qword ptr [rbp - 16]
+      18: 48 8b 04 c5 00 00 00 00      	mov	rax, qword ptr [8*rax]
+      20: ff e0                        	jmp	rax
+      22: c7 45 fc 0b 00 00 00         	mov	dword ptr [rbp - 4], 11
+      29: eb 3d                        	jmp	0x68 <dense+0x68>
+      2b: c7 45 fc 17 00 00 00         	mov	dword ptr [rbp - 4], 23
+      32: eb 34                        	jmp	0x68 <dense+0x68>
+      34: c7 45 fc 25 00 00 00         	mov	dword ptr [rbp - 4], 37
+      3b: eb 2b                        	jmp	0x68 <dense+0x68>
+      3d: c7 45 fc 29 00 00 00         	mov	dword ptr [rbp - 4], 41
+      44: eb 22                        	jmp	0x68 <dense+0x68>
+      46: c7 45 fc 3b 00 00 00         	mov	dword ptr [rbp - 4], 59
+      4d: eb 19                        	jmp	0x68 <dense+0x68>
+      4f: c7 45 fc 3d 00 00 00         	mov	dword ptr [rbp - 4], 61
+      56: eb 10                        	jmp	0x68 <dense+0x68>
+      58: c7 45 fc 49 00 00 00         	mov	dword ptr [rbp - 4], 73
+      5f: eb 07                        	jmp	0x68 <dense+0x68>
+      61: c7 45 fc ff ff ff ff         	mov	dword ptr [rbp - 4], 4294967295
+      68: 8b 45 fc                     	mov	eax, dword ptr [rbp - 4]
+      6b: 5d                           	pop	rbp
+      6c: c3                           	ret
+      6d: 0f 1f 00                     	nop	dword ptr [rax]
+
+0000000000000070 <sparse>:
+      70: 55                           	push	rbp
+      71: 48 89 e5                     	mov	rbp, rsp
+      74: 89 7d f8                     	mov	dword ptr [rbp - 8], edi
+      77: 8b 45 f8                     	mov	eax, dword ptr [rbp - 8]
+      7a: 89 45 f4                     	mov	dword ptr [rbp - 12], eax
+      7d: 83 e8 03                     	sub	eax, 3
+      80: 74 24                        	je	0xa6 <sparse+0x36>
+      82: eb 00                        	jmp	0x84 <sparse+0x14>
+      84: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+      87: 83 e8 64                     	sub	eax, 100
+      8a: 74 23                        	je	0xaf <sparse+0x3f>
+      8c: eb 00                        	jmp	0x8e <sparse+0x1e>
+      8e: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+      91: 2d e8 03 00 00               	sub	eax, 1000
+      96: 74 20                        	je	0xb8 <sparse+0x48>
+      98: eb 00                        	jmp	0x9a <sparse+0x2a>
+      9a: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+      9d: 2d 9f 86 01 00               	sub	eax, 99999
+      a2: 74 1d                        	je	0xc1 <sparse+0x51>
+      a4: eb 24                        	jmp	0xca <sparse+0x5a>
+      a6: c7 45 fc 01 00 00 00         	mov	dword ptr [rbp - 4], 1
+      ad: eb 22                        	jmp	0xd1 <sparse+0x61>
+      af: c7 45 fc 02 00 00 00         	mov	dword ptr [rbp - 4], 2
+      b6: eb 19                        	jmp	0xd1 <sparse+0x61>
+      b8: c7 45 fc 03 00 00 00         	mov	dword ptr [rbp - 4], 3
+      bf: eb 10                        	jmp	0xd1 <sparse+0x61>
+      c1: c7 45 fc 04 00 00 00         	mov	dword ptr [rbp - 4], 4
+      c8: eb 07                        	jmp	0xd1 <sparse+0x61>
+      ca: c7 45 fc 00 00 00 00         	mov	dword ptr [rbp - 4], 0
+      d1: 8b 45 fc                     	mov	eax, dword ptr [rbp - 4]
+      d4: 5d                           	pop	rbp
+      d5: c3                           	ret
+      d6: 66 2e 0f 1f 84 00 00 00 00 00	nop	word ptr cs:[rax + rax]
+
+00000000000000e0 <dispatch>:
+      e0: 55                           	push	rbp
+      e1: 48 89 e5                     	mov	rbp, rsp
+      e4: 48 83 ec 10                  	sub	rsp, 16
+      e8: 89 7d fc                     	mov	dword ptr [rbp - 4], edi
+      eb: 8b 45 fc                     	mov	eax, dword ptr [rbp - 4]
+      ee: 89 45 f8                     	mov	dword ptr [rbp - 8], eax
+      f1: 85 c0                        	test	eax, eax
+      f3: 74 16                        	je	0x10b <dispatch+0x2b>
+      f5: eb 00                        	jmp	0xf7 <dispatch+0x17>
+      f7: 8b 45 f8                     	mov	eax, dword ptr [rbp - 8]
+      fa: 83 e8 01                     	sub	eax, 1
+      fd: 74 13                        	je	0x112 <dispatch+0x32>
+      ff: eb 00                        	jmp	0x101 <dispatch+0x21>
+     101: 8b 45 f8                     	mov	eax, dword ptr [rbp - 8]
+     104: 83 e8 02                     	sub	eax, 2
+     107: 74 10                        	je	0x119 <dispatch+0x39>
+     109: eb 13                        	jmp	0x11e <dispatch+0x3e>
+     10b: e8 00 00 00 00               	call	0x110 <dispatch+0x30>
+     110: eb 0c                        	jmp	0x11e <dispatch+0x3e>
+     112: e8 00 00 00 00               	call	0x117 <dispatch+0x37>
+     117: eb 05                        	jmp	0x11e <dispatch+0x3e>
+     119: e8 00 00 00 00               	call	0x11e <dispatch+0x3e>
+     11e: 48 83 c4 10                  	add	rsp, 16
+     122: 5d                           	pop	rbp
+     123: c3                           	ret

@@ -167,3 +167,126 @@ func TestRejectsBadInputs(t *testing.T) {
 		t.Error("segment past end of file loaded")
 	}
 }
+
+// callTarget decodes the destination of the ARM BL/BLX or Thumb-2 BL/BLX
+// at addr.
+func callTarget(t *testing.T, p *Program, addr uint64, thumb bool) uint64 {
+	t.Helper()
+	b, err := p.Read(addr, 4)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if thumb {
+		hi, lo := binary.LittleEndian.Uint16(b), binary.LittleEndian.Uint16(b[2:])
+		target := addr + 4 + uint64(signExtend(thumbBranchImm(hi, lo), thumbBranchRange))
+		if lo&(1<<12) == 0 { // BLX
+			target &^= 3
+		}
+		return target
+	}
+	w := binary.LittleEndian.Uint32(b)
+	off := signExtend(uint64(w&0xffffff)<<2, armBranchRange)
+	if w>>28 == armUncond {
+		off |= int64(w >> 23 & 2)
+	}
+	return addr + 8 + uint64(off)
+}
+
+func TestAppliesCallRelocations(t *testing.T) {
+	for _, tc := range []struct {
+		dir   string
+		thumb bool
+	}{{"arm", false}, {"thumb", true}} {
+		p := loadFile(t, filepath.Join("..", "..", "testdata", "synthetic", tc.dir, "calls-O0.o"))
+		printf := -1
+		for i, s := range p.Symbols {
+			if s.Name == "printf" && s.Kind == SymImport {
+				printf = i
+			}
+		}
+		if printf < 0 {
+			t.Fatalf("%s: no printf import", tc.dir)
+		}
+		ext := p.Segment(p.Symbols[printf].Addr)
+		if ext == nil || ext.Name != ExternalSegment || ext.Perm&PermX != 0 {
+			t.Fatalf("%s: printf at %#x is not in a data-only external segment", tc.dir, p.Symbols[printf].Addr)
+		}
+		if s, ok := p.Import(p.Symbols[printf].Addr); !ok || s.Name != "printf" {
+			t.Errorf("%s: Import(%#x) = %+v, %v", tc.dir, p.Symbols[printf].Addr, s, ok)
+		}
+		calls := 0
+		for _, r := range p.Relocs {
+			if r.Type != rARMCall && r.Type != rARMThmCall {
+				continue
+			}
+			if !r.Applied {
+				t.Errorf("%s: call relocation at %#x to %s not applied", tc.dir, r.Addr, r.Symbol)
+				continue
+			}
+			want := p.Symbols[printf].Addr
+			if r.Symbol != "printf" {
+				s, _ := p.Lookup(r.Symbol)
+				want = s.Addr
+			}
+			if got := callTarget(t, p, r.Addr, tc.thumb); got != want {
+				t.Errorf("%s: call at %#x goes to %#x, want %s at %#x", tc.dir, r.Addr, got, r.Symbol, want)
+			}
+			calls++
+		}
+		if calls < 3 {
+			t.Errorf("%s: only %d call relocations", tc.dir, calls)
+		}
+	}
+}
+
+func TestAppliesDataRelocations(t *testing.T) {
+	// The -O0 dense switch reads a table of absolute case addresses at 0x28.
+	p := loadFile(t, filepath.Join("..", "..", "testdata", "synthetic", "arm", "switch-O0.o"))
+	b, _ := p.Read(0x28, 28)
+	for i, want := range []uint32{0x44, 0x50, 0x5c, 0x68, 0x74, 0x80, 0x8c} {
+		if got := binary.LittleEndian.Uint32(b[4*i:]); got != want {
+			t.Errorf("table entry %d = %#x, want %#x", i, got, want)
+		}
+	}
+
+	// movw/movt pairs load the address of the global origin.
+	p = loadFile(t, filepath.Join("..", "..", "testdata", "synthetic", "thumb", "structs-O2.o"))
+	origin, ok := p.Lookup("origin")
+	if !ok {
+		t.Fatal("no origin")
+	}
+	seen := 0
+	for _, r := range p.Relocs {
+		if r.Type != rARMThmMovwAbsNC || r.Symbol != "origin" {
+			continue
+		}
+		pair, _ := p.Read(r.Addr, 8) // movw, then movt
+		imm := func(b []byte) uint64 {
+			hi, lo := uint64(binary.LittleEndian.Uint16(b)), uint64(binary.LittleEndian.Uint16(b[2:]))
+			return hi&0xf<<12 | hi>>10&1<<11 | lo>>12&7<<8 | lo&0xff
+		}
+		if got := imm(pair[4:])<<16 | imm(pair); got != origin.Addr {
+			t.Errorf("movw/movt at %#x load %#x, want origin at %#x", r.Addr, got, origin.Addr)
+		}
+		seen++
+	}
+	if seen == 0 {
+		t.Error("no movw relocations against origin")
+	}
+}
+
+func TestUnrelocatedKeepsFileBytes(t *testing.T) {
+	data, err := os.ReadFile(filepath.Join("..", "..", "testdata", "synthetic", "arm", "switch-O0.o"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	p, err := LoadUnrelocated(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, r := range p.Relocs {
+		if r.Applied {
+			t.Fatalf("relocation at %#x applied", r.Addr)
+		}
+	}
+}

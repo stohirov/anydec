@@ -1,0 +1,100 @@
+
+testdata/synthetic/aarch64/arith-O0.o:	file format elf64-littleaarch64
+
+Disassembly of section .text:
+
+0000000000000000 <add>:
+       0: d10043ff     	sub	sp, sp, #16
+       4: b9000fe0     	str	w0, [sp, #12]
+       8: b9000be1     	str	w1, [sp, #8]
+       c: b9400fe8     	ldr	w8, [sp, #12]
+      10: b9400be9     	ldr	w9, [sp, #8]
+      14: 0b090100     	add	w0, w8, w9
+      18: 910043ff     	add	sp, sp, #16
+      1c: d65f03c0     	ret
+
+0000000000000020 <mul_add>:
+      20: d10043ff     	sub	sp, sp, #16
+      24: b9000fe0     	str	w0, [sp, #12]
+      28: b9000be1     	str	w1, [sp, #8]
+      2c: b90007e2     	str	w2, [sp, #4]
+      30: b9400fe8     	ldr	w8, [sp, #12]
+      34: b9400be9     	ldr	w9, [sp, #8]
+      38: 1b097d08     	mul	w8, w8, w9
+      3c: b94007e9     	ldr	w9, [sp, #4]
+      40: 0b090100     	add	w0, w8, w9
+      44: 910043ff     	add	sp, sp, #16
+      48: d65f03c0     	ret
+
+000000000000004c <shifts>:
+      4c: d10043ff     	sub	sp, sp, #16
+      50: b9000fe0     	str	w0, [sp, #12]
+      54: b9000be1     	str	w1, [sp, #8]
+      58: b9400fe8     	ldr	w8, [sp, #12]
+      5c: b9400be9     	ldr	w9, [sp, #8]
+      60: 1ac92108     	lsl	w8, w8, w9
+      64: b9400fe9     	ldr	w9, [sp, #12]
+      68: b9400beb     	ldr	w11, [sp, #8]
+      6c: 5280040a     	mov	w10, #32                // =0x20
+      70: 6b0b014a     	subs	w10, w10, w11
+      74: 1aca2529     	lsr	w9, w9, w10
+      78: 4a090100     	eor	w0, w8, w9
+      7c: 910043ff     	add	sp, sp, #16
+      80: d65f03c0     	ret
+
+0000000000000084 <sdiv>:
+      84: d10043ff     	sub	sp, sp, #16
+      88: b9000fe0     	str	w0, [sp, #12]
+      8c: b9000be1     	str	w1, [sp, #8]
+      90: b9400be8     	ldr	w8, [sp, #8]
+      94: 340000e8     	cbz	w8, 0xb0 <sdiv+0x2c>
+      98: 14000001     	b	0x9c <sdiv+0x18>
+      9c: b9400fe8     	ldr	w8, [sp, #12]
+      a0: b9400be9     	ldr	w9, [sp, #8]
+      a4: 1ac90d08     	sdiv	w8, w8, w9
+      a8: b90007e8     	str	w8, [sp, #4]
+      ac: 14000004     	b	0xbc <sdiv+0x38>
+      b0: 2a1f03e8     	mov	w8, wzr
+      b4: b90007e8     	str	w8, [sp, #4]
+      b8: 14000001     	b	0xbc <sdiv+0x38>
+      bc: b94007e0     	ldr	w0, [sp, #4]
+      c0: 910043ff     	add	sp, sp, #16
+      c4: d65f03c0     	ret
+
+00000000000000c8 <clamp>:
+      c8: d10043ff     	sub	sp, sp, #16
+      cc: b9000be0     	str	w0, [sp, #8]
+      d0: b90007e1     	str	w1, [sp, #4]
+      d4: b90003e2     	str	w2, [sp]
+      d8: b9400be8     	ldr	w8, [sp, #8]
+      dc: b94007e9     	ldr	w9, [sp, #4]
+      e0: 6b090108     	subs	w8, w8, w9
+      e4: 540000aa     	b.ge	0xf8 <clamp+0x30>
+      e8: 14000001     	b	0xec <clamp+0x24>
+      ec: b94007e8     	ldr	w8, [sp, #4]
+      f0: b9000fe8     	str	w8, [sp, #12]
+      f4: 1400000c     	b	0x124 <clamp+0x5c>
+      f8: b9400be8     	ldr	w8, [sp, #8]
+      fc: b94003e9     	ldr	w9, [sp]
+     100: 6b090108     	subs	w8, w8, w9
+     104: 540000ad     	b.le	0x118 <clamp+0x50>
+     108: 14000001     	b	0x10c <clamp+0x44>
+     10c: b94003e8     	ldr	w8, [sp]
+     110: b9000fe8     	str	w8, [sp, #12]
+     114: 14000004     	b	0x124 <clamp+0x5c>
+     118: b9400be8     	ldr	w8, [sp, #8]
+     11c: b9000fe8     	str	w8, [sp, #12]
+     120: 14000001     	b	0x124 <clamp+0x5c>
+     124: b9400fe0     	ldr	w0, [sp, #12]
+     128: 910043ff     	add	sp, sp, #16
+     12c: d65f03c0     	ret
+
+0000000000000130 <wide_add>:
+     130: d10043ff     	sub	sp, sp, #16
+     134: f90007e0     	str	x0, [sp, #8]
+     138: f90003e1     	str	x1, [sp]
+     13c: f94007e8     	ldr	x8, [sp, #8]
+     140: f94003e9     	ldr	x9, [sp]
+     144: 8b090100     	add	x0, x8, x9
+     148: 910043ff     	add	sp, sp, #16
+     14c: d65f03c0     	ret

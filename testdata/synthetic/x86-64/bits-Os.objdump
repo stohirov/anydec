@@ -1,0 +1,115 @@
+
+testdata/synthetic/x86-64/bits-Os.o:	file format elf64-x86-64
+
+Disassembly of section .text:
+
+0000000000000000 <popcount>:
+       0: 55                           	push	rbp
+       1: 48 89 e5                     	mov	rbp, rsp
+       4: 31 c0                        	xor	eax, eax
+       6: 85 ff                        	test	edi, edi
+       8: 74 0b                        	je	0x15 <popcount+0x15>
+       a: 8d 4f ff                     	lea	ecx, [rdi - 1]
+       d: ff c0                        	inc	eax
+       f: 21 f9                        	and	ecx, edi
+      11: 89 cf                        	mov	edi, ecx
+      13: 75 f5                        	jne	0xa <popcount+0xa>
+      15: 5d                           	pop	rbp
+      16: c3                           	ret
+
+0000000000000017 <bswap>:
+      17: 55                           	push	rbp
+      18: 48 89 e5                     	mov	rbp, rsp
+      1b: 89 f8                        	mov	eax, edi
+      1d: 0f c8                        	bswap	eax
+      1f: 5d                           	pop	rbp
+      20: c3                           	ret
+
+0000000000000021 <clz>:
+      21: 55                           	push	rbp
+      22: 48 89 e5                     	mov	rbp, rsp
+      25: b8 3f 00 00 00               	mov	eax, 63
+      2a: 0f bd c7                     	bsr	eax, edi
+      2d: 83 f0 1f                     	xor	eax, 31
+      30: 5d                           	pop	rbp
+      31: c3                           	ret
+
+0000000000000032 <mul64>:
+      32: 55                           	push	rbp
+      33: 48 89 e5                     	mov	rbp, rsp
+      36: 48 89 f8                     	mov	rax, rdi
+      39: 48 0f af c6                  	imul	rax, rsi
+      3d: 5d                           	pop	rbp
+      3e: c3                           	ret
+
+000000000000003f <smull>:
+      3f: 55                           	push	rbp
+      40: 48 89 e5                     	mov	rbp, rsp
+      43: 48 63 cf                     	movsxd	rcx, edi
+      46: 48 63 c6                     	movsxd	rax, esi
+      49: 48 0f af c1                  	imul	rax, rcx
+      4d: 5d                           	pop	rbp
+      4e: c3                           	ret
+
+000000000000004f <rotl>:
+      4f: 55                           	push	rbp
+      50: 48 89 e5                     	mov	rbp, rsp
+      53: 89 f1                        	mov	ecx, esi
+      55: 89 f8                        	mov	eax, edi
+      57: d3 c0                        	rol	eax, cl
+      59: 5d                           	pop	rbp
+      5a: c3                           	ret
+
+000000000000005b <extract>:
+      5b: 55                           	push	rbp
+      5c: 48 89 e5                     	mov	rbp, rsp
+      5f: 89 f8                        	mov	eax, edi
+      61: c1 e8 07                     	shr	eax, 7
+      64: 83 e0 1f                     	and	eax, 31
+      67: 5d                           	pop	rbp
+      68: c3                           	ret
+
+0000000000000069 <insert>:
+      69: 55                           	push	rbp
+      6a: 48 89 e5                     	mov	rbp, rsp
+      6d: 81 e7 7f f0 ff ff            	and	edi, 4294963327
+      73: 83 e6 1f                     	and	esi, 31
+      76: c1 e6 07                     	shl	esi, 7
+      79: 8d 04 3e                     	lea	eax, [rsi + rdi]
+      7c: 5d                           	pop	rbp
+      7d: c3                           	ret
+
+000000000000007e <sext>:
+      7e: 55                           	push	rbp
+      7f: 48 89 e5                     	mov	rbp, rsp
+      82: 89 f8                        	mov	eax, edi
+      84: 5d                           	pop	rbp
+      85: c3                           	ret
+
+0000000000000086 <zext>:
+      86: 55                           	push	rbp
+      87: 48 89 e5                     	mov	rbp, rsp
+      8a: 89 f8                        	mov	eax, edi
+      8c: 5d                           	pop	rbp
+      8d: c3                           	ret
+
+000000000000008e <fetch_add>:
+      8e: 55                           	push	rbp
+      8f: 48 89 e5                     	mov	rbp, rsp
+      92: 89 f0                        	mov	eax, esi
+      94: f0                           	lock
+      95: 0f c1 07                     	xadd	dword ptr [rdi], eax
+      98: 5d                           	pop	rbp
+      99: c3                           	ret
+
+000000000000009a <cas>:
+      9a: 55                           	push	rbp
+      9b: 48 89 e5                     	mov	rbp, rsp
+      9e: 89 f0                        	mov	eax, esi
+      a0: 31 c9                        	xor	ecx, ecx
+      a2: f0                           	lock
+      a3: 0f b1 17                     	cmpxchg	dword ptr [rdi], edx
+      a6: 0f 94 c1                     	sete	cl
+      a9: 89 c8                        	mov	eax, ecx
+      ab: 5d                           	pop	rbp
+      ac: c3                           	ret

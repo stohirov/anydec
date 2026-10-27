@@ -1,0 +1,198 @@
+
+testdata/synthetic/arm/jumps-Os.o:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00000000 <alu>:
+       0: e350000b     	cmp	r0, #11
+       4: 83a00000     	movhi	r0, #0
+       8: 812fff1e     	bxhi	lr
+       c: e28f3000     	add	r3, pc, #0
+      10: e793f100     	ldr	pc, [r3, r0, lsl #2]
+      14: 44 00 00 00  	.word	0x00000044
+      18: 88 00 00 00  	.word	0x00000088
+      1c: 6c 00 00 00  	.word	0x0000006c
+      20: 74 00 00 00  	.word	0x00000074
+      24: 54 00 00 00  	.word	0x00000054
+      28: 90 00 00 00  	.word	0x00000090
+      2c: 98 00 00 00  	.word	0x00000098
+      30: 7c 00 00 00  	.word	0x0000007c
+      34: ac 00 00 00  	.word	0x000000ac
+      38: 5c 00 00 00  	.word	0x0000005c
+      3c: a4 00 00 00  	.word	0x000000a4
+      40: 4c 00 00 00  	.word	0x0000004c
+      44: e0820001     	add	r0, r2, r1
+      48: e12fff1e     	bx	lr
+      4c: e1e00002     	mvn	r0, r2
+      50: e12fff1e     	bx	lr
+      54: e1820001     	orr	r0, r2, r1
+      58: e12fff1e     	bx	lr
+      5c: e3a00000     	mov	r0, #0
+      60: e1510002     	cmp	r1, r2
+      64: b3000001     	movwlt	r0, #1
+      68: e12fff1e     	bx	lr
+      6c: e0000192     	mul	r0, r2, r1
+      70: e12fff1e     	bx	lr
+      74: e0020001     	and	r0, r2, r1
+      78: e12fff1e     	bx	lr
+      7c: e202001f     	and	r0, r2, #31
+      80: e1a00031     	lsr	r0, r1, r0
+      84: e12fff1e     	bx	lr
+      88: e0410002     	sub	r0, r1, r2
+      8c: e12fff1e     	bx	lr
+      90: e0220001     	eor	r0, r2, r1
+      94: e12fff1e     	bx	lr
+      98: e202001f     	and	r0, r2, #31
+      9c: e1a00011     	lsl	r0, r1, r0
+      a0: e12fff1e     	bx	lr
+      a4: e2610000     	rsb	r0, r1, #0
+      a8: e12fff1e     	bx	lr
+      ac: e202001f     	and	r0, r2, #31
+      b0: e1a00051     	asr	r0, r1, r0
+      b4: e12fff1e     	bx	lr
+
+000000b8 <offset_switch>:
+      b8: e2400064     	sub	r0, r0, #100
+      bc: e3500007     	cmp	r0, #7
+      c0: 83e00000     	mvnhi	r0, #0
+      c4: 812fff1e     	bxhi	lr
+      c8: e28f2000     	add	r2, pc, #0
+      cc: e792f100     	ldr	pc, [r2, r0, lsl #2]
+      d0: f0 00 00 00  	.word	0x000000f0
+      d4: 18 01 00 00  	.word	0x00000118
+      d8: 00 01 00 00  	.word	0x00000100
+      dc: 08 01 00 00  	.word	0x00000108
+      e0: f8 00 00 00  	.word	0x000000f8
+      e4: 20 01 00 00  	.word	0x00000120
+      e8: 28 01 00 00  	.word	0x00000128
+      ec: 10 01 00 00  	.word	0x00000110
+      f0: e0810081     	add	r0, r1, r1, lsl #1
+      f4: e12fff1e     	bx	lr
+      f8: e1a00101     	lsl	r0, r1, #2
+      fc: e12fff1e     	bx	lr
+     100: e2210055     	eor	r0, r1, #85
+     104: e12fff1e     	bx	lr
+     108: e2410009     	sub	r0, r1, #9
+     10c: e12fff1e     	bx	lr
+     110: e2610007     	rsb	r0, r1, #7
+     114: e12fff1e     	bx	lr
+     118: e2810011     	add	r0, r1, #17
+     11c: e12fff1e     	bx	lr
+     120: e1a000c1     	asr	r0, r1, #1
+     124: e12fff1e     	bx	lr
+     128: e0000191     	mul	r0, r1, r1
+     12c: e12fff1e     	bx	lr
+
+00000130 <byte_switch>:
+     130: e2400061     	sub	r0, r0, #97
+     134: e3500007     	cmp	r0, #7
+     138: 8a000018     	bhi	0x1a0 <byte_switch+0x70> @ imm = #96
+     13c: e28f2000     	add	r2, pc, #0
+     140: e792f100     	ldr	pc, [r2, r0, lsl #2]
+     144: 64 01 00 00  	.word	0x00000164
+     148: 8c 01 00 00  	.word	0x0000018c
+     14c: 74 01 00 00  	.word	0x00000174
+     150: 7c 01 00 00  	.word	0x0000017c
+     154: 6c 01 00 00  	.word	0x0000016c
+     158: 94 01 00 00  	.word	0x00000194
+     15c: 9c 01 00 00  	.word	0x0000019c
+     160: 84 01 00 00  	.word	0x00000184
+     164: e2811001     	add	r1, r1, #1
+     168: ea00000c     	b	0x1a0 <byte_switch+0x70> @ imm = #48
+     16c: e3811005     	orr	r1, r1, #5
+     170: ea00000a     	b	0x1a0 <byte_switch+0x70> @ imm = #40
+     174: e2411003     	sub	r1, r1, #3
+     178: ea000008     	b	0x1a0 <byte_switch+0x70> @ imm = #32
+     17c: e2211004     	eor	r1, r1, #4
+     180: ea000006     	b	0x1a0 <byte_switch+0x70> @ imm = #24
+     184: e1a01421     	lsr	r1, r1, #8
+     188: ea000004     	b	0x1a0 <byte_switch+0x70> @ imm = #16
+     18c: e1a01081     	lsl	r1, r1, #1
+     190: ea000002     	b	0x1a0 <byte_switch+0x70> @ imm = #8
+     194: e2011006     	and	r1, r1, #6
+     198: ea000000     	b	0x1a0 <byte_switch+0x70> @ imm = #0
+     19c: e1a01381     	lsl	r1, r1, #7
+     1a0: e1a00001     	mov	r0, r1
+     1a4: e12fff1e     	bx	lr
+
+000001a8 <interp>:
+     1a8: e3510001     	cmp	r1, #1
+     1ac: b3a00000     	movlt	r0, #0
+     1b0: b12fff1e     	bxlt	lr
+     1b4: e92d4830     	push	{r4, r5, r11, lr}
+     1b8: e24dd040     	sub	sp, sp, #64
+     1bc: e3a0e000     	mov	lr, #0
+     1c0: e1a0c00d     	mov	r12, sp
+     1c4: e4d02001     	ldrb	r2, [r0], #1
+     1c8: e28f4004     	add	r4, pc, #4
+     1cc: e2023007     	and	r3, r2, #7
+     1d0: e794f103     	ldr	pc, [r4, r3, lsl #2]
+     1d4: f4 01 00 00  	.word	0x000001f4
+     1d8: 64 02 00 00  	.word	0x00000264
+     1dc: 1c 02 00 00  	.word	0x0000021c
+     1e0: 3c 02 00 00  	.word	0x0000023c
+     1e4: 04 02 00 00  	.word	0x00000204
+     1e8: 8c 02 00 00  	.word	0x0000028c
+     1ec: a8 02 00 00  	.word	0x000002a8
+     1f0: d8 02 00 00  	.word	0x000002d8
+     1f4: e35e000f     	cmp	lr, #15
+     1f8: ca00002c     	bgt	0x2b0 <interp+0x108>    @ imm = #176
+     1fc: e1a021a2     	lsr	r2, r2, #3
+     200: ea000025     	b	0x29c <interp+0xf4>     @ imm = #148
+     204: e35e0001     	cmp	lr, #1
+     208: a08c210e     	addge	r2, r12, lr, lsl #2
+     20c: a5123004     	ldrge	r3, [r2, #-4]
+     210: a2633000     	rsbge	r3, r3, #0
+     214: a5023004     	strge	r3, [r2, #-4]
+     218: ea000024     	b	0x2b0 <interp+0x108>    @ imm = #144
+     21c: e35e0002     	cmp	lr, #2
+     220: ba000022     	blt	0x2b0 <interp+0x108>    @ imm = #136
+     224: e24e2001     	sub	r2, lr, #1
+     228: e08c510e     	add	r5, r12, lr, lsl #2
+     22c: e79c3102     	ldr	r3, [r12, r2, lsl #2]
+     230: e5154008     	ldr	r4, [r5, #-8]
+     234: e0443003     	sub	r3, r4, r3
+     238: ea000006     	b	0x258 <interp+0xb0>     @ imm = #24
+     23c: e35e0002     	cmp	lr, #2
+     240: ba00001a     	blt	0x2b0 <interp+0x108>    @ imm = #104
+     244: e24e2001     	sub	r2, lr, #1
+     248: e08c510e     	add	r5, r12, lr, lsl #2
+     24c: e79c3102     	ldr	r3, [r12, r2, lsl #2]
+     250: e5154008     	ldr	r4, [r5, #-8]
+     254: e0030394     	mul	r3, r4, r3
+     258: e5053008     	str	r3, [r5, #-8]
+     25c: e1a0e002     	mov	lr, r2
+     260: ea000012     	b	0x2b0 <interp+0x108>    @ imm = #72
+     264: e35e0002     	cmp	lr, #2
+     268: ba000010     	blt	0x2b0 <interp+0x108>    @ imm = #64
+     26c: e24e2001     	sub	r2, lr, #1
+     270: e08c410e     	add	r4, r12, lr, lsl #2
+     274: e79c5102     	ldr	r5, [r12, r2, lsl #2]
+     278: e1a0e002     	mov	lr, r2
+     27c: e5143008     	ldr	r3, [r4, #-8]
+     280: e0833005     	add	r3, r3, r5
+     284: e5043008     	str	r3, [r4, #-8]
+     288: ea000008     	b	0x2b0 <interp+0x108>    @ imm = #32
+     28c: e24e2001     	sub	r2, lr, #1
+     290: e352000e     	cmp	r2, #14
+     294: 8a000005     	bhi	0x2b0 <interp+0x108>    @ imm = #20
+     298: e79c2102     	ldr	r2, [r12, r2, lsl #2]
+     29c: e78c210e     	str	r2, [r12, lr, lsl #2]
+     2a0: e28ee001     	add	lr, lr, #1
+     2a4: ea000001     	b	0x2b0 <interp+0x108>    @ imm = #4
+     2a8: e35e0000     	cmp	lr, #0
+     2ac: c24ee001     	subgt	lr, lr, #1
+     2b0: e2511001     	subs	r1, r1, #1
+     2b4: 1affffc2     	bne	0x1c4 <interp+0x1c>     @ imm = #-248
+     2b8: e35e0000     	cmp	lr, #0
+     2bc: 0a000002     	beq	0x2cc <interp+0x124>    @ imm = #8
+     2c0: e08c010e     	add	r0, r12, lr, lsl #2
+     2c4: e5100004     	ldr	r0, [r0, #-4]
+     2c8: ea000000     	b	0x2d0 <interp+0x128>    @ imm = #0
+     2cc: e3a00000     	mov	r0, #0
+     2d0: e28dd040     	add	sp, sp, #64
+     2d4: e8bd8830     	pop	{r4, r5, r11, pc}
+     2d8: e35e0000     	cmp	lr, #0
+     2dc: 1afffff7     	bne	0x2c0 <interp+0x118>    @ imm = #-36
+     2e0: e3e00000     	mvn	r0, #0
+     2e4: eafffff9     	b	0x2d0 <interp+0x128>    @ imm = #-28

@@ -1,0 +1,327 @@
+
+testdata/synthetic/x86-64/jumps-O0.o:	file format elf64-x86-64
+
+Disassembly of section .text:
+
+0000000000000000 <alu>:
+       0: 55                           	push	rbp
+       1: 48 89 e5                     	mov	rbp, rsp
+       4: 89 7d f8                     	mov	dword ptr [rbp - 8], edi
+       7: 89 75 f4                     	mov	dword ptr [rbp - 12], esi
+       a: 89 55 f0                     	mov	dword ptr [rbp - 16], edx
+       d: 8b 45 f8                     	mov	eax, dword ptr [rbp - 8]
+      10: 48 89 45 e8                  	mov	qword ptr [rbp - 24], rax
+      14: 48 83 e8 0b                  	sub	rax, 11
+      18: 0f 87 b2 00 00 00            	ja	0xd0 <alu+0xd0>
+      1e: 48 8b 45 e8                  	mov	rax, qword ptr [rbp - 24]
+      22: 48 8b 04 c5 00 00 00 00      	mov	rax, qword ptr [8*rax]
+      2a: ff e0                        	jmp	rax
+      2c: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+      2f: 03 45 f0                     	add	eax, dword ptr [rbp - 16]
+      32: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+      35: e9 9d 00 00 00               	jmp	0xd7 <alu+0xd7>
+      3a: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+      3d: 2b 45 f0                     	sub	eax, dword ptr [rbp - 16]
+      40: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+      43: e9 8f 00 00 00               	jmp	0xd7 <alu+0xd7>
+      48: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+      4b: 0f af 45 f0                  	imul	eax, dword ptr [rbp - 16]
+      4f: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+      52: e9 80 00 00 00               	jmp	0xd7 <alu+0xd7>
+      57: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+      5a: 23 45 f0                     	and	eax, dword ptr [rbp - 16]
+      5d: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+      60: eb 75                        	jmp	0xd7 <alu+0xd7>
+      62: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+      65: 0b 45 f0                     	or	eax, dword ptr [rbp - 16]
+      68: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+      6b: eb 6a                        	jmp	0xd7 <alu+0xd7>
+      6d: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+      70: 33 45 f0                     	xor	eax, dword ptr [rbp - 16]
+      73: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+      76: eb 5f                        	jmp	0xd7 <alu+0xd7>
+      78: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+      7b: 8b 4d f0                     	mov	ecx, dword ptr [rbp - 16]
+      7e: 83 e1 1f                     	and	ecx, 31
+      81: d3 e0                        	shl	eax, cl
+      83: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+      86: eb 4f                        	jmp	0xd7 <alu+0xd7>
+      88: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+      8b: 8b 4d f0                     	mov	ecx, dword ptr [rbp - 16]
+      8e: 83 e1 1f                     	and	ecx, 31
+      91: d3 e8                        	shr	eax, cl
+      93: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+      96: eb 3f                        	jmp	0xd7 <alu+0xd7>
+      98: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+      9b: 8b 4d f0                     	mov	ecx, dword ptr [rbp - 16]
+      9e: 83 e1 1f                     	and	ecx, 31
+      a1: d3 f8                        	sar	eax, cl
+      a3: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+      a6: eb 2f                        	jmp	0xd7 <alu+0xd7>
+      a8: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+      ab: 3b 45 f0                     	cmp	eax, dword ptr [rbp - 16]
+      ae: 0f 9c c0                     	setl	al
+      b1: 24 01                        	and	al, 1
+      b3: 0f b6 c0                     	movzx	eax, al
+      b6: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+      b9: eb 1c                        	jmp	0xd7 <alu+0xd7>
+      bb: 31 c0                        	xor	eax, eax
+      bd: 2b 45 f4                     	sub	eax, dword ptr [rbp - 12]
+      c0: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+      c3: eb 12                        	jmp	0xd7 <alu+0xd7>
+      c5: 8b 45 f0                     	mov	eax, dword ptr [rbp - 16]
+      c8: 83 f0 ff                     	xor	eax, -1
+      cb: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+      ce: eb 07                        	jmp	0xd7 <alu+0xd7>
+      d0: c7 45 fc 00 00 00 00         	mov	dword ptr [rbp - 4], 0
+      d7: 8b 45 fc                     	mov	eax, dword ptr [rbp - 4]
+      da: 5d                           	pop	rbp
+      db: c3                           	ret
+      dc: 0f 1f 40 00                  	nop	dword ptr [rax]
+
+00000000000000e0 <offset_switch>:
+      e0: 55                           	push	rbp
+      e1: 48 89 e5                     	mov	rbp, rsp
+      e4: 89 7d f8                     	mov	dword ptr [rbp - 8], edi
+      e7: 89 75 f4                     	mov	dword ptr [rbp - 12], esi
+      ea: 8b 45 f8                     	mov	eax, dword ptr [rbp - 8]
+      ed: 83 c0 9c                     	add	eax, -100
+      f0: 89 c1                        	mov	ecx, eax
+      f2: 48 89 4d e8                  	mov	qword ptr [rbp - 24], rcx
+      f6: 83 e8 07                     	sub	eax, 7
+      f9: 77 66                        	ja	0x161 <offset_switch+0x81>
+      fb: 48 8b 45 e8                  	mov	rax, qword ptr [rbp - 24]
+      ff: 48 8b 04 c5 00 00 00 00      	mov	rax, qword ptr [8*rax]
+     107: ff e0                        	jmp	rax
+     109: 6b 45 f4 03                  	imul	eax, dword ptr [rbp - 12], 3
+     10d: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+     110: eb 56                        	jmp	0x168 <offset_switch+0x88>
+     112: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+     115: 83 c0 11                     	add	eax, 17
+     118: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+     11b: eb 4b                        	jmp	0x168 <offset_switch+0x88>
+     11d: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+     120: 83 f0 55                     	xor	eax, 85
+     123: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+     126: eb 40                        	jmp	0x168 <offset_switch+0x88>
+     128: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+     12b: 83 e8 09                     	sub	eax, 9
+     12e: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+     131: eb 35                        	jmp	0x168 <offset_switch+0x88>
+     133: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+     136: c1 e0 02                     	shl	eax, 2
+     139: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+     13c: eb 2a                        	jmp	0x168 <offset_switch+0x88>
+     13e: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+     141: d1 f8                        	sar	eax
+     143: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+     146: eb 20                        	jmp	0x168 <offset_switch+0x88>
+     148: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+     14b: 0f af 45 f4                  	imul	eax, dword ptr [rbp - 12]
+     14f: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+     152: eb 14                        	jmp	0x168 <offset_switch+0x88>
+     154: b8 07 00 00 00               	mov	eax, 7
+     159: 2b 45 f4                     	sub	eax, dword ptr [rbp - 12]
+     15c: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+     15f: eb 07                        	jmp	0x168 <offset_switch+0x88>
+     161: c7 45 fc ff ff ff ff         	mov	dword ptr [rbp - 4], 4294967295
+     168: 8b 45 fc                     	mov	eax, dword ptr [rbp - 4]
+     16b: 5d                           	pop	rbp
+     16c: c3                           	ret
+     16d: 0f 1f 00                     	nop	dword ptr [rax]
+
+0000000000000170 <byte_switch>:
+     170: 55                           	push	rbp
+     171: 48 89 e5                     	mov	rbp, rsp
+     174: 40 88 f8                     	mov	al, dil
+     177: 88 45 fb                     	mov	byte ptr [rbp - 5], al
+     17a: 89 75 f4                     	mov	dword ptr [rbp - 12], esi
+     17d: 0f b6 45 fb                  	movzx	eax, byte ptr [rbp - 5]
+     181: 83 c0 9f                     	add	eax, -97
+     184: 89 c1                        	mov	ecx, eax
+     186: 48 89 4d e8                  	mov	qword ptr [rbp - 24], rcx
+     18a: 83 e8 07                     	sub	eax, 7
+     18d: 77 65                        	ja	0x1f4 <byte_switch+0x84>
+     18f: 48 8b 45 e8                  	mov	rax, qword ptr [rbp - 24]
+     193: 48 8b 04 c5 00 00 00 00      	mov	rax, qword ptr [8*rax]
+     19b: ff e0                        	jmp	rax
+     19d: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+     1a0: 83 c0 01                     	add	eax, 1
+     1a3: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+     1a6: eb 52                        	jmp	0x1fa <byte_switch+0x8a>
+     1a8: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+     1ab: d1 e0                        	shl	eax
+     1ad: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+     1b0: eb 48                        	jmp	0x1fa <byte_switch+0x8a>
+     1b2: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+     1b5: 83 e8 03                     	sub	eax, 3
+     1b8: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+     1bb: eb 3d                        	jmp	0x1fa <byte_switch+0x8a>
+     1bd: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+     1c0: 83 f0 04                     	xor	eax, 4
+     1c3: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+     1c6: eb 32                        	jmp	0x1fa <byte_switch+0x8a>
+     1c8: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+     1cb: 83 c8 05                     	or	eax, 5
+     1ce: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+     1d1: eb 27                        	jmp	0x1fa <byte_switch+0x8a>
+     1d3: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+     1d6: 83 e0 06                     	and	eax, 6
+     1d9: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+     1dc: eb 1c                        	jmp	0x1fa <byte_switch+0x8a>
+     1de: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+     1e1: c1 e0 07                     	shl	eax, 7
+     1e4: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+     1e7: eb 11                        	jmp	0x1fa <byte_switch+0x8a>
+     1e9: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+     1ec: c1 e8 08                     	shr	eax, 8
+     1ef: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+     1f2: eb 06                        	jmp	0x1fa <byte_switch+0x8a>
+     1f4: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+     1f7: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+     1fa: 8b 45 fc                     	mov	eax, dword ptr [rbp - 4]
+     1fd: 5d                           	pop	rbp
+     1fe: c3                           	ret
+     1ff: 90                           	nop
+
+0000000000000200 <interp>:
+     200: 55                           	push	rbp
+     201: 48 89 e5                     	mov	rbp, rsp
+     204: 48 89 7d f0                  	mov	qword ptr [rbp - 16], rdi
+     208: 89 75 ec                     	mov	dword ptr [rbp - 20], esi
+     20b: c7 45 9c 00 00 00 00         	mov	dword ptr [rbp - 100], 0
+     212: c7 45 98 00 00 00 00         	mov	dword ptr [rbp - 104], 0
+     219: 8b 45 98                     	mov	eax, dword ptr [rbp - 104]
+     21c: 3b 45 ec                     	cmp	eax, dword ptr [rbp - 20]
+     21f: 0f 8d 73 01 00 00            	jge	0x398 <interp+0x198>
+     225: 48 8b 45 f0                  	mov	rax, qword ptr [rbp - 16]
+     229: 48 63 4d 98                  	movsxd	rcx, dword ptr [rbp - 104]
+     22d: 8a 04 08                     	mov	al, byte ptr [rax + rcx]
+     230: 88 45 97                     	mov	byte ptr [rbp - 105], al
+     233: 0f b6 45 97                  	movzx	eax, byte ptr [rbp - 105]
+     237: 83 e0 07                     	and	eax, 7
+     23a: 89 c1                        	mov	ecx, eax
+     23c: 48 89 4d 88                  	mov	qword ptr [rbp - 120], rcx
+     240: 83 e8 07                     	sub	eax, 7
+     243: 0f 87 3f 01 00 00            	ja	0x388 <interp+0x188>
+     249: 48 8b 45 88                  	mov	rax, qword ptr [rbp - 120]
+     24d: 48 8b 04 c5 00 00 00 00      	mov	rax, qword ptr [8*rax]
+     255: ff e0                        	jmp	rax
+     257: 83 7d 9c 10                  	cmp	dword ptr [rbp - 100], 16
+     25b: 7d 18                        	jge	0x275 <interp+0x75>
+     25d: 0f b6 4d 97                  	movzx	ecx, byte ptr [rbp - 105]
+     261: c1 f9 03                     	sar	ecx, 3
+     264: 8b 45 9c                     	mov	eax, dword ptr [rbp - 100]
+     267: 89 c2                        	mov	edx, eax
+     269: 83 c2 01                     	add	edx, 1
+     26c: 89 55 9c                     	mov	dword ptr [rbp - 100], edx
+     26f: 48 98                        	cdqe
+     271: 89 4c 85 a0                  	mov	dword ptr [rbp + 4*rax - 96], ecx
+     275: e9 0e 01 00 00               	jmp	0x388 <interp+0x188>
+     27a: 83 7d 9c 02                  	cmp	dword ptr [rbp - 100], 2
+     27e: 7c 21                        	jl	0x2a1 <interp+0xa1>
+     280: 8b 45 9c                     	mov	eax, dword ptr [rbp - 100]
+     283: 83 c0 ff                     	add	eax, -1
+     286: 89 45 9c                     	mov	dword ptr [rbp - 100], eax
+     289: 48 63 45 9c                  	movsxd	rax, dword ptr [rbp - 100]
+     28d: 8b 4c 85 a0                  	mov	ecx, dword ptr [rbp + 4*rax - 96]
+     291: 8b 45 9c                     	mov	eax, dword ptr [rbp - 100]
+     294: 83 e8 01                     	sub	eax, 1
+     297: 48 98                        	cdqe
+     299: 03 4c 85 a0                  	add	ecx, dword ptr [rbp + 4*rax - 96]
+     29d: 89 4c 85 a0                  	mov	dword ptr [rbp + 4*rax - 96], ecx
+     2a1: e9 e2 00 00 00               	jmp	0x388 <interp+0x188>
+     2a6: 83 7d 9c 02                  	cmp	dword ptr [rbp - 100], 2
+     2aa: 7c 23                        	jl	0x2cf <interp+0xcf>
+     2ac: 8b 45 9c                     	mov	eax, dword ptr [rbp - 100]
+     2af: 83 c0 ff                     	add	eax, -1
+     2b2: 89 45 9c                     	mov	dword ptr [rbp - 100], eax
+     2b5: 48 63 45 9c                  	movsxd	rax, dword ptr [rbp - 100]
+     2b9: 8b 54 85 a0                  	mov	edx, dword ptr [rbp + 4*rax - 96]
+     2bd: 8b 45 9c                     	mov	eax, dword ptr [rbp - 100]
+     2c0: 83 e8 01                     	sub	eax, 1
+     2c3: 48 98                        	cdqe
+     2c5: 8b 4c 85 a0                  	mov	ecx, dword ptr [rbp + 4*rax - 96]
+     2c9: 29 d1                        	sub	ecx, edx
+     2cb: 89 4c 85 a0                  	mov	dword ptr [rbp + 4*rax - 96], ecx
+     2cf: e9 b4 00 00 00               	jmp	0x388 <interp+0x188>
+     2d4: 83 7d 9c 02                  	cmp	dword ptr [rbp - 100], 2
+     2d8: 7c 22                        	jl	0x2fc <interp+0xfc>
+     2da: 8b 45 9c                     	mov	eax, dword ptr [rbp - 100]
+     2dd: 83 c0 ff                     	add	eax, -1
+     2e0: 89 45 9c                     	mov	dword ptr [rbp - 100], eax
+     2e3: 48 63 45 9c                  	movsxd	rax, dword ptr [rbp - 100]
+     2e7: 8b 4c 85 a0                  	mov	ecx, dword ptr [rbp + 4*rax - 96]
+     2eb: 8b 45 9c                     	mov	eax, dword ptr [rbp - 100]
+     2ee: 83 e8 01                     	sub	eax, 1
+     2f1: 48 98                        	cdqe
+     2f3: 0f af 4c 85 a0               	imul	ecx, dword ptr [rbp + 4*rax - 96]
+     2f8: 89 4c 85 a0                  	mov	dword ptr [rbp + 4*rax - 96], ecx
+     2fc: e9 87 00 00 00               	jmp	0x388 <interp+0x188>
+     301: 83 7d 9c 01                  	cmp	dword ptr [rbp - 100], 1
+     305: 7c 1a                        	jl	0x321 <interp+0x121>
+     307: 8b 45 9c                     	mov	eax, dword ptr [rbp - 100]
+     30a: 83 e8 01                     	sub	eax, 1
+     30d: 48 98                        	cdqe
+     30f: 31 c9                        	xor	ecx, ecx
+     311: 2b 4c 85 a0                  	sub	ecx, dword ptr [rbp + 4*rax - 96]
+     315: 8b 45 9c                     	mov	eax, dword ptr [rbp - 100]
+     318: 83 e8 01                     	sub	eax, 1
+     31b: 48 98                        	cdqe
+     31d: 89 4c 85 a0                  	mov	dword ptr [rbp + 4*rax - 96], ecx
+     321: eb 65                        	jmp	0x388 <interp+0x188>
+     323: 83 7d 9c 01                  	cmp	dword ptr [rbp - 100], 1
+     327: 7c 23                        	jl	0x34c <interp+0x14c>
+     329: 83 7d 9c 10                  	cmp	dword ptr [rbp - 100], 16
+     32d: 7d 1d                        	jge	0x34c <interp+0x14c>
+     32f: 8b 45 9c                     	mov	eax, dword ptr [rbp - 100]
+     332: 83 e8 01                     	sub	eax, 1
+     335: 48 98                        	cdqe
+     337: 8b 4c 85 a0                  	mov	ecx, dword ptr [rbp + 4*rax - 96]
+     33b: 48 63 45 9c                  	movsxd	rax, dword ptr [rbp - 100]
+     33f: 89 4c 85 a0                  	mov	dword ptr [rbp + 4*rax - 96], ecx
+     343: 8b 45 9c                     	mov	eax, dword ptr [rbp - 100]
+     346: 83 c0 01                     	add	eax, 1
+     349: 89 45 9c                     	mov	dword ptr [rbp - 100], eax
+     34c: eb 3a                        	jmp	0x388 <interp+0x188>
+     34e: 83 7d 9c 01                  	cmp	dword ptr [rbp - 100], 1
+     352: 7c 09                        	jl	0x35d <interp+0x15d>
+     354: 8b 45 9c                     	mov	eax, dword ptr [rbp - 100]
+     357: 83 c0 ff                     	add	eax, -1
+     35a: 89 45 9c                     	mov	dword ptr [rbp - 100], eax
+     35d: eb 29                        	jmp	0x388 <interp+0x188>
+     35f: 83 7d 9c 00                  	cmp	dword ptr [rbp - 100], 0
+     363: 74 11                        	je	0x376 <interp+0x176>
+     365: 8b 45 9c                     	mov	eax, dword ptr [rbp - 100]
+     368: 83 e8 01                     	sub	eax, 1
+     36b: 48 98                        	cdqe
+     36d: 8b 44 85 a0                  	mov	eax, dword ptr [rbp + 4*rax - 96]
+     371: 89 45 84                     	mov	dword ptr [rbp - 124], eax
+     374: eb 0a                        	jmp	0x380 <interp+0x180>
+     376: b8 ff ff ff ff               	mov	eax, 4294967295
+     37b: 89 45 84                     	mov	dword ptr [rbp - 124], eax
+     37e: eb 00                        	jmp	0x380 <interp+0x180>
+     380: 8b 45 84                     	mov	eax, dword ptr [rbp - 124]
+     383: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+     386: eb 34                        	jmp	0x3bc <interp+0x1bc>
+     388: eb 00                        	jmp	0x38a <interp+0x18a>
+     38a: 8b 45 98                     	mov	eax, dword ptr [rbp - 104]
+     38d: 83 c0 01                     	add	eax, 1
+     390: 89 45 98                     	mov	dword ptr [rbp - 104], eax
+     393: e9 81 fe ff ff               	jmp	0x219 <interp+0x19>
+     398: 83 7d 9c 00                  	cmp	dword ptr [rbp - 100], 0
+     39c: 74 11                        	je	0x3af <interp+0x1af>
+     39e: 8b 45 9c                     	mov	eax, dword ptr [rbp - 100]
+     3a1: 83 e8 01                     	sub	eax, 1
+     3a4: 48 98                        	cdqe
+     3a6: 8b 44 85 a0                  	mov	eax, dword ptr [rbp + 4*rax - 96]
+     3aa: 89 45 80                     	mov	dword ptr [rbp - 128], eax
+     3ad: eb 07                        	jmp	0x3b6 <interp+0x1b6>
+     3af: 31 c0                        	xor	eax, eax
+     3b1: 89 45 80                     	mov	dword ptr [rbp - 128], eax
+     3b4: eb 00                        	jmp	0x3b6 <interp+0x1b6>
+     3b6: 8b 45 80                     	mov	eax, dword ptr [rbp - 128]
+     3b9: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+     3bc: 8b 45 fc                     	mov	eax, dword ptr [rbp - 4]
+     3bf: 5d                           	pop	rbp
+     3c0: c3                           	ret

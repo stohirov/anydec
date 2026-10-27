@@ -23,7 +23,9 @@ type Instruction struct {
 	Mnemonic string
 	Operands string
 	// DelaySlot is the number of bytes of following instructions that
-	// execute before this one takes effect (MIPS, SPARC).
+	// execute before this one takes effect (MIPS, SPARC). Decode reports
+	// the minimum the spec declares (delayslot(1) is 1); Translate reports
+	// the length of the delay-slot instructions it folded into the p-code.
 	DelaySlot int
 }
 

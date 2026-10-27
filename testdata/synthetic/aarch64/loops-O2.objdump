@@ -1,0 +1,140 @@
+
+testdata/synthetic/aarch64/loops-O2.o:	file format elf64-littleaarch64
+
+Disassembly of section .text:
+
+0000000000000000 <sum>:
+       0: 7100043f     	cmp	w1, #1
+       4: 540000eb     	b.lt	0x20 <sum+0x20>
+       8: 7100203f     	cmp	w1, #8
+       c: 2a0103e9     	mov	w9, w1
+      10: 540000e2     	b.hs	0x2c <sum+0x2c>
+      14: aa1f03ea     	mov	x10, xzr
+      18: 2a1f03e8     	mov	w8, wzr
+      1c: 14000014     	b	0x6c <sum+0x6c>
+      20: 2a1f03e8     	mov	w8, wzr
+      24: 2a0803e0     	mov	w0, w8
+      28: d65f03c0     	ret
+      2c: 6f00e400     	movi	v0.2d, #0000000000000000
+      30: 6f00e401     	movi	v1.2d, #0000000000000000
+      34: 927d6d2a     	and	x10, x9, #0x7ffffff8
+      38: 91004008     	add	x8, x0, #16
+      3c: aa0a03eb     	mov	x11, x10
+      40: ad7f8d02     	ldp	q2, q3, [x8, #-16]
+      44: f100216b     	subs	x11, x11, #8
+      48: 91008108     	add	x8, x8, #32
+      4c: 4ea08440     	add	v0.4s, v2.4s, v0.4s
+      50: 4ea18461     	add	v1.4s, v3.4s, v1.4s
+      54: 54ffff61     	b.ne	0x40 <sum+0x40>
+      58: 4ea08420     	add	v0.4s, v1.4s, v0.4s
+      5c: eb09015f     	cmp	x10, x9
+      60: 4eb1b800     	addv	s0, v0.4s
+      64: 1e260008     	fmov	w8, s0
+      68: 540000e0     	b.eq	0x84 <sum+0x84>
+      6c: 8b0a080b     	add	x11, x0, x10, lsl #2
+      70: cb0a0129     	sub	x9, x9, x10
+      74: b840456a     	ldr	w10, [x11], #4
+      78: f1000529     	subs	x9, x9, #1
+      7c: 0b080148     	add	w8, w10, w8
+      80: 54ffffa1     	b.ne	0x74 <sum+0x74>
+      84: 2a0803e0     	mov	w0, w8
+      88: d65f03c0     	ret
+
+000000000000008c <strlen_>:
+      8c: aa0003e8     	mov	x8, x0
+      90: 12800000     	mov	w0, #-1                 // =0xffffffff
+      94: 11000400     	add	w0, w0, #1
+      98: 38604909     	ldrb	w9, [x8, w0, uxtw]
+      9c: 35ffffc9     	cbnz	w9, 0x94 <strlen_+0x8>
+      a0: d65f03c0     	ret
+
+00000000000000a4 <find>:
+      a4: 7100043f     	cmp	w1, #1
+      a8: 5400014b     	b.lt	0xd0 <find+0x2c>
+      ac: aa0003e8     	mov	x8, x0
+      b0: aa1f03e0     	mov	x0, xzr
+      b4: 2a0103e9     	mov	w9, w1
+      b8: b860790a     	ldr	w10, [x8, x0, lsl #2]
+      bc: 6b02015f     	cmp	w10, w2
+      c0: 540000a0     	b.eq	0xd4 <find+0x30>
+      c4: 91000400     	add	x0, x0, #1
+      c8: eb00013f     	cmp	x9, x0
+      cc: 54ffff61     	b.ne	0xb8 <find+0x14>
+      d0: 12800000     	mov	w0, #-1                 // =0xffffffff
+      d4: d65f03c0     	ret
+
+00000000000000d8 <matmul>:
+      d8: 7100041f     	cmp	w0, #1
+      dc: 5400078b     	b.lt	0x1cc <matmul+0xf4>
+      e0: f81e0ff5     	str	x21, [sp, #-32]!
+      e4: 2a0003e9     	mov	w9, w0
+      e8: d37e7c0a     	ubfiz	x10, x0, #2, #32
+      ec: d37d7c0b     	ubfiz	x11, x0, #3, #32
+      f0: aa1f03e8     	mov	x8, xzr
+      f4: 927f752c     	and	x12, x9, #0x7ffffffe
+      f8: 9100102d     	add	x13, x1, #4
+      fc: a9014ff4     	stp	x20, x19, [sp, #16]
+     100: 14000006     	b	0x118 <matmul+0x40>
+     104: 91000508     	add	x8, x8, #1
+     108: 8b0a01ad     	add	x13, x13, x10
+     10c: 8b0a0021     	add	x1, x1, x10
+     110: eb09011f     	cmp	x8, x9
+     114: 54000580     	b.eq	0x1c4 <matmul+0xec>
+     118: 9b097d0f     	mul	x15, x8, x9
+     11c: aa1f03ee     	mov	x14, xzr
+     120: aa0203f0     	mov	x16, x2
+     124: 8b0f086f     	add	x15, x3, x15, lsl #2
+     128: 14000006     	b	0x140 <matmul+0x68>
+     12c: b82e79f1     	str	w17, [x15, x14, lsl #2]
+     130: 910005ce     	add	x14, x14, #1
+     134: 91001210     	add	x16, x16, #4
+     138: eb0901df     	cmp	x14, x9
+     13c: 54fffe40     	b.eq	0x104 <matmul+0x2c>
+     140: 7100041f     	cmp	w0, #1
+     144: 54000081     	b.ne	0x154 <matmul+0x7c>
+     148: aa1f03e5     	mov	x5, xzr
+     14c: 2a1f03f1     	mov	w17, wzr
+     150: 14000013     	b	0x19c <matmul+0xc4>
+     154: 2a1f03f1     	mov	w17, wzr
+     158: 2a1f03f2     	mov	w18, wzr
+     15c: aa0c03e4     	mov	x4, x12
+     160: aa1003e5     	mov	x5, x16
+     164: aa0d03e6     	mov	x6, x13
+     168: 297fd0c7     	ldp	w7, w20, [x6, #-4]
+     16c: b94000b3     	ldr	w19, [x5]
+     170: b86a68b5     	ldr	w21, [x5, x10]
+     174: f1000884     	subs	x4, x4, #2
+     178: 910020c6     	add	x6, x6, #8
+     17c: 8b0b00a5     	add	x5, x5, x11
+     180: 1b074671     	madd	w17, w19, w7, w17
+     184: 1b144ab2     	madd	w18, w21, w20, w18
+     188: 54ffff01     	b.ne	0x168 <matmul+0x90>
+     18c: eb09019f     	cmp	x12, x9
+     190: 0b110251     	add	w17, w18, w17
+     194: aa0c03e5     	mov	x5, x12
+     198: 54fffca0     	b.eq	0x12c <matmul+0x54>
+     19c: 9b057d52     	mul	x18, x10, x5
+     1a0: 8b050824     	add	x4, x1, x5, lsl #2
+     1a4: cb050125     	sub	x5, x9, x5
+     1a8: b8404486     	ldr	w6, [x4], #4
+     1ac: b8726a07     	ldr	w7, [x16, x18]
+     1b0: f10004a5     	subs	x5, x5, #1
+     1b4: 8b0a0252     	add	x18, x18, x10
+     1b8: 1b0644f1     	madd	w17, w7, w6, w17
+     1bc: 54ffff61     	b.ne	0x1a8 <matmul+0xd0>
+     1c0: 17ffffdb     	b	0x12c <matmul+0x54>
+     1c4: a9414ff4     	ldp	x20, x19, [sp, #16]
+     1c8: f84207f5     	ldr	x21, [sp], #32
+     1cc: d65f03c0     	ret
+
+00000000000001d0 <collatz>:
+     1d0: 2a1f03e8     	mov	w8, wzr
+     1d4: 0b000409     	add	w9, w0, w0, lsl #1
+     1d8: 53017c0a     	lsr	w10, w0, #1
+     1dc: 7200001f     	tst	w0, #0x1
+     1e0: 11000508     	add	w8, w8, #1
+     1e4: 1a890540     	csinc	w0, w10, w9, eq
+     1e8: 7100041f     	cmp	w0, #1
+     1ec: 54ffff41     	b.ne	0x1d4 <collatz+0x4>
+     1f0: 2a0803e0     	mov	w0, w8
+     1f4: d65f03c0     	ret

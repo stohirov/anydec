@@ -1,0 +1,45 @@
+
+testdata/synthetic/x86/stress-asm.o:	file format elf32-i386
+
+Disassembly of section .text:
+
+00000000 <.text>:
+       0: 55                           	push	ebp
+       1: 89 e5                        	mov	ebp, esp
+       3: 60                           	pushal
+       4: 61                           	popal
+       5: 40                           	inc	eax
+       6: 49                           	dec	ecx
+       7: 8b 45 08                     	mov	eax, dword ptr [ebp + 8]
+       a: 66 8b 44 8e fe               	mov	ax, word ptr [esi + 4*ecx - 2]
+       f: 8d 3c 40                     	lea	edi, [eax + 2*eax]
+      12: a1 34 12 00 00               	mov	eax, dword ptr [4660]
+      17: 65 a3 14 00 00 00            	mov	dword ptr gs:[20], eax
+      1d: f0                           	lock
+      1e: 0f c1 11                     	xadd	dword ptr [ecx], edx
+      21: f3 a5                        	rep		movsd	dword ptr es:[edi], dword ptr [esi]
+      23: 99                           	cdq
+      24: f7 f9                        	idiv	ecx
+      26: 6b 03 0a                     	imul	eax, dword ptr [ebx], 10
+      29: 0f b7 0a                     	movzx	ecx, word ptr [edx]
+      2c: d9 44 24 04                  	fld	dword ptr [esp + 4]
+      30: d8 c1                        	fadd	st, st(1)
+      32: dd 5d f8                     	fstp	qword ptr [ebp - 8]
+      35: db 00                        	fild	dword ptr [eax]
+      37: db 18                        	fistp	dword ptr [eax]
+      39: d9 ca                        	fxch	st(2)
+      3b: df e0                        	fnstsw	ax
+      3d: cd 80                        	int	128
+      3f: ff e0                        	jmp	eax
+      41: ff 50 04                     	call	dword ptr [eax + 4]
+      44: 37                           	aaa
+      45: 27                           	daa
+      46: 66 0e                        	push	cs
+      48: 66 07                        	pop	es
+      4a: 0f 6e c0                     	movd	mm0, eax
+      4d: 0f fd c1                     	paddw	mm0, mm1
+      50: 0f 77                        	emms
+      52: 0f 58 c1                     	addps	xmm0, xmm1
+      55: f3 0f 2a c0                  	cvtsi2ss	xmm0, eax
+      59: c9                           	leave
+      5a: c3                           	ret

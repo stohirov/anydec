@@ -1,0 +1,113 @@
+
+testdata/synthetic/aarch64/structs-O0.o:	file format elf64-littleaarch64
+
+Disassembly of section .text:
+
+0000000000000000 <manhattan>:
+       0: d10083ff     	sub	sp, sp, #32
+       4: f9000fe0     	str	x0, [sp, #24]
+       8: f9400fe8     	ldr	x8, [sp, #24]
+       c: b9400108     	ldr	w8, [x8]
+      10: 9000000a     	adrp	x10, 0x0 <manhattan>
+      14: 90000009     	adrp	x9, 0x0 <manhattan>
+      18: 91000129     	add	x9, x9, #0
+      1c: b940014a     	ldr	w10, [x10]
+      20: 6b0a0108     	subs	w8, w8, w10
+      24: b90017e8     	str	w8, [sp, #20]
+      28: f9400fe8     	ldr	x8, [sp, #24]
+      2c: b9400508     	ldr	w8, [x8, #4]
+      30: b9400529     	ldr	w9, [x9, #4]
+      34: 6b090108     	subs	w8, w8, w9
+      38: b90013e8     	str	w8, [sp, #16]
+      3c: b94017e8     	ldr	w8, [sp, #20]
+      40: 36f800e8     	tbz	w8, #31, 0x5c <manhattan+0x5c>
+      44: 14000001     	b	0x48 <manhattan+0x48>
+      48: b94017e9     	ldr	w9, [sp, #20]
+      4c: 2a1f03e8     	mov	w8, wzr
+      50: 6b090108     	subs	w8, w8, w9
+      54: b9000fe8     	str	w8, [sp, #12]
+      58: 14000004     	b	0x68 <manhattan+0x68>
+      5c: b94017e8     	ldr	w8, [sp, #20]
+      60: b9000fe8     	str	w8, [sp, #12]
+      64: 14000001     	b	0x68 <manhattan+0x68>
+      68: b9400fe8     	ldr	w8, [sp, #12]
+      6c: b9000be8     	str	w8, [sp, #8]
+      70: b94013e8     	ldr	w8, [sp, #16]
+      74: 36f800e8     	tbz	w8, #31, 0x90 <manhattan+0x90>
+      78: 14000001     	b	0x7c <manhattan+0x7c>
+      7c: b94013e9     	ldr	w9, [sp, #16]
+      80: 2a1f03e8     	mov	w8, wzr
+      84: 6b090108     	subs	w8, w8, w9
+      88: b90007e8     	str	w8, [sp, #4]
+      8c: 14000004     	b	0x9c <manhattan+0x9c>
+      90: b94013e8     	ldr	w8, [sp, #16]
+      94: b90007e8     	str	w8, [sp, #4]
+      98: 14000001     	b	0x9c <manhattan+0x9c>
+      9c: b9400be8     	ldr	w8, [sp, #8]
+      a0: b94007e9     	ldr	w9, [sp, #4]
+      a4: 0b090100     	add	w0, w8, w9
+      a8: 910083ff     	add	sp, sp, #32
+      ac: d65f03c0     	ret
+
+00000000000000b0 <list_sum>:
+      b0: d10043ff     	sub	sp, sp, #16
+      b4: f90007e0     	str	x0, [sp, #8]
+      b8: b90007ff     	str	wzr, [sp, #4]
+      bc: 14000001     	b	0xc0 <list_sum+0x10>
+      c0: f94007e8     	ldr	x8, [sp, #8]
+      c4: b4000228     	cbz	x8, 0x108 <list_sum+0x58>
+      c8: 14000001     	b	0xcc <list_sum+0x1c>
+      cc: f94007e8     	ldr	x8, [sp, #8]
+      d0: 39403108     	ldrb	w8, [x8, #12]
+      d4: 34000108     	cbz	w8, 0xf4 <list_sum+0x44>
+      d8: 14000001     	b	0xdc <list_sum+0x2c>
+      dc: f94007e8     	ldr	x8, [sp, #8]
+      e0: b9400909     	ldr	w9, [x8, #8]
+      e4: b94007e8     	ldr	w8, [sp, #4]
+      e8: 0b090108     	add	w8, w8, w9
+      ec: b90007e8     	str	w8, [sp, #4]
+      f0: 14000001     	b	0xf4 <list_sum+0x44>
+      f4: 14000001     	b	0xf8 <list_sum+0x48>
+      f8: f94007e8     	ldr	x8, [sp, #8]
+      fc: f9400108     	ldr	x8, [x8]
+     100: f90007e8     	str	x8, [sp, #8]
+     104: 17ffffef     	b	0xc0 <list_sum+0x10>
+     108: b94007e0     	ldr	w0, [sp, #4]
+     10c: 910043ff     	add	sp, sp, #16
+     110: d65f03c0     	ret
+
+0000000000000114 <bump>:
+     114: d10043ff     	sub	sp, sp, #16
+     118: f90007e0     	str	x0, [sp, #8]
+     11c: b90007e1     	str	w1, [sp, #4]
+     120: b90003ff     	str	wzr, [sp]
+     124: 14000001     	b	0x128 <bump+0x14>
+     128: b94003e8     	ldr	w8, [sp]
+     12c: b94007e9     	ldr	w9, [sp, #4]
+     130: 6b090108     	subs	w8, w8, w9
+     134: 5400026a     	b.ge	0x180 <bump+0x6c>
+     138: 14000001     	b	0x13c <bump+0x28>
+     13c: f94007e8     	ldr	x8, [sp, #8]
+     140: b98003e9     	ldrsw	x9, [sp]
+     144: 8b090d09     	add	x9, x8, x9, lsl #3
+     148: b9400128     	ldr	w8, [x9]
+     14c: 11000508     	add	w8, w8, #1
+     150: b9000128     	str	w8, [x9]
+     154: f94007e8     	ldr	x8, [sp, #8]
+     158: b98003e9     	ldrsw	x9, [sp]
+     15c: 8b090d09     	add	x9, x8, x9, lsl #3
+     160: b9400528     	ldr	w8, [x9, #4]
+     164: 11000908     	add	w8, w8, #2
+     168: b9000528     	str	w8, [x9, #4]
+     16c: 14000001     	b	0x170 <bump+0x5c>
+     170: b94003e8     	ldr	w8, [sp]
+     174: 11000508     	add	w8, w8, #1
+     178: b90003e8     	str	w8, [sp]
+     17c: 17ffffeb     	b	0x128 <bump+0x14>
+     180: b94007ea     	ldr	w10, [sp, #4]
+     184: 90000009     	adrp	x9, 0x0 <manhattan>
+     188: b9400128     	ldr	w8, [x9]
+     18c: 0b0a0108     	add	w8, w8, w10
+     190: b9000128     	str	w8, [x9]
+     194: 910043ff     	add	sp, sp, #16
+     198: d65f03c0     	ret

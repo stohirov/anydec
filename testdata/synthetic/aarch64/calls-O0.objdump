@@ -1,0 +1,112 @@
+
+testdata/synthetic/aarch64/calls-O0.o:	file format elf64-littleaarch64
+
+Disassembly of section .text:
+
+0000000000000000 <many>:
+       0: d10083ff     	sub	sp, sp, #32
+       4: b9001fe0     	str	w0, [sp, #28]
+       8: b9001be1     	str	w1, [sp, #24]
+       c: b90017e2     	str	w2, [sp, #20]
+      10: b90013e3     	str	w3, [sp, #16]
+      14: b9000fe4     	str	w4, [sp, #12]
+      18: b9000be5     	str	w5, [sp, #8]
+      1c: b9401fe8     	ldr	w8, [sp, #28]
+      20: b9401be9     	ldr	w9, [sp, #24]
+      24: 0b090108     	add	w8, w8, w9
+      28: b94017e9     	ldr	w9, [sp, #20]
+      2c: 0b090108     	add	w8, w8, w9
+      30: b94013e9     	ldr	w9, [sp, #16]
+      34: 0b090108     	add	w8, w8, w9
+      38: b9400fe9     	ldr	w9, [sp, #12]
+      3c: 0b090108     	add	w8, w8, w9
+      40: b9400be9     	ldr	w9, [sp, #8]
+      44: 0b090100     	add	w0, w8, w9
+      48: 910083ff     	add	sp, sp, #32
+      4c: d65f03c0     	ret
+
+0000000000000050 <call_many>:
+      50: a9bf7bfd     	stp	x29, x30, [sp, #-16]!
+      54: 910003fd     	mov	x29, sp
+      58: 52800020     	mov	w0, #1                  // =0x1
+      5c: 52800041     	mov	w1, #2                  // =0x2
+      60: 52800062     	mov	w2, #3                  // =0x3
+      64: 52800083     	mov	w3, #4                  // =0x4
+      68: 528000a4     	mov	w4, #5                  // =0x5
+      6c: 528000c5     	mov	w5, #6                  // =0x6
+      70: 94000000     	bl	0x70 <call_many+0x20>
+      74: a8c17bfd     	ldp	x29, x30, [sp], #16
+      78: d65f03c0     	ret
+
+000000000000007c <fib>:
+      7c: d10083ff     	sub	sp, sp, #32
+      80: a9017bfd     	stp	x29, x30, [sp, #16]
+      84: 910043fd     	add	x29, sp, #16
+      88: b81fc3a0     	stur	w0, [x29, #-4]
+      8c: b85fc3a8     	ldur	w8, [x29, #-4]
+      90: 71000908     	subs	w8, w8, #2
+      94: 540000a2     	b.hs	0xa8 <fib+0x2c>
+      98: 14000001     	b	0x9c <fib+0x20>
+      9c: b85fc3a8     	ldur	w8, [x29, #-4]
+      a0: b9000be8     	str	w8, [sp, #8]
+      a4: 1400000d     	b	0xd8 <fib+0x5c>
+      a8: b85fc3a8     	ldur	w8, [x29, #-4]
+      ac: 71000500     	subs	w0, w8, #1
+      b0: 94000000     	bl	0xb0 <fib+0x34>
+      b4: b90007e0     	str	w0, [sp, #4]
+      b8: b85fc3a8     	ldur	w8, [x29, #-4]
+      bc: 71000900     	subs	w0, w8, #2
+      c0: 94000000     	bl	0xc0 <fib+0x44>
+      c4: 2a0003e8     	mov	w8, w0
+      c8: b94007e0     	ldr	w0, [sp, #4]
+      cc: 0b080008     	add	w8, w0, w8
+      d0: b9000be8     	str	w8, [sp, #8]
+      d4: 14000001     	b	0xd8 <fib+0x5c>
+      d8: b9400be0     	ldr	w0, [sp, #8]
+      dc: a9417bfd     	ldp	x29, x30, [sp, #16]
+      e0: 910083ff     	add	sp, sp, #32
+      e4: d65f03c0     	ret
+
+00000000000000e8 <apply>:
+      e8: d10083ff     	sub	sp, sp, #32
+      ec: a9017bfd     	stp	x29, x30, [sp, #16]
+      f0: 910043fd     	add	x29, sp, #16
+      f4: f90007e0     	str	x0, [sp, #8]
+      f8: b90007e1     	str	w1, [sp, #4]
+      fc: f94007e8     	ldr	x8, [sp, #8]
+     100: b94007e0     	ldr	w0, [sp, #4]
+     104: b94007e9     	ldr	w9, [sp, #4]
+     108: 11000521     	add	w1, w9, #1
+     10c: d63f0100     	blr	x8
+     110: a9417bfd     	ldp	x29, x30, [sp, #16]
+     114: 910083ff     	add	sp, sp, #32
+     118: d65f03c0     	ret
+
+000000000000011c <report>:
+     11c: d10083ff     	sub	sp, sp, #32
+     120: a9017bfd     	stp	x29, x30, [sp, #16]
+     124: 910043fd     	add	x29, sp, #16
+     128: f90007e0     	str	x0, [sp, #8]
+     12c: b90007e1     	str	w1, [sp, #4]
+     130: f94007e1     	ldr	x1, [sp, #8]
+     134: b94007e2     	ldr	w2, [sp, #4]
+     138: 90000000     	adrp	x0, 0x0 <many>
+     13c: 91000000     	add	x0, x0, #0
+     140: 94000000     	bl	0x140 <report+0x24>
+     144: a9417bfd     	ldp	x29, x30, [sp, #16]
+     148: 910083ff     	add	sp, sp, #32
+     14c: d65f03c0     	ret
+
+0000000000000150 <copy16>:
+     150: d10083ff     	sub	sp, sp, #32
+     154: a9017bfd     	stp	x29, x30, [sp, #16]
+     158: 910043fd     	add	x29, sp, #16
+     15c: f90007e0     	str	x0, [sp, #8]
+     160: f90003e1     	str	x1, [sp]
+     164: f94007e0     	ldr	x0, [sp, #8]
+     168: f94003e1     	ldr	x1, [sp]
+     16c: 52800202     	mov	w2, #16                 // =0x10
+     170: 94000000     	bl	0x170 <copy16+0x20>
+     174: a9417bfd     	ldp	x29, x30, [sp, #16]
+     178: 910083ff     	add	sp, sp, #32
+     17c: d65f03c0     	ret

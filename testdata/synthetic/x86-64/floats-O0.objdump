@@ -1,0 +1,116 @@
+
+testdata/synthetic/x86-64/floats-O0.o:	file format elf64-x86-64
+
+Disassembly of section .text:
+
+0000000000000000 <lerp>:
+       0: 55                           	push	rbp
+       1: 48 89 e5                     	mov	rbp, rsp
+       4: f3 0f 11 45 fc               	movss	dword ptr [rbp - 4], xmm0
+       9: f3 0f 11 4d f8               	movss	dword ptr [rbp - 8], xmm1
+       e: f3 0f 11 55 f4               	movss	dword ptr [rbp - 12], xmm2
+      13: f3 0f 10 4d fc               	movss	xmm1, dword ptr [rbp - 4]
+      18: f3 0f 10 45 f8               	movss	xmm0, dword ptr [rbp - 8]
+      1d: f3 0f 5c 45 fc               	subss	xmm0, dword ptr [rbp - 4]
+      22: f3 0f 10 55 f4               	movss	xmm2, dword ptr [rbp - 12]
+      27: f3 0f 59 c2                  	mulss	xmm0, xmm2
+      2b: f3 0f 58 c1                  	addss	xmm0, xmm1
+      2f: 5d                           	pop	rbp
+      30: c3                           	ret
+      31: 66 66 66 66 66 66 2e 0f 1f 84 00 00 00 00 00 	nop	word ptr cs:[rax + rax]
+
+0000000000000040 <poly>:
+      40: 55                           	push	rbp
+      41: 48 89 e5                     	mov	rbp, rsp
+      44: f2 0f 11 45 f8               	movsd	qword ptr [rbp - 8], xmm0
+      49: f2 0f 10 45 f8               	movsd	xmm0, qword ptr [rbp - 8]
+      4e: f2 0f 10 0d 00 00 00 00      	movsd	xmm1, qword ptr [rip]   # 0x56 <poly+0x16>
+      56: f2 0f 59 c1                  	mulsd	xmm0, xmm1
+      5a: f2 0f 10 0d 00 00 00 00      	movsd	xmm1, qword ptr [rip]   # 0x62 <poly+0x22>
+      62: f2 0f 58 c1                  	addsd	xmm0, xmm1
+      66: f2 0f 10 4d f8               	movsd	xmm1, qword ptr [rbp - 8]
+      6b: f2 0f 59 c1                  	mulsd	xmm0, xmm1
+      6f: f2 0f 10 0d 00 00 00 00      	movsd	xmm1, qword ptr [rip]   # 0x77 <poly+0x37>
+      77: f2 0f 58 c1                  	addsd	xmm0, xmm1
+      7b: f2 0f 10 4d f8               	movsd	xmm1, qword ptr [rbp - 8]
+      80: f2 0f 59 c1                  	mulsd	xmm0, xmm1
+      84: f2 0f 10 0d 00 00 00 00      	movsd	xmm1, qword ptr [rip]   # 0x8c <poly+0x4c>
+      8c: f2 0f 58 c1                  	addsd	xmm0, xmm1
+      90: 5d                           	pop	rbp
+      91: c3                           	ret
+      92: 66 66 66 66 66 2e 0f 1f 84 00 00 00 00 00    	nop	word ptr cs:[rax + rax]
+
+00000000000000a0 <to_int>:
+      a0: 55                           	push	rbp
+      a1: 48 89 e5                     	mov	rbp, rsp
+      a4: f3 0f 11 45 fc               	movss	dword ptr [rbp - 4], xmm0
+      a9: f3 0f 2c 45 fc               	cvttss2si	eax, dword ptr [rbp - 4]
+      ae: 5d                           	pop	rbp
+      af: c3                           	ret
+
+00000000000000b0 <from_int>:
+      b0: 55                           	push	rbp
+      b1: 48 89 e5                     	mov	rbp, rsp
+      b4: 89 7d fc                     	mov	dword ptr [rbp - 4], edi
+      b7: f3 0f 2a 45 fc               	cvtsi2ss	xmm0, dword ptr [rbp - 4]
+      bc: 5d                           	pop	rbp
+      bd: c3                           	ret
+      be: 66 90                        	nop
+
+00000000000000c0 <widen>:
+      c0: 55                           	push	rbp
+      c1: 48 89 e5                     	mov	rbp, rsp
+      c4: f3 0f 11 45 fc               	movss	dword ptr [rbp - 4], xmm0
+      c9: f3 0f 10 45 fc               	movss	xmm0, dword ptr [rbp - 4]
+      ce: f3 0f 5a c0                  	cvtss2sd	xmm0, xmm0
+      d2: 5d                           	pop	rbp
+      d3: c3                           	ret
+      d4: 66 66 66 2e 0f 1f 84 00 00 00 00 00  	nop	word ptr cs:[rax + rax]
+
+00000000000000e0 <fmax_>:
+      e0: 55                           	push	rbp
+      e1: 48 89 e5                     	mov	rbp, rsp
+      e4: f3 0f 11 45 fc               	movss	dword ptr [rbp - 4], xmm0
+      e9: f3 0f 11 4d f8               	movss	dword ptr [rbp - 8], xmm1
+      ee: f3 0f 10 45 fc               	movss	xmm0, dword ptr [rbp - 4]
+      f3: 0f 2e 45 f8                  	ucomiss	xmm0, dword ptr [rbp - 8]
+      f7: 76 0c                        	jbe	0x105 <fmax_+0x25>
+      f9: f3 0f 10 45 fc               	movss	xmm0, dword ptr [rbp - 4]
+      fe: f3 0f 11 45 f4               	movss	dword ptr [rbp - 12], xmm0
+     103: eb 0a                        	jmp	0x10f <fmax_+0x2f>
+     105: f3 0f 10 45 f8               	movss	xmm0, dword ptr [rbp - 8]
+     10a: f3 0f 11 45 f4               	movss	dword ptr [rbp - 12], xmm0
+     10f: f3 0f 10 45 f4               	movss	xmm0, dword ptr [rbp - 12]
+     114: 5d                           	pop	rbp
+     115: c3                           	ret
+     116: 66 2e 0f 1f 84 00 00 00 00 00	nop	word ptr cs:[rax + rax]
+
+0000000000000120 <dot>:
+     120: 55                           	push	rbp
+     121: 48 89 e5                     	mov	rbp, rsp
+     124: 48 89 7d f8                  	mov	qword ptr [rbp - 8], rdi
+     128: 48 89 75 f0                  	mov	qword ptr [rbp - 16], rsi
+     12c: 89 55 ec                     	mov	dword ptr [rbp - 20], edx
+     12f: 0f 57 c0                     	xorps	xmm0, xmm0
+     132: f3 0f 11 45 e8               	movss	dword ptr [rbp - 24], xmm0
+     137: c7 45 e4 00 00 00 00         	mov	dword ptr [rbp - 28], 0
+     13e: 8b 45 e4                     	mov	eax, dword ptr [rbp - 28]
+     141: 3b 45 ec                     	cmp	eax, dword ptr [rbp - 20]
+     144: 7d 37                        	jge	0x17d <dot+0x5d>
+     146: 48 8b 45 f8                  	mov	rax, qword ptr [rbp - 8]
+     14a: 48 63 4d e4                  	movsxd	rcx, dword ptr [rbp - 28]
+     14e: f3 0f 10 04 88               	movss	xmm0, dword ptr [rax + 4*rcx]
+     153: 48 8b 45 f0                  	mov	rax, qword ptr [rbp - 16]
+     157: 48 63 4d e4                  	movsxd	rcx, dword ptr [rbp - 28]
+     15b: f3 0f 10 14 88               	movss	xmm2, dword ptr [rax + 4*rcx]
+     160: f3 0f 10 4d e8               	movss	xmm1, dword ptr [rbp - 24]
+     165: f3 0f 59 c2                  	mulss	xmm0, xmm2
+     169: f3 0f 58 c1                  	addss	xmm0, xmm1
+     16d: f3 0f 11 45 e8               	movss	dword ptr [rbp - 24], xmm0
+     172: 8b 45 e4                     	mov	eax, dword ptr [rbp - 28]
+     175: 83 c0 01                     	add	eax, 1
+     178: 89 45 e4                     	mov	dword ptr [rbp - 28], eax
+     17b: eb c1                        	jmp	0x13e <dot+0x1e>
+     17d: f3 0f 10 45 e8               	movss	xmm0, dword ptr [rbp - 24]
+     182: 5d                           	pop	rbp
+     183: c3                           	ret

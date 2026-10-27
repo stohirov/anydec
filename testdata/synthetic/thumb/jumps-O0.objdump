@@ -1,0 +1,363 @@
+
+testdata/synthetic/thumb/jumps-O0.o:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00000000 <alu>:
+       0: b085         	sub	sp, #20
+       2: 9003         	str	r0, [sp, #12]
+       4: 9102         	str	r1, [sp, #8]
+       6: 9201         	str	r2, [sp, #4]
+       8: 9803         	ldr	r0, [sp, #12]
+       a: 9000         	str	r0, [sp]
+       c: 280b         	cmp	r0, #11
+       e: d84c         	bhi	0xaa <alu+0xaa>         @ imm = #152
+      10: 9900         	ldr	r1, [sp]
+      12: e8df f001    	tbb	[pc, r1]
+      16: 06 0b 10 15  	.word	0x15100b06
+      1a: 1a 1f 24 2b  	.word	0x2b241f1a
+      1e: 32 39 42 46  	.word	0x46423932
+      22: 9802         	ldr	r0, [sp, #8]
+      24: 9901         	ldr	r1, [sp, #4]
+      26: 4408         	add	r0, r1
+      28: 9004         	str	r0, [sp, #16]
+      2a: e041         	b	0xb0 <alu+0xb0>         @ imm = #130
+      2c: 9802         	ldr	r0, [sp, #8]
+      2e: 9901         	ldr	r1, [sp, #4]
+      30: 1a40         	subs	r0, r0, r1
+      32: 9004         	str	r0, [sp, #16]
+      34: e03c         	b	0xb0 <alu+0xb0>         @ imm = #120
+      36: 9802         	ldr	r0, [sp, #8]
+      38: 9901         	ldr	r1, [sp, #4]
+      3a: 4348         	muls	r0, r1, r0
+      3c: 9004         	str	r0, [sp, #16]
+      3e: e037         	b	0xb0 <alu+0xb0>         @ imm = #110
+      40: 9802         	ldr	r0, [sp, #8]
+      42: 9901         	ldr	r1, [sp, #4]
+      44: 4008         	ands	r0, r1
+      46: 9004         	str	r0, [sp, #16]
+      48: e032         	b	0xb0 <alu+0xb0>         @ imm = #100
+      4a: 9802         	ldr	r0, [sp, #8]
+      4c: 9901         	ldr	r1, [sp, #4]
+      4e: 4308         	orrs	r0, r1
+      50: 9004         	str	r0, [sp, #16]
+      52: e02d         	b	0xb0 <alu+0xb0>         @ imm = #90
+      54: 9802         	ldr	r0, [sp, #8]
+      56: 9901         	ldr	r1, [sp, #4]
+      58: 4048         	eors	r0, r1
+      5a: 9004         	str	r0, [sp, #16]
+      5c: e028         	b	0xb0 <alu+0xb0>         @ imm = #80
+      5e: 9802         	ldr	r0, [sp, #8]
+      60: 9901         	ldr	r1, [sp, #4]
+      62: f001 011f    	and	r1, r1, #31
+      66: 4088         	lsls	r0, r1
+      68: 9004         	str	r0, [sp, #16]
+      6a: e021         	b	0xb0 <alu+0xb0>         @ imm = #66
+      6c: 9802         	ldr	r0, [sp, #8]
+      6e: 9901         	ldr	r1, [sp, #4]
+      70: f001 011f    	and	r1, r1, #31
+      74: 40c8         	lsrs	r0, r1
+      76: 9004         	str	r0, [sp, #16]
+      78: e01a         	b	0xb0 <alu+0xb0>         @ imm = #52
+      7a: 9802         	ldr	r0, [sp, #8]
+      7c: 9901         	ldr	r1, [sp, #4]
+      7e: f001 011f    	and	r1, r1, #31
+      82: 4108         	asrs	r0, r1
+      84: 9004         	str	r0, [sp, #16]
+      86: e013         	b	0xb0 <alu+0xb0>         @ imm = #38
+      88: 9802         	ldr	r0, [sp, #8]
+      8a: 9901         	ldr	r1, [sp, #4]
+      8c: 4288         	cmp	r0, r1
+      8e: f04f 0000    	mov.w	r0, #0
+      92: bfb8         	it	lt
+      94: 2001         	movlt	r0, #1
+      96: 9004         	str	r0, [sp, #16]
+      98: e00a         	b	0xb0 <alu+0xb0>         @ imm = #20
+      9a: 9802         	ldr	r0, [sp, #8]
+      9c: 4240         	rsbs	r0, r0, #0
+      9e: 9004         	str	r0, [sp, #16]
+      a0: e006         	b	0xb0 <alu+0xb0>         @ imm = #12
+      a2: 9801         	ldr	r0, [sp, #4]
+      a4: 43c0         	mvns	r0, r0
+      a6: 9004         	str	r0, [sp, #16]
+      a8: e002         	b	0xb0 <alu+0xb0>         @ imm = #4
+      aa: 2000         	movs	r0, #0
+      ac: 9004         	str	r0, [sp, #16]
+      ae: e7ff         	b	0xb0 <alu+0xb0>         @ imm = #-2
+      b0: 9804         	ldr	r0, [sp, #16]
+      b2: b005         	add	sp, #20
+      b4: 4770         	bx	lr
+      b6: bf00         	nop
+
+000000b8 <offset_switch>:
+      b8: b084         	sub	sp, #16
+      ba: 9002         	str	r0, [sp, #8]
+      bc: 9101         	str	r1, [sp, #4]
+      be: 9802         	ldr	r0, [sp, #8]
+      c0: 3864         	subs	r0, #100
+      c2: 4601         	mov	r1, r0
+      c4: 9100         	str	r1, [sp]
+      c6: 2807         	cmp	r0, #7
+      c8: d829         	bhi	0x11e <offset_switch+0x66> @ imm = #82
+      ca: 9900         	ldr	r1, [sp]
+      cc: e8df f001    	tbb	[pc, r1]
+      d0: 04 09 0d 12  	.word	0x120d0904
+      d4: 16 1a 1e 22  	.word	0x221e1a16
+      d8: 9801         	ldr	r0, [sp, #4]
+      da: eb00 0040    	add.w	r0, r0, r0, lsl #1
+      de: 9003         	str	r0, [sp, #12]
+      e0: e021         	b	0x126 <offset_switch+0x6e> @ imm = #66
+      e2: 9801         	ldr	r0, [sp, #4]
+      e4: 3011         	adds	r0, #17
+      e6: 9003         	str	r0, [sp, #12]
+      e8: e01d         	b	0x126 <offset_switch+0x6e> @ imm = #58
+      ea: 9801         	ldr	r0, [sp, #4]
+      ec: f080 0055    	eor	r0, r0, #85
+      f0: 9003         	str	r0, [sp, #12]
+      f2: e018         	b	0x126 <offset_switch+0x6e> @ imm = #48
+      f4: 9801         	ldr	r0, [sp, #4]
+      f6: 3809         	subs	r0, #9
+      f8: 9003         	str	r0, [sp, #12]
+      fa: e014         	b	0x126 <offset_switch+0x6e> @ imm = #40
+      fc: 9801         	ldr	r0, [sp, #4]
+      fe: 0080         	lsls	r0, r0, #2
+     100: 9003         	str	r0, [sp, #12]
+     102: e010         	b	0x126 <offset_switch+0x6e> @ imm = #32
+     104: 9801         	ldr	r0, [sp, #4]
+     106: 1040         	asrs	r0, r0, #1
+     108: 9003         	str	r0, [sp, #12]
+     10a: e00c         	b	0x126 <offset_switch+0x6e> @ imm = #24
+     10c: 9801         	ldr	r0, [sp, #4]
+     10e: 4340         	muls	r0, r0, r0
+     110: 9003         	str	r0, [sp, #12]
+     112: e008         	b	0x126 <offset_switch+0x6e> @ imm = #16
+     114: 9801         	ldr	r0, [sp, #4]
+     116: f1c0 0007    	rsb.w	r0, r0, #7
+     11a: 9003         	str	r0, [sp, #12]
+     11c: e003         	b	0x126 <offset_switch+0x6e> @ imm = #6
+     11e: f04f 30ff    	mov.w	r0, #4294967295
+     122: 9003         	str	r0, [sp, #12]
+     124: e7ff         	b	0x126 <offset_switch+0x6e> @ imm = #-2
+     126: 9803         	ldr	r0, [sp, #12]
+     128: b004         	add	sp, #16
+     12a: 4770         	bx	lr
+
+0000012c <byte_switch>:
+     12c: b084         	sub	sp, #16
+     12e: f88d 000b    	strb.w	r0, [sp, #11]
+     132: 9101         	str	r1, [sp, #4]
+     134: f89d 000b    	ldrb.w	r0, [sp, #11]
+     138: 3861         	subs	r0, #97
+     13a: 4601         	mov	r1, r0
+     13c: 9100         	str	r1, [sp]
+     13e: 2807         	cmp	r0, #7
+     140: d829         	bhi	0x196 <byte_switch+0x6a> @ imm = #82
+     142: 9900         	ldr	r1, [sp]
+     144: e8df f001    	tbb	[pc, r1]
+     148: 04 08 0c 10  	.word	0x100c0804
+     14c: 15 1a 1f 23  	.word	0x231f1a15
+     150: 9801         	ldr	r0, [sp, #4]
+     152: 3001         	adds	r0, #1
+     154: 9003         	str	r0, [sp, #12]
+     156: e021         	b	0x19c <byte_switch+0x70> @ imm = #66
+     158: 9801         	ldr	r0, [sp, #4]
+     15a: 0040         	lsls	r0, r0, #1
+     15c: 9003         	str	r0, [sp, #12]
+     15e: e01d         	b	0x19c <byte_switch+0x70> @ imm = #58
+     160: 9801         	ldr	r0, [sp, #4]
+     162: 3803         	subs	r0, #3
+     164: 9003         	str	r0, [sp, #12]
+     166: e019         	b	0x19c <byte_switch+0x70> @ imm = #50
+     168: 9801         	ldr	r0, [sp, #4]
+     16a: f080 0004    	eor	r0, r0, #4
+     16e: 9003         	str	r0, [sp, #12]
+     170: e014         	b	0x19c <byte_switch+0x70> @ imm = #40
+     172: 9801         	ldr	r0, [sp, #4]
+     174: f040 0005    	orr	r0, r0, #5
+     178: 9003         	str	r0, [sp, #12]
+     17a: e00f         	b	0x19c <byte_switch+0x70> @ imm = #30
+     17c: 9801         	ldr	r0, [sp, #4]
+     17e: f000 0006    	and	r0, r0, #6
+     182: 9003         	str	r0, [sp, #12]
+     184: e00a         	b	0x19c <byte_switch+0x70> @ imm = #20
+     186: 9801         	ldr	r0, [sp, #4]
+     188: 01c0         	lsls	r0, r0, #7
+     18a: 9003         	str	r0, [sp, #12]
+     18c: e006         	b	0x19c <byte_switch+0x70> @ imm = #12
+     18e: 9801         	ldr	r0, [sp, #4]
+     190: 0a00         	lsrs	r0, r0, #8
+     192: 9003         	str	r0, [sp, #12]
+     194: e002         	b	0x19c <byte_switch+0x70> @ imm = #4
+     196: 9801         	ldr	r0, [sp, #4]
+     198: 9003         	str	r0, [sp, #12]
+     19a: e7ff         	b	0x19c <byte_switch+0x70> @ imm = #-2
+     19c: 9803         	ldr	r0, [sp, #12]
+     19e: b004         	add	sp, #16
+     1a0: 4770         	bx	lr
+     1a2: bf00         	nop
+
+000001a4 <interp>:
+     1a4: b099         	sub	sp, #100
+     1a6: 9017         	str	r0, [sp, #92]
+     1a8: 9116         	str	r1, [sp, #88]
+     1aa: 2000         	movs	r0, #0
+     1ac: 9005         	str	r0, [sp, #20]
+     1ae: 9004         	str	r0, [sp, #16]
+     1b0: e7ff         	b	0x1b2 <interp+0xe>      @ imm = #-2
+     1b2: 9804         	ldr	r0, [sp, #16]
+     1b4: 9916         	ldr	r1, [sp, #88]
+     1b6: 4288         	cmp	r0, r1
+     1b8: f280 80a5    	bge.w	0x306 <interp+0x162>    @ imm = #330
+     1bc: e7ff         	b	0x1be <interp+0x1a>     @ imm = #-2
+     1be: 9817         	ldr	r0, [sp, #92]
+     1c0: 9904         	ldr	r1, [sp, #16]
+     1c2: 5c40         	ldrb	r0, [r0, r1]
+     1c4: f88d 000f    	strb.w	r0, [sp, #15]
+     1c8: f89d 000f    	ldrb.w	r0, [sp, #15]
+     1cc: f000 0007    	and	r0, r0, #7
+     1d0: 4601         	mov	r1, r0
+     1d2: 9102         	str	r1, [sp, #8]
+     1d4: 2807         	cmp	r0, #7
+     1d6: f200 8091    	bhi.w	0x2fc <interp+0x158>    @ imm = #290
+     1da: 9902         	ldr	r1, [sp, #8]
+     1dc: e8df f001    	tbb	[pc, r1]
+     1e0: 04 13 27 3b  	.word	0x3b271304
+     1e4: 4f 5e 73 7c  	.word	0x7c735e4f
+     1e8: 9805         	ldr	r0, [sp, #20]
+     1ea: 280f         	cmp	r0, #15
+     1ec: dc0a         	bgt	0x204 <interp+0x60>     @ imm = #20
+     1ee: e7ff         	b	0x1f0 <interp+0x4c>     @ imm = #-2
+     1f0: f89d 000f    	ldrb.w	r0, [sp, #15]
+     1f4: 08c0         	lsrs	r0, r0, #3
+     1f6: 9a05         	ldr	r2, [sp, #20]
+     1f8: 1c51         	adds	r1, r2, #1
+     1fa: 9105         	str	r1, [sp, #20]
+     1fc: a906         	add	r1, sp, #24
+     1fe: f841 0022    	str.w	r0, [r1, r2, lsl #2]
+     202: e7ff         	b	0x204 <interp+0x60>     @ imm = #-2
+     204: e07a         	b	0x2fc <interp+0x158>    @ imm = #244
+     206: 9805         	ldr	r0, [sp, #20]
+     208: 2802         	cmp	r0, #2
+     20a: db0f         	blt	0x22c <interp+0x88>     @ imm = #30
+     20c: e7ff         	b	0x20e <interp+0x6a>     @ imm = #-2
+     20e: 9805         	ldr	r0, [sp, #20]
+     210: 3801         	subs	r0, #1
+     212: 9005         	str	r0, [sp, #20]
+     214: 9a05         	ldr	r2, [sp, #20]
+     216: a806         	add	r0, sp, #24
+     218: eb00 0182    	add.w	r1, r0, r2, lsl #2
+     21c: f850 2022    	ldr.w	r2, [r0, r2, lsl #2]
+     220: f851 0c04    	ldr	r0, [r1, #-4]
+     224: 4410         	add	r0, r2
+     226: f841 0c04    	str	r0, [r1, #-4]
+     22a: e7ff         	b	0x22c <interp+0x88>     @ imm = #-2
+     22c: e066         	b	0x2fc <interp+0x158>    @ imm = #204
+     22e: 9805         	ldr	r0, [sp, #20]
+     230: 2802         	cmp	r0, #2
+     232: db0f         	blt	0x254 <interp+0xb0>     @ imm = #30
+     234: e7ff         	b	0x236 <interp+0x92>     @ imm = #-2
+     236: 9805         	ldr	r0, [sp, #20]
+     238: 3801         	subs	r0, #1
+     23a: 9005         	str	r0, [sp, #20]
+     23c: 9a05         	ldr	r2, [sp, #20]
+     23e: a806         	add	r0, sp, #24
+     240: eb00 0182    	add.w	r1, r0, r2, lsl #2
+     244: f850 2022    	ldr.w	r2, [r0, r2, lsl #2]
+     248: f851 0c04    	ldr	r0, [r1, #-4]
+     24c: 1a80         	subs	r0, r0, r2
+     24e: f841 0c04    	str	r0, [r1, #-4]
+     252: e7ff         	b	0x254 <interp+0xb0>     @ imm = #-2
+     254: e052         	b	0x2fc <interp+0x158>    @ imm = #164
+     256: 9805         	ldr	r0, [sp, #20]
+     258: 2802         	cmp	r0, #2
+     25a: db0f         	blt	0x27c <interp+0xd8>     @ imm = #30
+     25c: e7ff         	b	0x25e <interp+0xba>     @ imm = #-2
+     25e: 9805         	ldr	r0, [sp, #20]
+     260: 3801         	subs	r0, #1
+     262: 9005         	str	r0, [sp, #20]
+     264: 9a05         	ldr	r2, [sp, #20]
+     266: a806         	add	r0, sp, #24
+     268: eb00 0182    	add.w	r1, r0, r2, lsl #2
+     26c: f850 2022    	ldr.w	r2, [r0, r2, lsl #2]
+     270: f851 0c04    	ldr	r0, [r1, #-4]
+     274: 4350         	muls	r0, r2, r0
+     276: f841 0c04    	str	r0, [r1, #-4]
+     27a: e7ff         	b	0x27c <interp+0xd8>     @ imm = #-2
+     27c: e03e         	b	0x2fc <interp+0x158>    @ imm = #124
+     27e: 9805         	ldr	r0, [sp, #20]
+     280: 2801         	cmp	r0, #1
+     282: db0a         	blt	0x29a <interp+0xf6>     @ imm = #20
+     284: e7ff         	b	0x286 <interp+0xe2>     @ imm = #-2
+     286: 9905         	ldr	r1, [sp, #20]
+     288: a806         	add	r0, sp, #24
+     28a: eb00 0181    	add.w	r1, r0, r1, lsl #2
+     28e: f851 0c04    	ldr	r0, [r1, #-4]
+     292: 4240         	rsbs	r0, r0, #0
+     294: f841 0c04    	str	r0, [r1, #-4]
+     298: e7ff         	b	0x29a <interp+0xf6>     @ imm = #-2
+     29a: e02f         	b	0x2fc <interp+0x158>    @ imm = #94
+     29c: 9805         	ldr	r0, [sp, #20]
+     29e: 2801         	cmp	r0, #1
+     2a0: db10         	blt	0x2c4 <interp+0x120>    @ imm = #32
+     2a2: e7ff         	b	0x2a4 <interp+0x100>    @ imm = #-2
+     2a4: 9805         	ldr	r0, [sp, #20]
+     2a6: 280f         	cmp	r0, #15
+     2a8: dc0c         	bgt	0x2c4 <interp+0x120>    @ imm = #24
+     2aa: e7ff         	b	0x2ac <interp+0x108>    @ imm = #-2
+     2ac: 9a05         	ldr	r2, [sp, #20]
+     2ae: a906         	add	r1, sp, #24
+     2b0: eb01 0082    	add.w	r0, r1, r2, lsl #2
+     2b4: f850 0c04    	ldr	r0, [r0, #-4]
+     2b8: f841 0022    	str.w	r0, [r1, r2, lsl #2]
+     2bc: 9805         	ldr	r0, [sp, #20]
+     2be: 3001         	adds	r0, #1
+     2c0: 9005         	str	r0, [sp, #20]
+     2c2: e7ff         	b	0x2c4 <interp+0x120>    @ imm = #-2
+     2c4: e01a         	b	0x2fc <interp+0x158>    @ imm = #52
+     2c6: 9805         	ldr	r0, [sp, #20]
+     2c8: 2801         	cmp	r0, #1
+     2ca: db04         	blt	0x2d6 <interp+0x132>    @ imm = #8
+     2cc: e7ff         	b	0x2ce <interp+0x12a>    @ imm = #-2
+     2ce: 9805         	ldr	r0, [sp, #20]
+     2d0: 3801         	subs	r0, #1
+     2d2: 9005         	str	r0, [sp, #20]
+     2d4: e7ff         	b	0x2d6 <interp+0x132>    @ imm = #-2
+     2d6: e011         	b	0x2fc <interp+0x158>    @ imm = #34
+     2d8: 9805         	ldr	r0, [sp, #20]
+     2da: b140         	cbz	r0, 0x2ee <interp+0x14a> @ imm = #16
+     2dc: e7ff         	b	0x2de <interp+0x13a>    @ imm = #-2
+     2de: 9905         	ldr	r1, [sp, #20]
+     2e0: a806         	add	r0, sp, #24
+     2e2: eb00 0081    	add.w	r0, r0, r1, lsl #2
+     2e6: f850 0c04    	ldr	r0, [r0, #-4]
+     2ea: 9001         	str	r0, [sp, #4]
+     2ec: e003         	b	0x2f6 <interp+0x152>    @ imm = #6
+     2ee: f04f 30ff    	mov.w	r0, #4294967295
+     2f2: 9001         	str	r0, [sp, #4]
+     2f4: e7ff         	b	0x2f6 <interp+0x152>    @ imm = #-2
+     2f6: 9801         	ldr	r0, [sp, #4]
+     2f8: 9018         	str	r0, [sp, #96]
+     2fa: e015         	b	0x328 <interp+0x184>    @ imm = #42
+     2fc: e7ff         	b	0x2fe <interp+0x15a>    @ imm = #-2
+     2fe: 9804         	ldr	r0, [sp, #16]
+     300: 3001         	adds	r0, #1
+     302: 9004         	str	r0, [sp, #16]
+     304: e755         	b	0x1b2 <interp+0xe>      @ imm = #-342
+     306: 9805         	ldr	r0, [sp, #20]
+     308: b140         	cbz	r0, 0x31c <interp+0x178> @ imm = #16
+     30a: e7ff         	b	0x30c <interp+0x168>    @ imm = #-2
+     30c: 9905         	ldr	r1, [sp, #20]
+     30e: a806         	add	r0, sp, #24
+     310: eb00 0081    	add.w	r0, r0, r1, lsl #2
+     314: f850 0c04    	ldr	r0, [r0, #-4]
+     318: 9000         	str	r0, [sp]
+     31a: e002         	b	0x322 <interp+0x17e>    @ imm = #4
+     31c: 2000         	movs	r0, #0
+     31e: 9000         	str	r0, [sp]
+     320: e7ff         	b	0x322 <interp+0x17e>    @ imm = #-2
+     322: 9800         	ldr	r0, [sp]
+     324: 9018         	str	r0, [sp, #96]
+     326: e7ff         	b	0x328 <interp+0x184>    @ imm = #-2
+     328: 9818         	ldr	r0, [sp, #96]
+     32a: b019         	add	sp, #100
+     32c: 4770         	bx	lr

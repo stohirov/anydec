@@ -1,0 +1,201 @@
+
+testdata/synthetic/x86-64/loops-O2.o:	file format elf64-x86-64
+
+Disassembly of section .text:
+
+0000000000000000 <sum>:
+       0: 55                           	push	rbp
+       1: 48 89 e5                     	mov	rbp, rsp
+       4: 85 f6                        	test	esi, esi
+       6: 7e 0d                        	jle	0x15 <sum+0x15>
+       8: 89 f1                        	mov	ecx, esi
+       a: 83 fe 08                     	cmp	esi, 8
+       d: 73 0a                        	jae	0x19 <sum+0x19>
+       f: 31 d2                        	xor	edx, edx
+      11: 31 c0                        	xor	eax, eax
+      13: eb 6b                        	jmp	0x80 <sum+0x80>
+      15: 31 c0                        	xor	eax, eax
+      17: 5d                           	pop	rbp
+      18: c3                           	ret
+      19: 89 ca                        	mov	edx, ecx
+      1b: 81 e2 f8 ff ff 7f            	and	edx, 2147483640
+      21: 89 c8                        	mov	eax, ecx
+      23: c1 e8 03                     	shr	eax, 3
+      26: 25 ff ff ff 0f               	and	eax, 268435455
+      2b: 48 c1 e0 05                  	shl	rax, 5
+      2f: 66 0f ef c0                  	pxor	xmm0, xmm0
+      33: 31 f6                        	xor	esi, esi
+      35: 66 0f ef c9                  	pxor	xmm1, xmm1
+      39: 0f 1f 80 00 00 00 00         	nop	dword ptr [rax]
+      40: f3 0f 6f 14 37               	movdqu	xmm2, xmmword ptr [rdi + rsi]
+      45: 66 0f fe c2                  	paddd	xmm0, xmm2
+      49: f3 0f 6f 54 37 10            	movdqu	xmm2, xmmword ptr [rdi + rsi + 16]
+      4f: 66 0f fe ca                  	paddd	xmm1, xmm2
+      53: 48 83 c6 20                  	add	rsi, 32
+      57: 48 39 f0                     	cmp	rax, rsi
+      5a: 75 e4                        	jne	0x40 <sum+0x40>
+      5c: 66 0f fe c8                  	paddd	xmm1, xmm0
+      60: 66 0f 70 c1 ee               	pshufd	xmm0, xmm1, 238         # xmm0 = xmm1[2,3,2,3]
+      65: 66 0f fe c1                  	paddd	xmm0, xmm1
+      69: 66 0f 70 c8 55               	pshufd	xmm1, xmm0, 85          # xmm1 = xmm0[1,1,1,1]
+      6e: 66 0f fe c8                  	paddd	xmm1, xmm0
+      72: 66 0f 7e c8                  	movd	eax, xmm1
+      76: 39 ca                        	cmp	edx, ecx
+      78: 74 11                        	je	0x8b <sum+0x8b>
+      7a: 66 0f 1f 44 00 00            	nop	word ptr [rax + rax]
+      80: 03 04 97                     	add	eax, dword ptr [rdi + 4*rdx]
+      83: 48 ff c2                     	inc	rdx
+      86: 48 39 d1                     	cmp	rcx, rdx
+      89: 75 f5                        	jne	0x80 <sum+0x80>
+      8b: 5d                           	pop	rbp
+      8c: c3                           	ret
+      8d: 0f 1f 00                     	nop	dword ptr [rax]
+
+0000000000000090 <strlen_>:
+      90: 55                           	push	rbp
+      91: 48 89 e5                     	mov	rbp, rsp
+      94: b8 ff ff ff ff               	mov	eax, 4294967295
+      99: 0f 1f 80 00 00 00 00         	nop	dword ptr [rax]
+      a0: ff c0                        	inc	eax
+      a2: 80 3c 07 00                  	cmp	byte ptr [rdi + rax], 0
+      a6: 75 f8                        	jne	0xa0 <strlen_+0x10>
+      a8: 5d                           	pop	rbp
+      a9: c3                           	ret
+      aa: 66 0f 1f 44 00 00            	nop	word ptr [rax + rax]
+
+00000000000000b0 <find>:
+      b0: 55                           	push	rbp
+      b1: 48 89 e5                     	mov	rbp, rsp
+      b4: b8 ff ff ff ff               	mov	eax, 4294967295
+      b9: 85 f6                        	test	esi, esi
+      bb: 7e 20                        	jle	0xdd <find+0x2d>
+      bd: 89 f6                        	mov	esi, esi
+      bf: 31 c9                        	xor	ecx, ecx
+      c1: 66 66 66 66 66 66 2e 0f 1f 84 00 00 00 00 00 	nop	word ptr cs:[rax + rax]
+      d0: 39 14 8f                     	cmp	dword ptr [rdi + 4*rcx], edx
+      d3: 74 0a                        	je	0xdf <find+0x2f>
+      d5: 48 ff c1                     	inc	rcx
+      d8: 48 39 ce                     	cmp	rsi, rcx
+      db: 75 f3                        	jne	0xd0 <find+0x20>
+      dd: 5d                           	pop	rbp
+      de: c3                           	ret
+      df: 89 c8                        	mov	eax, ecx
+      e1: 5d                           	pop	rbp
+      e2: c3                           	ret
+      e3: 66 66 66 66 2e 0f 1f 84 00 00 00 00 00       	nop	word ptr cs:[rax + rax]
+
+00000000000000f0 <matmul>:
+      f0: 55                           	push	rbp
+      f1: 48 89 e5                     	mov	rbp, rsp
+      f4: 41 57                        	push	r15
+      f6: 41 56                        	push	r14
+      f8: 41 55                        	push	r13
+      fa: 41 54                        	push	r12
+      fc: 53                           	push	rbx
+      fd: 48 89 4d b8                  	mov	qword ptr [rbp - 72], rcx
+     101: 48 89 55 c0                  	mov	qword ptr [rbp - 64], rdx
+     105: 48 89 75 c8                  	mov	qword ptr [rbp - 56], rsi
+     109: 89 7d d4                     	mov	dword ptr [rbp - 44], edi
+     10c: 85 ff                        	test	edi, edi
+     10e: 0f 8e 26 01 00 00            	jle	0x23a <matmul+0x14a>
+     114: 8b 45 d4                     	mov	eax, dword ptr [rbp - 44]
+     117: 41 89 c0                     	mov	r8d, eax
+     11a: 41 83 e0 03                  	and	r8d, 3
+     11e: 41 89 c1                     	mov	r9d, eax
+     121: 41 81 e1 fc ff ff 7f         	and	r9d, 2147483644
+     128: 48 8b 4d c8                  	mov	rcx, qword ptr [rbp - 56]
+     12c: 4c 8d 51 0c                  	lea	r10, [rcx + 12]
+     130: 4c 8d 1c 85 00 00 00 00      	lea	r11, [4*rax]
+     138: 4b 8d 1c 5b                  	lea	rbx, [r11 + 2*r11]
+     13c: 49 89 c6                     	mov	r14, rax
+     13f: 49 c1 e6 04                  	shl	r14, 4
+     143: 31 c9                        	xor	ecx, ecx
+     145: eb 20                        	jmp	0x167 <matmul+0x77>
+     147: 66 0f 1f 84 00 00 00 00 00   	nop	word ptr [rax + rax]
+     150: 48 8b 4d b0                  	mov	rcx, qword ptr [rbp - 80]
+     154: 48 ff c1                     	inc	rcx
+     157: 4d 01 da                     	add	r10, r11
+     15a: 4c 01 5d c8                  	add	qword ptr [rbp - 56], r11
+     15e: 48 39 c1                     	cmp	rcx, rax
+     161: 0f 84 d3 00 00 00            	je	0x23a <matmul+0x14a>
+     167: 48 89 4d b0                  	mov	qword ptr [rbp - 80], rcx
+     16b: 48 0f af c8                  	imul	rcx, rax
+     16f: 48 8b 55 b8                  	mov	rdx, qword ptr [rbp - 72]
+     173: 48 8d 0c 8a                  	lea	rcx, [rdx + 4*rcx]
+     177: 48 89 4d a8                  	mov	qword ptr [rbp - 88], rcx
+     17b: 4c 8b 65 c0                  	mov	r12, qword ptr [rbp - 64]
+     17f: 45 31 ff                     	xor	r15d, r15d
+     182: eb 20                        	jmp	0x1a4 <matmul+0xb4>
+     184: 66 66 66 2e 0f 1f 84 00 00 00 00 00  	nop	word ptr cs:[rax + rax]
+     190: 48 8b 55 a8                  	mov	rdx, qword ptr [rbp - 88]
+     194: 42 89 0c ba                  	mov	dword ptr [rdx + 4*r15], ecx
+     198: 49 ff c7                     	inc	r15
+     19b: 49 83 c4 04                  	add	r12, 4
+     19f: 49 39 c7                     	cmp	r15, rax
+     1a2: 74 ac                        	je	0x150 <matmul+0x60>
+     1a4: 83 7d d4 04                  	cmp	dword ptr [rbp - 44], 4
+     1a8: 73 06                        	jae	0x1b0 <matmul+0xc0>
+     1aa: 31 d2                        	xor	edx, edx
+     1ac: 31 c9                        	xor	ecx, ecx
+     1ae: eb 4e                        	jmp	0x1fe <matmul+0x10e>
+     1b0: 31 d2                        	xor	edx, edx
+     1b2: 4d 89 e5                     	mov	r13, r12
+     1b5: 31 c9                        	xor	ecx, ecx
+     1b7: 66 0f 1f 84 00 00 00 00 00   	nop	word ptr [rax + rax]
+     1c0: 41 8b 75 00                  	mov	esi, dword ptr [r13]
+     1c4: 41 0f af 74 92 f4            	imul	esi, dword ptr [r10 + 4*rdx - 12]
+     1ca: 01 ce                        	add	esi, ecx
+     1cc: 41 8b 4c 85 00               	mov	ecx, dword ptr [r13 + 4*rax]
+     1d1: 41 0f af 4c 92 f8            	imul	ecx, dword ptr [r10 + 4*rdx - 8]
+     1d7: 41 8b 7c c5 00               	mov	edi, dword ptr [r13 + 8*rax]
+     1dc: 41 0f af 7c 92 fc            	imul	edi, dword ptr [r10 + 4*rdx - 4]
+     1e2: 01 cf                        	add	edi, ecx
+     1e4: 01 f7                        	add	edi, esi
+     1e6: 41 8b 4c 1d 00               	mov	ecx, dword ptr [r13 + rbx]
+     1eb: 41 0f af 0c 92               	imul	ecx, dword ptr [r10 + 4*rdx]
+     1f0: 01 f9                        	add	ecx, edi
+     1f2: 48 83 c2 04                  	add	rdx, 4
+     1f6: 4d 01 f5                     	add	r13, r14
+     1f9: 49 39 d1                     	cmp	r9, rdx
+     1fc: 75 c2                        	jne	0x1c0 <matmul+0xd0>
+     1fe: 4d 85 c0                     	test	r8, r8
+     201: 74 8d                        	je	0x190 <matmul+0xa0>
+     203: 4d 89 dd                     	mov	r13, r11
+     206: 4c 0f af ea                  	imul	r13, rdx
+     20a: 4d 01 e5                     	add	r13, r12
+     20d: 48 8b 75 c8                  	mov	rsi, qword ptr [rbp - 56]
+     211: 48 8d 14 96                  	lea	rdx, [rsi + 4*rdx]
+     215: 31 f6                        	xor	esi, esi
+     217: 66 0f 1f 84 00 00 00 00 00   	nop	word ptr [rax + rax]
+     220: 41 8b 7d 00                  	mov	edi, dword ptr [r13]
+     224: 0f af 3c b2                  	imul	edi, dword ptr [rdx + 4*rsi]
+     228: 01 f9                        	add	ecx, edi
+     22a: 48 ff c6                     	inc	rsi
+     22d: 4d 01 dd                     	add	r13, r11
+     230: 49 39 f0                     	cmp	r8, rsi
+     233: 75 eb                        	jne	0x220 <matmul+0x130>
+     235: e9 56 ff ff ff               	jmp	0x190 <matmul+0xa0>
+     23a: 5b                           	pop	rbx
+     23b: 41 5c                        	pop	r12
+     23d: 41 5d                        	pop	r13
+     23f: 41 5e                        	pop	r14
+     241: 41 5f                        	pop	r15
+     243: 5d                           	pop	rbp
+     244: c3                           	ret
+     245: 66 66 2e 0f 1f 84 00 00 00 00 00     	nop	word ptr cs:[rax + rax]
+
+0000000000000250 <collatz>:
+     250: 55                           	push	rbp
+     251: 48 89 e5                     	mov	rbp, rsp
+     254: 31 c0                        	xor	eax, eax
+     256: 66 2e 0f 1f 84 00 00 00 00 00	nop	word ptr cs:[rax + rax]
+     260: 89 f9                        	mov	ecx, edi
+     262: d1 e9                        	shr	ecx
+     264: 40 f6 c7 01                  	test	dil, 1
+     268: 8d 7c 7f 01                  	lea	edi, [rdi + 2*rdi + 1]
+     26c: 0f 44 f9                     	cmove	edi, ecx
+     26f: ff c0                        	inc	eax
+     271: 83 ff 01                     	cmp	edi, 1
+     274: 75 ea                        	jne	0x260 <collatz+0x10>
+     276: 5d                           	pop	rbp
+     277: c3                           	ret

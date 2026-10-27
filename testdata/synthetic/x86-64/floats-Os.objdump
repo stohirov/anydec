@@ -1,0 +1,73 @@
+
+testdata/synthetic/x86-64/floats-Os.o:	file format elf64-x86-64
+
+Disassembly of section .text:
+
+0000000000000000 <lerp>:
+       0: 55                           	push	rbp
+       1: 48 89 e5                     	mov	rbp, rsp
+       4: f3 0f 5c c8                  	subss	xmm1, xmm0
+       8: f3 0f 59 ca                  	mulss	xmm1, xmm2
+       c: f3 0f 58 c1                  	addss	xmm0, xmm1
+      10: 5d                           	pop	rbp
+      11: c3                           	ret
+
+0000000000000012 <poly>:
+      12: 55                           	push	rbp
+      13: 48 89 e5                     	mov	rbp, rsp
+      16: f2 0f 10 0d 00 00 00 00      	movsd	xmm1, qword ptr [rip]   # 0x1e <poly+0xc>
+      1e: f2 0f 59 c8                  	mulsd	xmm1, xmm0
+      22: f2 0f 58 0d 00 00 00 00      	addsd	xmm1, qword ptr [rip]   # 0x2a <poly+0x18>
+      2a: f2 0f 59 c8                  	mulsd	xmm1, xmm0
+      2e: f2 0f 58 0d 00 00 00 00      	addsd	xmm1, qword ptr [rip]   # 0x36 <poly+0x24>
+      36: f2 0f 59 c1                  	mulsd	xmm0, xmm1
+      3a: f2 0f 58 05 00 00 00 00      	addsd	xmm0, qword ptr [rip]   # 0x42 <poly+0x30>
+      42: 5d                           	pop	rbp
+      43: c3                           	ret
+
+0000000000000044 <to_int>:
+      44: 55                           	push	rbp
+      45: 48 89 e5                     	mov	rbp, rsp
+      48: f3 0f 2c c0                  	cvttss2si	eax, xmm0
+      4c: 5d                           	pop	rbp
+      4d: c3                           	ret
+
+000000000000004e <from_int>:
+      4e: 55                           	push	rbp
+      4f: 48 89 e5                     	mov	rbp, rsp
+      52: f3 0f 2a c7                  	cvtsi2ss	xmm0, edi
+      56: 5d                           	pop	rbp
+      57: c3                           	ret
+
+0000000000000058 <widen>:
+      58: 55                           	push	rbp
+      59: 48 89 e5                     	mov	rbp, rsp
+      5c: f3 0f 5a c0                  	cvtss2sd	xmm0, xmm0
+      60: 5d                           	pop	rbp
+      61: c3                           	ret
+
+0000000000000062 <fmax_>:
+      62: 55                           	push	rbp
+      63: 48 89 e5                     	mov	rbp, rsp
+      66: f3 0f 5f c1                  	maxss	xmm0, xmm1
+      6a: 5d                           	pop	rbp
+      6b: c3                           	ret
+
+000000000000006c <dot>:
+      6c: 55                           	push	rbp
+      6d: 48 89 e5                     	mov	rbp, rsp
+      70: 85 d2                        	test	edx, edx
+      72: 7e 1f                        	jle	0x93 <dot+0x27>
+      74: 89 d0                        	mov	eax, edx
+      76: 0f 57 c0                     	xorps	xmm0, xmm0
+      79: 31 c9                        	xor	ecx, ecx
+      7b: f3 0f 10 0c 8f               	movss	xmm1, dword ptr [rdi + 4*rcx]
+      80: f3 0f 59 0c 8e               	mulss	xmm1, dword ptr [rsi + 4*rcx]
+      85: f3 0f 58 c1                  	addss	xmm0, xmm1
+      89: 48 ff c1                     	inc	rcx
+      8c: 48 39 c8                     	cmp	rax, rcx
+      8f: 75 ea                        	jne	0x7b <dot+0xf>
+      91: eb 03                        	jmp	0x96 <dot+0x2a>
+      93: 0f 57 c0                     	xorps	xmm0, xmm0
+      96: 5d                           	pop	rbp
+      97: c3                           	ret

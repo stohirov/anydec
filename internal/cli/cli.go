@@ -10,6 +10,7 @@ import (
 	"io"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/stohirov/decompile-anything/engine"
 	"github.com/stohirov/decompile-anything/internal/intake"
@@ -27,8 +28,9 @@ var commands = []command{
 	{"identify", "identify <file>", "classify a file and report high-entropy regions", runIdentify},
 	{"disasm", "disasm <binary> [--func <name|addr>]", "disassemble code with the SLEIGH decoder", runDisasm},
 	{"unpack", "unpack <firmware> -o <dir>", "recursively extract a firmware image", runUnpack},
+	{"ir", "ir <binary> --func <name|addr>", "print a function's control-flow graph in IR", runIR},
 	{"open", "open <binary> --project <file>", "load a binary into a project database", runOpen},
-	{"funcs", "funcs <project> [--filter <text>]", "list discovered functions", runFuncs},
+	{"funcs", "funcs <binary> [--filter <text>] [--sweep=false]", "list discovered functions", runFuncs},
 	{"decompile", "decompile <project> <addr> [--format c|json|html]", "decompile one function", runDecompile},
 	{"raw", "raw <dump> --isa <spec> [--base auto|<addr>] [--svd <file>]", "load a headerless flash dump", runRaw},
 	{"serve", "serve <project> [--mcp]", "serve the engine API or an MCP server", runServe},
@@ -223,13 +225,144 @@ func runOpen(args []string, _ io.Writer) error {
 	return engine.ErrNotImplemented
 }
 
-func runFuncs(args []string, _ io.Writer) error {
+// analyze loads and analyzes the binary at path.
+func analyze(path string, sweep bool) (*engine.Analysis, error) {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+	prog, err := engine.Load(data)
+	if err != nil {
+		return nil, err
+	}
+	return engine.Analyze(prog, sweep)
+}
+
+// Until project databases exist, funcs analyzes a binary directly.
+func runFuncs(args []string, stdout io.Writer) error {
 	fs := flag.NewFlagSet("funcs", flag.ContinueOnError)
-	fs.String("filter", "", "only list functions whose name contains this text")
-	if _, err := parse(fs, args, 1); err != nil {
+	filter := fs.String("filter", "", "only list functions whose name contains this text")
+	sweep := fs.Bool("sweep", true, "also look for functions no call reaches, as stripped binaries need")
+	pos, err := parse(fs, args, 1)
+	if err != nil {
 		return err
 	}
-	return engine.ErrNotImplemented
+	a, err := analyze(pos[0], *sweep)
+	if err != nil {
+		return err
+	}
+	w := bufio.NewWriter(stdout)
+	defer w.Flush()
+	fmt.Fprintf(w, "%-10s %6s %6s %6s %5s  %s\n", "entry", "bytes", "insns", "blocks", "calls", "name")
+	for _, fn := range a.Functions {
+		if !strings.Contains(fn.Name, *filter) {
+			continue
+		}
+		var size uint64
+		for _, in := range fn.Insns {
+			size += uint64(in.Length)
+		}
+		var notes []string
+		if n := len(fn.JumpTables); n > 0 {
+			notes = append(notes, fmt.Sprintf("%d jump table(s)", n))
+		}
+		if n := len(fn.Unresolved); n > 0 {
+			notes = append(notes, fmt.Sprintf("%d unresolved indirect jump(s)", n))
+		}
+		if n := len(fn.Warnings); n > 0 {
+			notes = append(notes, fmt.Sprintf("%d warning(s)", n))
+		}
+		note := ""
+		if len(notes) > 0 {
+			note = "  (" + strings.Join(notes, ", ") + ")"
+		}
+		fmt.Fprintf(w, "%#-10x %6d %6d %6d %5d  %s%s\n", fn.Entry, size, len(fn.Insns), len(fn.Blocks), len(fn.Calls), fn.Name, note)
+	}
+	return nil
+}
+
+func runIR(args []string, stdout io.Writer) error {
+	fs := flag.NewFlagSet("ir", flag.ContinueOnError)
+	name := fs.String("func", "", "function name or entry address")
+	pos, err := parse(fs, args, 1)
+	if err != nil {
+		return err
+	}
+	if *name == "" {
+		return errUsage
+	}
+	a, err := analyze(pos[0], true)
+	if err != nil {
+		return err
+	}
+	fn := a.Function(0, *name)
+	if fn == nil {
+		addr, perr := strconv.ParseUint(*name, 0, 64)
+		if fn = a.Function(addr, ""); perr != nil || fn == nil {
+			return fmt.Errorf("no function %q", *name)
+		}
+	}
+	w := bufio.NewWriter(stdout)
+	defer w.Flush()
+	writeIR(w, a, fn)
+	return nil
+}
+
+// writeIR prints fn's blocks with each instruction's text above its ops.
+func writeIR(w io.Writer, a *engine.Analysis, fn *engine.Function) {
+	fmt.Fprintf(w, "%s at %#x: %d blocks, %d instructions\n", fn.Name, fn.Entry, len(fn.Blocks), len(fn.Insns))
+	for _, jt := range fn.JumpTables {
+		targets := map[uint64][]string{}
+		var order []uint64
+		for _, c := range jt.Cases {
+			if targets[c.Target] == nil {
+				order = append(order, c.Target)
+			}
+			targets[c.Target] = append(targets[c.Target], strconv.FormatInt(c.Value, 10))
+		}
+		fmt.Fprintf(w, "jump table at %#x:", jt.Addr)
+		for _, t := range order {
+			vals := targets[t]
+			if len(vals) > 4 {
+				vals = append(vals[:3], fmt.Sprintf("... (%d values)", len(targets[t])))
+			}
+			fmt.Fprintf(w, " %s->%#x", strings.Join(vals, ","), t)
+		}
+		fmt.Fprintln(w)
+	}
+	for _, u := range fn.Unresolved {
+		fmt.Fprintf(w, "unresolved indirect jump at %#x\n", u)
+	}
+	for _, warn := range fn.Warnings {
+		fmt.Fprintf(w, "warning: %s\n", warn)
+	}
+	index := map[*engine.Block]int{}
+	for i, b := range fn.Blocks {
+		index[b] = i
+	}
+	text := map[uint64]string{}
+	for _, in := range fn.Insns {
+		text[in.Addr] = in.Text
+	}
+	for i, b := range fn.Blocks {
+		var succ []string
+		for _, s := range b.Succ {
+			succ = append(succ, fmt.Sprintf("b%d", index[s]))
+		}
+		fmt.Fprintf(w, "\nb%d at %#x", i, b.Start)
+		if len(succ) > 0 {
+			fmt.Fprintf(w, " -> %s", strings.Join(succ, " "))
+		}
+		fmt.Fprintln(w)
+		origin := ^uint64(0)
+		for _, op := range b.Ops {
+			if op.Origin != origin {
+				origin = op.Origin
+				fmt.Fprintf(w, "  %8x: %s\n", origin, text[origin])
+			}
+			fmt.Fprintf(w, "            %s\n", a.Arch.FormatOp(op))
+		}
+	}
 }
 
 func runDecompile(args []string, _ io.Writer) error {

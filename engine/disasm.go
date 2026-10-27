@@ -13,9 +13,16 @@ import (
 // Program is a loaded executable.
 type Program = loader.Program
 
-// Load parses an executable (ELF today) into a Program.
+// Load parses an executable (ELF today) into a Program, applying the
+// relocations of relocatable objects as a static linker would.
 func Load(data []byte) (*Program, error) {
 	return loader.Load(data)
+}
+
+// LoadUnrelocated is Load with code bytes left exactly as the file stores
+// them.
+func LoadUnrelocated(data []byte) (*Program, error) {
+	return loader.LoadUnrelocated(data)
 }
 
 // Line is one line of a disassembly listing: an instruction, or bytes that

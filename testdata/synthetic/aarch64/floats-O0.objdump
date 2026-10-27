@@ -1,0 +1,109 @@
+
+testdata/synthetic/aarch64/floats-O0.o:	file format elf64-littleaarch64
+
+Disassembly of section .text:
+
+0000000000000000 <lerp>:
+       0: d10043ff     	sub	sp, sp, #16
+       4: bd000fe0     	str	s0, [sp, #12]
+       8: bd000be1     	str	s1, [sp, #8]
+       c: bd0007e2     	str	s2, [sp, #4]
+      10: bd400fe2     	ldr	s2, [sp, #12]
+      14: bd400be0     	ldr	s0, [sp, #8]
+      18: bd400fe1     	ldr	s1, [sp, #12]
+      1c: 1e213800     	fsub	s0, s0, s1
+      20: bd4007e1     	ldr	s1, [sp, #4]
+      24: 1f010800     	fmadd	s0, s0, s1, s2
+      28: 910043ff     	add	sp, sp, #16
+      2c: d65f03c0     	ret
+
+0000000000000030 <poly>:
+      30: d10043ff     	sub	sp, sp, #16
+      34: fd0007e0     	str	d0, [sp, #8]
+      38: fd4007e1     	ldr	d1, [sp, #8]
+      3c: 1e601002     	fmov	d2, #2.00000000
+      40: 1e611000     	fmov	d0, #3.00000000
+      44: 1f410800     	fmadd	d0, d0, d1, d2
+      48: fd4007e1     	ldr	d1, [sp, #8]
+      4c: 1e7e1002     	fmov	d2, #-1.00000000
+      50: 1f410800     	fmadd	d0, d0, d1, d2
+      54: fd4007e1     	ldr	d1, [sp, #8]
+      58: 1e6c1002     	fmov	d2, #0.50000000
+      5c: 1f410800     	fmadd	d0, d0, d1, d2
+      60: 910043ff     	add	sp, sp, #16
+      64: d65f03c0     	ret
+
+0000000000000068 <to_int>:
+      68: d10043ff     	sub	sp, sp, #16
+      6c: bd000fe0     	str	s0, [sp, #12]
+      70: bd400fe0     	ldr	s0, [sp, #12]
+      74: 1e380000     	fcvtzs	w0, s0
+      78: 910043ff     	add	sp, sp, #16
+      7c: d65f03c0     	ret
+
+0000000000000080 <from_int>:
+      80: d10043ff     	sub	sp, sp, #16
+      84: b9000fe0     	str	w0, [sp, #12]
+      88: bd400fe0     	ldr	s0, [sp, #12]
+      8c: 5e21d800     	scvtf	s0, s0
+      90: 910043ff     	add	sp, sp, #16
+      94: d65f03c0     	ret
+
+0000000000000098 <widen>:
+      98: d10043ff     	sub	sp, sp, #16
+      9c: bd000fe0     	str	s0, [sp, #12]
+      a0: bd400fe0     	ldr	s0, [sp, #12]
+      a4: 1e22c000     	fcvt	d0, s0
+      a8: 910043ff     	add	sp, sp, #16
+      ac: d65f03c0     	ret
+
+00000000000000b0 <fmax_>:
+      b0: d10043ff     	sub	sp, sp, #16
+      b4: bd000fe0     	str	s0, [sp, #12]
+      b8: bd000be1     	str	s1, [sp, #8]
+      bc: bd400fe0     	ldr	s0, [sp, #12]
+      c0: bd400be1     	ldr	s1, [sp, #8]
+      c4: 1e212000     	fcmp	s0, s1
+      c8: 540000ad     	b.le	0xdc <fmax_+0x2c>
+      cc: 14000001     	b	0xd0 <fmax_+0x20>
+      d0: bd400fe0     	ldr	s0, [sp, #12]
+      d4: bd0007e0     	str	s0, [sp, #4]
+      d8: 14000004     	b	0xe8 <fmax_+0x38>
+      dc: bd400be0     	ldr	s0, [sp, #8]
+      e0: bd0007e0     	str	s0, [sp, #4]
+      e4: 14000001     	b	0xe8 <fmax_+0x38>
+      e8: bd4007e0     	ldr	s0, [sp, #4]
+      ec: 910043ff     	add	sp, sp, #16
+      f0: d65f03c0     	ret
+
+00000000000000f4 <dot>:
+      f4: d10083ff     	sub	sp, sp, #32
+      f8: f9000fe0     	str	x0, [sp, #24]
+      fc: f9000be1     	str	x1, [sp, #16]
+     100: b9000fe2     	str	w2, [sp, #12]
+     104: 2f00e400     	movi	d0, #0000000000000000
+     108: bd000be0     	str	s0, [sp, #8]
+     10c: b90007ff     	str	wzr, [sp, #4]
+     110: 14000001     	b	0x114 <dot+0x20>
+     114: b94007e8     	ldr	w8, [sp, #4]
+     118: b9400fe9     	ldr	w9, [sp, #12]
+     11c: 6b090108     	subs	w8, w8, w9
+     120: 5400020a     	b.ge	0x160 <dot+0x6c>
+     124: 14000001     	b	0x128 <dot+0x34>
+     128: f9400fe8     	ldr	x8, [sp, #24]
+     12c: b98007e9     	ldrsw	x9, [sp, #4]
+     130: bc697900     	ldr	s0, [x8, x9, lsl #2]
+     134: f9400be8     	ldr	x8, [sp, #16]
+     138: b98007e9     	ldrsw	x9, [sp, #4]
+     13c: bc697901     	ldr	s1, [x8, x9, lsl #2]
+     140: bd400be2     	ldr	s2, [sp, #8]
+     144: 1f010800     	fmadd	s0, s0, s1, s2
+     148: bd000be0     	str	s0, [sp, #8]
+     14c: 14000001     	b	0x150 <dot+0x5c>
+     150: b94007e8     	ldr	w8, [sp, #4]
+     154: 11000508     	add	w8, w8, #1
+     158: b90007e8     	str	w8, [sp, #4]
+     15c: 17ffffee     	b	0x114 <dot+0x20>
+     160: bd400be0     	ldr	s0, [sp, #8]
+     164: 910083ff     	add	sp, sp, #32
+     168: d65f03c0     	ret

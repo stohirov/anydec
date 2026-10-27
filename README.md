@@ -2,7 +2,7 @@
 
 A local-first decompiler that turns firmware and binaries from devices you own into readable C-like code. It needs no hosted AI service: a deterministic engine does all the analysis, and an optional AI layer explains results using models you run yourself.
 
-> **Status:** phase 1 (foundations). `anydec identify` and `anydec disasm` work: an ELF loader and a pure-Go SLEIGH runtime decode ARM and Thumb code and emit P-code, checked against llvm-objdump on a synthetic corpus. The other commands parse their arguments and report "not implemented yet". See [the design doc](docs/design.md) for the plan.
+> **Status:** phase 2 (lifting and control flow). An ELF loader that applies object relocations and a pure-Go SLEIGH runtime decode ARM, Thumb, AArch64, x86 and MIPS code, checked against llvm-objdump on a synthetic corpus (MIPS by hand-encoded tests only). P-code is lifted to an architecture-neutral IR, and the engine discovers functions (including in stripped code), builds their control-flow graphs and resolves jump tables. Running the lifted IR reproduces native results for every corpus function. `identify`, `disasm`, `funcs` and `ir` work; the other commands parse their arguments and report "not implemented yet". See [the design doc](docs/design.md) for the plan.
 
 ## Goals
 
@@ -33,7 +33,7 @@ Requires Go 1.27+.
 make build        # static binary at bin/anydec (CGO_ENABLED=0)
 make test         # go test ./...
 make check        # vet + gofmt check + tests
-make corpus       # rebuild testdata/synthetic (needs clang with ARM targets)
+make corpus       # rebuild testdata/synthetic (needs clang with ARM, AArch64 and x86 targets)
 ```
 
 ## Usage
@@ -41,6 +41,8 @@ make corpus       # rebuild testdata/synthetic (needs clang with ARM targets)
 ```sh
 anydec identify firmware.bin
 anydec disasm extracted/usr/bin/tvservice --func main
+anydec funcs extracted/usr/bin/tvservice --filter net   # a binary, until projects exist
+anydec ir extracted/usr/bin/tvservice --func main       # lifted IR and CFG
 anydec unpack firmware.bin -o extracted/
 anydec open extracted/usr/bin/tvservice --project tv.adb
 anydec funcs tv.adb --filter net
@@ -58,8 +60,10 @@ anydec serve tv.adb --mcp
 | `internal/intake` | Identify and recursively unpack containers |
 | `internal/loader` | ELF, PE, Mach-O and raw images into a `Program` |
 | `internal/sleigh` | Pure-Go SLEIGH runtime: decode bytes, emit P-code |
-| `internal/ir` | Architecture-neutral IR (varnodes, ops, blocks, functions) |
-| `internal/analysis` | Pass manager, CFG, SSA, simplification, stack, calling conventions |
+| `internal/lift` | P-code into IR; the only stage that knows about SLEIGH |
+| `internal/ir` | Architecture-neutral IR (varnodes, ops, blocks, functions) and op semantics |
+| `internal/analysis` | Function discovery, CFG, jump tables; later SSA, simplification, stack, calling conventions |
+| `internal/irexec` | IR interpreter the tests use to check lifting against native runs |
 | `internal/typerec` | Constraint-based type, struct and array recovery |
 | `internal/structure` | CFG back into `if`/`while`/`switch` |
 | `internal/emit` | C text, JSON AST, HTML output |

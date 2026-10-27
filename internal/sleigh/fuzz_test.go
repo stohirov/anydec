@@ -15,7 +15,7 @@ func decodeAll(t testing.TB, l *Language, code []byte, thumb bool) {
 			t.Fatal(err)
 		}
 	}
-	step := uint64(4)
+	step := uint64(max(l.Spec.Alignment, 1))
 	if thumb {
 		step = 2
 	}
@@ -26,7 +26,6 @@ func decodeAll(t testing.TB, l *Language, code []byte, thumb bool) {
 }
 
 func TestRandomBytesNeverPanic(t *testing.T) {
-	l := loadARM(t, "ARM:LE:32:v8")
 	rng := rand.New(rand.NewPCG(7, 11))
 	n := 1 << 16
 	if testing.Short() {
@@ -36,8 +35,13 @@ func TestRandomBytesNeverPanic(t *testing.T) {
 	for i := range code {
 		code[i] = byte(rng.Uint32())
 	}
-	decodeAll(t, l, code, false)
-	decodeAll(t, l, code, true)
+	decodeAll(t, loadARM(t, "ARM:LE:32:v8"), code, false)
+	decodeAll(t, loadARM(t, "ARM:LE:32:v8"), code, true)
+	// x86 decodes at every byte offset, so prefixes and partial
+	// instructions get exercised too.
+	for _, id := range []string{"AARCH64:LE:64:v8A", "MIPS:BE:32:default", "x86:LE:64:default", "x86:LE:32:default"} {
+		decodeAll(t, loadARM(t, id), code, false)
+	}
 }
 
 func FuzzDecode(f *testing.F) {

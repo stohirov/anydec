@@ -111,6 +111,12 @@ func (c constTpl) fixSpace(w *walker) *Space {
 		if c.sel == vSpace {
 			h := &w.point.resolve[c.handle].hand
 			if h.offsetSpace == nil {
+				if h.space == nil {
+					// The operand's constructor exports nothing, so there
+					// is no varnode to use (a spec bug Ghidra hits as a
+					// null handle).
+					badData(w, "operand %d exports no varnode", c.handle)
+				}
 				return h.space
 			}
 			return h.tempSpace

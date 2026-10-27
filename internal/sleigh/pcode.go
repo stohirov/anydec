@@ -157,7 +157,9 @@ func (op PcodeOp) String() string {
 var ErrUnimplemented = errors.New("instruction has no p-code semantics")
 
 // Translate decodes the instruction at addr and returns it with its p-code,
-// as Sleigh::oneInstruction does. The length covers any delay slots.
+// as Sleigh::oneInstruction does. The p-code includes the instructions in
+// any delay slot, and in.DelaySlot is set to their total length, so the
+// next instruction to translate is at Addr+Length+DelaySlot.
 func (d *Decoder) Translate(addr uint64) (*Instruction, []PcodeOp, error) {
 	in, c, err := d.decode(addr)
 	if err != nil {
@@ -176,6 +178,7 @@ func (d *Decoder) Translate(addr uint64) (*Instruction, []PcodeOp, error) {
 				n += ds.base.length
 			}
 			c.naddr = addr + uint64(fall)
+			in.DelaySlot = fall - c.base.length
 		}
 		b := &builder{dec: d, cache: &pcodeCache{}, uniqMask: d.spec.uniqMask}
 		w := &walker{ctx: c}

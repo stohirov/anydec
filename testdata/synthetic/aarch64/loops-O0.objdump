@@ -1,0 +1,189 @@
+
+testdata/synthetic/aarch64/loops-O0.o:	file format elf64-littleaarch64
+
+Disassembly of section .text:
+
+0000000000000000 <sum>:
+       0: d10083ff     	sub	sp, sp, #32
+       4: f9000fe0     	str	x0, [sp, #24]
+       8: b90017e1     	str	w1, [sp, #20]
+       c: b90013ff     	str	wzr, [sp, #16]
+      10: b9000fff     	str	wzr, [sp, #12]
+      14: 14000001     	b	0x18 <sum+0x18>
+      18: b9400fe8     	ldr	w8, [sp, #12]
+      1c: b94017e9     	ldr	w9, [sp, #20]
+      20: 6b090108     	subs	w8, w8, w9
+      24: 540001aa     	b.ge	0x58 <sum+0x58>
+      28: 14000001     	b	0x2c <sum+0x2c>
+      2c: f9400fe8     	ldr	x8, [sp, #24]
+      30: b9800fe9     	ldrsw	x9, [sp, #12]
+      34: b8697909     	ldr	w9, [x8, x9, lsl #2]
+      38: b94013e8     	ldr	w8, [sp, #16]
+      3c: 0b090108     	add	w8, w8, w9
+      40: b90013e8     	str	w8, [sp, #16]
+      44: 14000001     	b	0x48 <sum+0x48>
+      48: b9400fe8     	ldr	w8, [sp, #12]
+      4c: 11000508     	add	w8, w8, #1
+      50: b9000fe8     	str	w8, [sp, #12]
+      54: 17fffff1     	b	0x18 <sum+0x18>
+      58: b94013e0     	ldr	w0, [sp, #16]
+      5c: 910083ff     	add	sp, sp, #32
+      60: d65f03c0     	ret
+
+0000000000000064 <strlen_>:
+      64: d10043ff     	sub	sp, sp, #16
+      68: f90007e0     	str	x0, [sp, #8]
+      6c: b90007ff     	str	wzr, [sp, #4]
+      70: 14000001     	b	0x74 <strlen_+0x10>
+      74: f94007e8     	ldr	x8, [sp, #8]
+      78: b94007e9     	ldr	w9, [sp, #4]
+      7c: 8b090108     	add	x8, x8, x9
+      80: 39400108     	ldrb	w8, [x8]
+      84: 340000c8     	cbz	w8, 0x9c <strlen_+0x38>
+      88: 14000001     	b	0x8c <strlen_+0x28>
+      8c: b94007e8     	ldr	w8, [sp, #4]
+      90: 11000508     	add	w8, w8, #1
+      94: b90007e8     	str	w8, [sp, #4]
+      98: 17fffff7     	b	0x74 <strlen_+0x10>
+      9c: b94007e0     	ldr	w0, [sp, #4]
+      a0: 910043ff     	add	sp, sp, #16
+      a4: d65f03c0     	ret
+
+00000000000000a8 <find>:
+      a8: d10083ff     	sub	sp, sp, #32
+      ac: f9000be0     	str	x0, [sp, #16]
+      b0: b9000fe1     	str	w1, [sp, #12]
+      b4: b9000be2     	str	w2, [sp, #8]
+      b8: b90007ff     	str	wzr, [sp, #4]
+      bc: 14000001     	b	0xc0 <find+0x18>
+      c0: b94007e8     	ldr	w8, [sp, #4]
+      c4: b9400fe9     	ldr	w9, [sp, #12]
+      c8: 6b090108     	subs	w8, w8, w9
+      cc: 5400022a     	b.ge	0x110 <find+0x68>
+      d0: 14000001     	b	0xd4 <find+0x2c>
+      d4: f9400be8     	ldr	x8, [sp, #16]
+      d8: b98007e9     	ldrsw	x9, [sp, #4]
+      dc: b8697908     	ldr	w8, [x8, x9, lsl #2]
+      e0: b9400be9     	ldr	w9, [sp, #8]
+      e4: 6b090108     	subs	w8, w8, w9
+      e8: 540000a1     	b.ne	0xfc <find+0x54>
+      ec: 14000001     	b	0xf0 <find+0x48>
+      f0: b94007e8     	ldr	w8, [sp, #4]
+      f4: b9001fe8     	str	w8, [sp, #28]
+      f8: 14000009     	b	0x11c <find+0x74>
+      fc: 14000001     	b	0x100 <find+0x58>
+     100: b94007e8     	ldr	w8, [sp, #4]
+     104: 11000508     	add	w8, w8, #1
+     108: b90007e8     	str	w8, [sp, #4]
+     10c: 17ffffed     	b	0xc0 <find+0x18>
+     110: 12800008     	mov	w8, #-1                 // =0xffffffff
+     114: b9001fe8     	str	w8, [sp, #28]
+     118: 14000001     	b	0x11c <find+0x74>
+     11c: b9401fe0     	ldr	w0, [sp, #28]
+     120: 910083ff     	add	sp, sp, #32
+     124: d65f03c0     	ret
+
+0000000000000128 <matmul>:
+     128: d100c3ff     	sub	sp, sp, #48
+     12c: b9002fe0     	str	w0, [sp, #44]
+     130: f90013e1     	str	x1, [sp, #32]
+     134: f9000fe2     	str	x2, [sp, #24]
+     138: f9000be3     	str	x3, [sp, #16]
+     13c: b9000fff     	str	wzr, [sp, #12]
+     140: 14000001     	b	0x144 <matmul+0x1c>
+     144: b9400fe8     	ldr	w8, [sp, #12]
+     148: b9402fe9     	ldr	w9, [sp, #44]
+     14c: 6b090108     	subs	w8, w8, w9
+     150: 5400074a     	b.ge	0x238 <matmul+0x110>
+     154: 14000001     	b	0x158 <matmul+0x30>
+     158: b9000bff     	str	wzr, [sp, #8]
+     15c: 14000001     	b	0x160 <matmul+0x38>
+     160: b9400be8     	ldr	w8, [sp, #8]
+     164: b9402fe9     	ldr	w9, [sp, #44]
+     168: 6b090108     	subs	w8, w8, w9
+     16c: 540005ca     	b.ge	0x224 <matmul+0xfc>
+     170: 14000001     	b	0x174 <matmul+0x4c>
+     174: b90007ff     	str	wzr, [sp, #4]
+     178: b90003ff     	str	wzr, [sp]
+     17c: 14000001     	b	0x180 <matmul+0x58>
+     180: b94003e8     	ldr	w8, [sp]
+     184: b9402fe9     	ldr	w9, [sp, #44]
+     188: 6b090108     	subs	w8, w8, w9
+     18c: 5400032a     	b.ge	0x1f0 <matmul+0xc8>
+     190: 14000001     	b	0x194 <matmul+0x6c>
+     194: f94013e8     	ldr	x8, [sp, #32]
+     198: b9400fe9     	ldr	w9, [sp, #12]
+     19c: b9402fea     	ldr	w10, [sp, #44]
+     1a0: 1b0a7d29     	mul	w9, w9, w10
+     1a4: b94003ea     	ldr	w10, [sp]
+     1a8: 0b0a0129     	add	w9, w9, w10
+     1ac: b869d908     	ldr	w8, [x8, w9, sxtw #2]
+     1b0: f9400fe9     	ldr	x9, [sp, #24]
+     1b4: b94003ea     	ldr	w10, [sp]
+     1b8: b9402feb     	ldr	w11, [sp, #44]
+     1bc: 1b0b7d4a     	mul	w10, w10, w11
+     1c0: b9400beb     	ldr	w11, [sp, #8]
+     1c4: 0b0b014a     	add	w10, w10, w11
+     1c8: b86ad929     	ldr	w9, [x9, w10, sxtw #2]
+     1cc: 1b097d09     	mul	w9, w8, w9
+     1d0: b94007e8     	ldr	w8, [sp, #4]
+     1d4: 0b090108     	add	w8, w8, w9
+     1d8: b90007e8     	str	w8, [sp, #4]
+     1dc: 14000001     	b	0x1e0 <matmul+0xb8>
+     1e0: b94003e8     	ldr	w8, [sp]
+     1e4: 11000508     	add	w8, w8, #1
+     1e8: b90003e8     	str	w8, [sp]
+     1ec: 17ffffe5     	b	0x180 <matmul+0x58>
+     1f0: b94007e8     	ldr	w8, [sp, #4]
+     1f4: f9400be9     	ldr	x9, [sp, #16]
+     1f8: b9400fea     	ldr	w10, [sp, #12]
+     1fc: b9402feb     	ldr	w11, [sp, #44]
+     200: 1b0b7d4a     	mul	w10, w10, w11
+     204: b9400beb     	ldr	w11, [sp, #8]
+     208: 0b0b014a     	add	w10, w10, w11
+     20c: b82ad928     	str	w8, [x9, w10, sxtw #2]
+     210: 14000001     	b	0x214 <matmul+0xec>
+     214: b9400be8     	ldr	w8, [sp, #8]
+     218: 11000508     	add	w8, w8, #1
+     21c: b9000be8     	str	w8, [sp, #8]
+     220: 17ffffd0     	b	0x160 <matmul+0x38>
+     224: 14000001     	b	0x228 <matmul+0x100>
+     228: b9400fe8     	ldr	w8, [sp, #12]
+     22c: 11000508     	add	w8, w8, #1
+     230: b9000fe8     	str	w8, [sp, #12]
+     234: 17ffffc4     	b	0x144 <matmul+0x1c>
+     238: 9100c3ff     	add	sp, sp, #48
+     23c: d65f03c0     	ret
+
+0000000000000240 <collatz>:
+     240: d10043ff     	sub	sp, sp, #16
+     244: b9000fe0     	str	w0, [sp, #12]
+     248: b9000bff     	str	wzr, [sp, #8]
+     24c: 14000001     	b	0x250 <collatz+0x10>
+     250: b9400fe8     	ldr	w8, [sp, #12]
+     254: 36000108     	tbz	w8, #0, 0x274 <collatz+0x34>
+     258: 14000001     	b	0x25c <collatz+0x1c>
+     25c: b9400fe9     	ldr	w9, [sp, #12]
+     260: 52800068     	mov	w8, #3                  // =0x3
+     264: 1b097d08     	mul	w8, w8, w9
+     268: 11000508     	add	w8, w8, #1
+     26c: b90007e8     	str	w8, [sp, #4]
+     270: 14000006     	b	0x288 <collatz+0x48>
+     274: b9400fe8     	ldr	w8, [sp, #12]
+     278: 52800049     	mov	w9, #2                  // =0x2
+     27c: 1ac90908     	udiv	w8, w8, w9
+     280: b90007e8     	str	w8, [sp, #4]
+     284: 14000001     	b	0x288 <collatz+0x48>
+     288: b94007e8     	ldr	w8, [sp, #4]
+     28c: b9000fe8     	str	w8, [sp, #12]
+     290: b9400be8     	ldr	w8, [sp, #8]
+     294: 11000508     	add	w8, w8, #1
+     298: b9000be8     	str	w8, [sp, #8]
+     29c: 14000001     	b	0x2a0 <collatz+0x60>
+     2a0: b9400fe8     	ldr	w8, [sp, #12]
+     2a4: 71000508     	subs	w8, w8, #1
+     2a8: 54fffd41     	b.ne	0x250 <collatz+0x10>
+     2ac: 14000001     	b	0x2b0 <collatz+0x70>
+     2b0: b9400be0     	ldr	w0, [sp, #8]
+     2b4: 910043ff     	add	sp, sp, #16
+     2b8: d65f03c0     	ret

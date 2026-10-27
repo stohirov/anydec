@@ -113,9 +113,19 @@ func TestLanguages(t *testing.T) {
 	for _, l := range infos {
 		have[l.ID] = true
 	}
-	for _, id := range []string{"ARM:LE:32:v8", "ARM:BE:32:v8", "ARM:LE:32:v8T", "ARM:LE:32:Cortex"} {
+	for _, id := range []string{
+		"ARM:LE:32:v8", "ARM:BE:32:v8", "ARM:LE:32:v8T", "ARM:LE:32:Cortex",
+		"AARCH64:LE:64:v8A", "AARCH64:BE:64:v8A",
+		"x86:LE:32:default", "x86:LE:64:default",
+		"MIPS:BE:32:default", "MIPS:LE:32:default", "MIPS:BE:64:default", "MIPS:LE:64:default",
+	} {
 		if !have[id] {
 			t.Errorf("%s not listed; have %v", id, have)
+		}
+	}
+	for _, l := range infos {
+		if _, err := LoadLanguage(ghidra.Processors, l.ID); err != nil {
+			t.Errorf("load %s: %v", l.ID, err)
 		}
 	}
 	if have["ARM:LE:32:v4"] {

@@ -1,0 +1,58 @@
+
+testdata/synthetic/x86-64/switch-Os.o:	file format elf64-x86-64
+
+Disassembly of section .text:
+
+0000000000000000 <dense>:
+       0: 55                           	push	rbp
+       1: 48 89 e5                     	mov	rbp, rsp
+       4: b8 ff ff ff ff               	mov	eax, 4294967295
+       9: 83 ff 06                     	cmp	edi, 6
+       c: 77 09                        	ja	0x17 <dense+0x17>
+       e: 89 f8                        	mov	eax, edi
+      10: 8b 04 85 00 00 00 00         	mov	eax, dword ptr [4*rax]
+      17: 5d                           	pop	rbp
+      18: c3                           	ret
+
+0000000000000019 <sparse>:
+      19: 55                           	push	rbp
+      1a: 48 89 e5                     	mov	rbp, rsp
+      1d: 81 ff e7 03 00 00            	cmp	edi, 999
+      23: 7f 11                        	jg	0x36 <sparse+0x1d>
+      25: 83 ff 03                     	cmp	edi, 3
+      28: 74 27                        	je	0x51 <sparse+0x38>
+      2a: 83 ff 64                     	cmp	edi, 100
+      2d: 75 1e                        	jne	0x4d <sparse+0x34>
+      2f: b8 02 00 00 00               	mov	eax, 2
+      34: eb 27                        	jmp	0x5d <sparse+0x44>
+      36: 81 ff e8 03 00 00            	cmp	edi, 1000
+      3c: 74 1a                        	je	0x58 <sparse+0x3f>
+      3e: 81 ff 9f 86 01 00            	cmp	edi, 99999
+      44: 75 07                        	jne	0x4d <sparse+0x34>
+      46: b8 04 00 00 00               	mov	eax, 4
+      4b: eb 10                        	jmp	0x5d <sparse+0x44>
+      4d: 31 c0                        	xor	eax, eax
+      4f: eb 0c                        	jmp	0x5d <sparse+0x44>
+      51: b8 01 00 00 00               	mov	eax, 1
+      56: eb 05                        	jmp	0x5d <sparse+0x44>
+      58: b8 03 00 00 00               	mov	eax, 3
+      5d: 5d                           	pop	rbp
+      5e: c3                           	ret
+
+000000000000005f <dispatch>:
+      5f: 55                           	push	rbp
+      60: 48 89 e5                     	mov	rbp, rsp
+      63: 83 ff 02                     	cmp	edi, 2
+      66: 74 15                        	je	0x7d <dispatch+0x1e>
+      68: 83 ff 01                     	cmp	edi, 1
+      6b: 74 0a                        	je	0x77 <dispatch+0x18>
+      6d: 85 ff                        	test	edi, edi
+      6f: 75 12                        	jne	0x83 <dispatch+0x24>
+      71: 5d                           	pop	rbp
+      72: e9 00 00 00 00               	jmp	0x77 <dispatch+0x18>
+      77: 5d                           	pop	rbp
+      78: e9 00 00 00 00               	jmp	0x7d <dispatch+0x1e>
+      7d: 5d                           	pop	rbp
+      7e: e9 00 00 00 00               	jmp	0x83 <dispatch+0x24>
+      83: 5d                           	pop	rbp
+      84: c3                           	ret

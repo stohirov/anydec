@@ -1,0 +1,55 @@
+
+testdata/synthetic/aarch64/calls-O2.o:	file format elf64-littleaarch64
+
+Disassembly of section .text:
+
+0000000000000000 <many>:
+       0: 0b000028     	add	w8, w1, w0
+       4: 0b030049     	add	w9, w2, w3
+       8: 0b090108     	add	w8, w8, w9
+       c: 0b050089     	add	w9, w4, w5
+      10: 0b090100     	add	w0, w8, w9
+      14: d65f03c0     	ret
+
+0000000000000018 <call_many>:
+      18: 528002a0     	mov	w0, #21                 // =0x15
+      1c: d65f03c0     	ret
+
+0000000000000020 <fib>:
+      20: a9be7bfd     	stp	x29, x30, [sp, #-32]!
+      24: a9014ff4     	stp	x20, x19, [sp, #16]
+      28: 2a0003f3     	mov	w19, w0
+      2c: 7100081f     	cmp	w0, #2
+      30: 910003fd     	mov	x29, sp
+      34: 54000062     	b.hs	0x40 <fib+0x20>
+      38: 2a1f03f4     	mov	w20, wzr
+      3c: 14000008     	b	0x5c <fib+0x3c>
+      40: 2a1f03f4     	mov	w20, wzr
+      44: 51000660     	sub	w0, w19, #1
+      48: 94000000     	bl	0x48 <fib+0x28>
+      4c: 51000a73     	sub	w19, w19, #2
+      50: 0b140014     	add	w20, w0, w20
+      54: 7100067f     	cmp	w19, #1
+      58: 54ffff68     	b.hi	0x44 <fib+0x24>
+      5c: 0b140260     	add	w0, w19, w20
+      60: a9414ff4     	ldp	x20, x19, [sp, #16]
+      64: a8c27bfd     	ldp	x29, x30, [sp], #32
+      68: d65f03c0     	ret
+
+000000000000006c <apply>:
+      6c: 2a0103e8     	mov	w8, w1
+      70: aa0003e2     	mov	x2, x0
+      74: 11000421     	add	w1, w1, #1
+      78: 2a0803e0     	mov	w0, w8
+      7c: d61f0040     	br	x2
+
+0000000000000080 <report>:
+      80: 2a0103e2     	mov	w2, w1
+      84: aa0003e1     	mov	x1, x0
+      88: 90000000     	adrp	x0, 0x0 <many>
+      8c: 91000000     	add	x0, x0, #0
+      90: 14000000     	b	0x90 <report+0x10>
+
+0000000000000094 <copy16>:
+      94: 52800202     	mov	w2, #16                 // =0x10
+      98: 14000000     	b	0x98 <copy16+0x4>

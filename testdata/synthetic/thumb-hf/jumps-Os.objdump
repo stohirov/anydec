@@ -1,0 +1,174 @@
+
+testdata/synthetic/thumb-hf/jumps-Os.o:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00000000 <alu>:
+       0: 280b         	cmp	r0, #11
+       2: bf84         	itt	hi
+       4: 2000         	movhi	r0, #0
+       6: 4770         	bxhi	lr
+       8: e8df f000    	tbb	[pc, r0]
+       c: 06 1d 12 15  	.word	0x15121d06
+      10: 0a 1f 22 18  	.word	0x18221f0a
+      14: 29 0d 27 08  	.word	0x08270d29
+      18: 1850         	adds	r0, r2, r1
+      1a: 4770         	bx	lr
+      1c: 43d0         	mvns	r0, r2
+      1e: 4770         	bx	lr
+      20: ea42 0001    	orr.w	r0, r2, r1
+      24: 4770         	bx	lr
+      26: 2000         	movs	r0, #0
+      28: 4291         	cmp	r1, r2
+      2a: bfb8         	it	lt
+      2c: 2001         	movlt	r0, #1
+      2e: 4770         	bx	lr
+      30: fb02 f001    	mul	r0, r2, r1
+      34: 4770         	bx	lr
+      36: ea02 0001    	and.w	r0, r2, r1
+      3a: 4770         	bx	lr
+      3c: f002 001f    	and	r0, r2, #31
+      40: fa21 f000    	lsr.w	r0, r1, r0
+      44: 4770         	bx	lr
+      46: 1a88         	subs	r0, r1, r2
+      48: 4770         	bx	lr
+      4a: ea82 0001    	eor.w	r0, r2, r1
+      4e: 4770         	bx	lr
+      50: f002 001f    	and	r0, r2, #31
+      54: fa01 f000    	lsl.w	r0, r1, r0
+      58: 4770         	bx	lr
+      5a: 4248         	rsbs	r0, r1, #0
+      5c: 4770         	bx	lr
+      5e: f002 001f    	and	r0, r2, #31
+      62: fa41 f000    	asr.w	r0, r1, r0
+      66: 4770         	bx	lr
+
+00000068 <offset_switch>:
+      68: 3864         	subs	r0, #100
+      6a: 2807         	cmp	r0, #7
+      6c: bf84         	itt	hi
+      6e: f04f 30ff    	movhi.w	r0, #4294967295
+      72: 4770         	bxhi	lr
+      74: e8df f000    	tbb	[pc, r0]
+      78: 04 12 09 0c  	.word	0x0c091204
+      7c: 07 15 17 0f  	.word	0x0f171507
+      80: eb01 0041    	add.w	r0, r1, r1, lsl #1
+      84: 4770         	bx	lr
+      86: 0088         	lsls	r0, r1, #2
+      88: 4770         	bx	lr
+      8a: f081 0055    	eor	r0, r1, #85
+      8e: 4770         	bx	lr
+      90: f1a1 0009    	sub.w	r0, r1, #9
+      94: 4770         	bx	lr
+      96: f1c1 0007    	rsb.w	r0, r1, #7
+      9a: 4770         	bx	lr
+      9c: f101 0011    	add.w	r0, r1, #17
+      a0: 4770         	bx	lr
+      a2: 1048         	asrs	r0, r1, #1
+      a4: 4770         	bx	lr
+      a6: fb01 f001    	mul	r0, r1, r1
+      aa: 4770         	bx	lr
+
+000000ac <byte_switch>:
+      ac: f1a0 0261    	sub.w	r2, r0, #97
+      b0: 2a07         	cmp	r2, #7
+      b2: 4608         	mov	r0, r1
+      b4: bf88         	it	hi
+      b6: 4770         	bxhi	lr
+      b8: e8df f002    	tbb	[pc, r2]
+      bc: 04 10 09 0b  	.word	0x0b091004
+      c0: 06 12 15 0e  	.word	0x0e151206
+      c4: 3001         	adds	r0, #1
+      c6: 4770         	bx	lr
+      c8: f040 0005    	orr	r0, r0, #5
+      cc: 4770         	bx	lr
+      ce: 3803         	subs	r0, #3
+      d0: 4770         	bx	lr
+      d2: f080 0004    	eor	r0, r0, #4
+      d6: 4770         	bx	lr
+      d8: 0a00         	lsrs	r0, r0, #8
+      da: 4770         	bx	lr
+      dc: 0040         	lsls	r0, r0, #1
+      de: 4770         	bx	lr
+      e0: f000 0006    	and	r0, r0, #6
+      e4: 4770         	bx	lr
+      e6: 01c0         	lsls	r0, r0, #7
+      e8: 4770         	bx	lr
+      ea: bf00         	nop
+
+000000ec <interp>:
+      ec: 2901         	cmp	r1, #1
+      ee: bfbc         	itt	lt
+      f0: 2000         	movlt	r0, #0
+      f2: 4770         	bxlt	lr
+      f4: b510         	push	{r4, lr}
+      f6: b090         	sub	sp, #64
+      f8: f04f 0e00    	mov.w	lr, #0
+      fc: 46ec         	mov	r12, sp
+      fe: bf00         	nop
+     100: f810 2b01    	ldrb	r2, [r0], #1
+     104: f002 0307    	and	r3, r2, #7
+     108: e8df f003    	tbb	[pc, r3]
+     10c: 04 2e 14 21  	.word	0x21142e04
+     110: 09 3d 48 5b  	.word	0x5b483d09
+     114: f1be 0f0f    	cmp.w	lr, #15
+     118: dc46         	bgt	0x1a8 <interp+0xbc>     @ imm = #140
+     11a: 08d2         	lsrs	r2, r2, #3
+     11c: e039         	b	0x192 <interp+0xa6>     @ imm = #114
+     11e: f1be 0f01    	cmp.w	lr, #1
+     122: db41         	blt	0x1a8 <interp+0xbc>     @ imm = #130
+     124: eb0c 028e    	add.w	r2, r12, lr, lsl #2
+     128: f852 3c04    	ldr	r3, [r2, #-4]
+     12c: 425b         	rsbs	r3, r3, #0
+     12e: f842 3c04    	str	r3, [r2, #-4]
+     132: e039         	b	0x1a8 <interp+0xbc>     @ imm = #114
+     134: f1be 0f02    	cmp.w	lr, #2
+     138: db36         	blt	0x1a8 <interp+0xbc>     @ imm = #108
+     13a: eb0c 028e    	add.w	r2, r12, lr, lsl #2
+     13e: f1ae 0e01    	sub.w	lr, lr, #1
+     142: f85c 302e    	ldr.w	r3, [r12, lr, lsl #2]
+     146: f852 4c08    	ldr	r4, [r2, #-8]
+     14a: 1ae3         	subs	r3, r4, r3
+     14c: e018         	b	0x180 <interp+0x94>     @ imm = #48
+     14e: f1be 0f02    	cmp.w	lr, #2
+     152: db29         	blt	0x1a8 <interp+0xbc>     @ imm = #82
+     154: eb0c 028e    	add.w	r2, r12, lr, lsl #2
+     158: f1ae 0e01    	sub.w	lr, lr, #1
+     15c: f85c 302e    	ldr.w	r3, [r12, lr, lsl #2]
+     160: f852 4c08    	ldr	r4, [r2, #-8]
+     164: 4363         	muls	r3, r4, r3
+     166: e00b         	b	0x180 <interp+0x94>     @ imm = #22
+     168: f1be 0f02    	cmp.w	lr, #2
+     16c: db1c         	blt	0x1a8 <interp+0xbc>     @ imm = #56
+     16e: eb0c 028e    	add.w	r2, r12, lr, lsl #2
+     172: f1ae 0e01    	sub.w	lr, lr, #1
+     176: f85c 302e    	ldr.w	r3, [r12, lr, lsl #2]
+     17a: f852 4c08    	ldr	r4, [r2, #-8]
+     17e: 4423         	add	r3, r4
+     180: f842 3c08    	str	r3, [r2, #-8]
+     184: e010         	b	0x1a8 <interp+0xbc>     @ imm = #32
+     186: f1ae 0201    	sub.w	r2, lr, #1
+     18a: 2a0e         	cmp	r2, #14
+     18c: d80c         	bhi	0x1a8 <interp+0xbc>     @ imm = #24
+     18e: f85c 2022    	ldr.w	r2, [r12, r2, lsl #2]
+     192: f84c 202e    	str.w	r2, [r12, lr, lsl #2]
+     196: f10e 0e01    	add.w	lr, lr, #1
+     19a: e005         	b	0x1a8 <interp+0xbc>     @ imm = #10
+     19c: f1be 0f00    	cmp.w	lr, #0
+     1a0: bfc8         	it	gt
+     1a2: f1ae 0e01    	subgt.w	lr, lr, #1
+     1a6: bf00         	nop
+     1a8: 3901         	subs	r1, #1
+     1aa: d1a9         	bne	0x100 <interp+0x14>     @ imm = #-174
+     1ac: f1be 0f00    	cmp.w	lr, #0
+     1b0: d004         	beq	0x1bc <interp+0xd0>     @ imm = #8
+     1b2: eb0c 008e    	add.w	r0, r12, lr, lsl #2
+     1b6: f850 0c04    	ldr	r0, [r0, #-4]
+     1ba: e000         	b	0x1be <interp+0xd2>     @ imm = #0
+     1bc: 2000         	movs	r0, #0
+     1be: b010         	add	sp, #64
+     1c0: bd10         	pop	{r4, pc}
+     1c2: f1be 0f00    	cmp.w	lr, #0
+     1c6: d1f4         	bne	0x1b2 <interp+0xc6>     @ imm = #-24
+     1c8: f04f 30ff    	mov.w	r0, #4294967295
+     1cc: e7f7         	b	0x1be <interp+0xd2>     @ imm = #-18

@@ -1,0 +1,186 @@
+
+testdata/synthetic/x86-64/bits-O0.o:	file format elf64-x86-64
+
+Disassembly of section .text:
+
+0000000000000000 <popcount>:
+       0: 55                           	push	rbp
+       1: 48 89 e5                     	mov	rbp, rsp
+       4: 89 7d fc                     	mov	dword ptr [rbp - 4], edi
+       7: c7 45 f8 00 00 00 00         	mov	dword ptr [rbp - 8], 0
+       e: 83 7d fc 00                  	cmp	dword ptr [rbp - 4], 0
+      12: 74 17                        	je	0x2b <popcount+0x2b>
+      14: 8b 45 fc                     	mov	eax, dword ptr [rbp - 4]
+      17: 83 e8 01                     	sub	eax, 1
+      1a: 23 45 fc                     	and	eax, dword ptr [rbp - 4]
+      1d: 89 45 fc                     	mov	dword ptr [rbp - 4], eax
+      20: 8b 45 f8                     	mov	eax, dword ptr [rbp - 8]
+      23: 83 c0 01                     	add	eax, 1
+      26: 89 45 f8                     	mov	dword ptr [rbp - 8], eax
+      29: eb e3                        	jmp	0xe <popcount+0xe>
+      2b: 8b 45 f8                     	mov	eax, dword ptr [rbp - 8]
+      2e: 5d                           	pop	rbp
+      2f: c3                           	ret
+
+0000000000000030 <bswap>:
+      30: 55                           	push	rbp
+      31: 48 89 e5                     	mov	rbp, rsp
+      34: 89 7d fc                     	mov	dword ptr [rbp - 4], edi
+      37: 8b 45 fc                     	mov	eax, dword ptr [rbp - 4]
+      3a: 0f c8                        	bswap	eax
+      3c: 5d                           	pop	rbp
+      3d: c3                           	ret
+      3e: 66 90                        	nop
+
+0000000000000040 <clz>:
+      40: 55                           	push	rbp
+      41: 48 89 e5                     	mov	rbp, rsp
+      44: 89 7d fc                     	mov	dword ptr [rbp - 4], edi
+      47: 83 7d fc 00                  	cmp	dword ptr [rbp - 4], 0
+      4b: 74 0e                        	je	0x5b <clz+0x1b>
+      4d: 8b 4d fc                     	mov	ecx, dword ptr [rbp - 4]
+      50: 0f bd c1                     	bsr	eax, ecx
+      53: 83 f0 1f                     	xor	eax, 31
+      56: 89 45 f8                     	mov	dword ptr [rbp - 8], eax
+      59: eb 0a                        	jmp	0x65 <clz+0x25>
+      5b: b8 20 00 00 00               	mov	eax, 32
+      60: 89 45 f8                     	mov	dword ptr [rbp - 8], eax
+      63: eb 00                        	jmp	0x65 <clz+0x25>
+      65: 8b 45 f8                     	mov	eax, dword ptr [rbp - 8]
+      68: 5d                           	pop	rbp
+      69: c3                           	ret
+      6a: 66 0f 1f 44 00 00            	nop	word ptr [rax + rax]
+
+0000000000000070 <mul64>:
+      70: 55                           	push	rbp
+      71: 48 89 e5                     	mov	rbp, rsp
+      74: 48 89 7d f8                  	mov	qword ptr [rbp - 8], rdi
+      78: 48 89 75 f0                  	mov	qword ptr [rbp - 16], rsi
+      7c: 48 8b 45 f8                  	mov	rax, qword ptr [rbp - 8]
+      80: 48 0f af 45 f0               	imul	rax, qword ptr [rbp - 16]
+      85: 5d                           	pop	rbp
+      86: c3                           	ret
+      87: 66 0f 1f 84 00 00 00 00 00   	nop	word ptr [rax + rax]
+
+0000000000000090 <smull>:
+      90: 55                           	push	rbp
+      91: 48 89 e5                     	mov	rbp, rsp
+      94: 89 7d fc                     	mov	dword ptr [rbp - 4], edi
+      97: 89 75 f8                     	mov	dword ptr [rbp - 8], esi
+      9a: 48 63 45 fc                  	movsxd	rax, dword ptr [rbp - 4]
+      9e: 48 63 4d f8                  	movsxd	rcx, dword ptr [rbp - 8]
+      a2: 48 0f af c1                  	imul	rax, rcx
+      a6: 5d                           	pop	rbp
+      a7: c3                           	ret
+      a8: 0f 1f 84 00 00 00 00 00      	nop	dword ptr [rax + rax]
+
+00000000000000b0 <rotl>:
+      b0: 55                           	push	rbp
+      b1: 48 89 e5                     	mov	rbp, rsp
+      b4: 89 7d fc                     	mov	dword ptr [rbp - 4], edi
+      b7: 89 75 f8                     	mov	dword ptr [rbp - 8], esi
+      ba: 8b 45 fc                     	mov	eax, dword ptr [rbp - 4]
+      bd: 8b 4d f8                     	mov	ecx, dword ptr [rbp - 8]
+      c0: 83 e1 1f                     	and	ecx, 31
+      c3: d3 e0                        	shl	eax, cl
+      c5: 8b 55 fc                     	mov	edx, dword ptr [rbp - 4]
+      c8: 31 c9                        	xor	ecx, ecx
+      ca: 2b 4d f8                     	sub	ecx, dword ptr [rbp - 8]
+      cd: 83 e1 1f                     	and	ecx, 31
+      d0: d3 ea                        	shr	edx, cl
+      d2: 89 d1                        	mov	ecx, edx
+      d4: 09 c8                        	or	eax, ecx
+      d6: 5d                           	pop	rbp
+      d7: c3                           	ret
+      d8: 0f 1f 84 00 00 00 00 00      	nop	dword ptr [rax + rax]
+
+00000000000000e0 <extract>:
+      e0: 55                           	push	rbp
+      e1: 48 89 e5                     	mov	rbp, rsp
+      e4: 89 7d fc                     	mov	dword ptr [rbp - 4], edi
+      e7: 8b 45 fc                     	mov	eax, dword ptr [rbp - 4]
+      ea: c1 e8 07                     	shr	eax, 7
+      ed: 83 e0 1f                     	and	eax, 31
+      f0: 5d                           	pop	rbp
+      f1: c3                           	ret
+      f2: 66 66 66 66 66 2e 0f 1f 84 00 00 00 00 00    	nop	word ptr cs:[rax + rax]
+
+0000000000000100 <insert>:
+     100: 55                           	push	rbp
+     101: 48 89 e5                     	mov	rbp, rsp
+     104: 89 7d fc                     	mov	dword ptr [rbp - 4], edi
+     107: 89 75 f8                     	mov	dword ptr [rbp - 8], esi
+     10a: 8b 45 fc                     	mov	eax, dword ptr [rbp - 4]
+     10d: 25 7f f0 ff ff               	and	eax, 4294963327
+     112: 8b 4d f8                     	mov	ecx, dword ptr [rbp - 8]
+     115: 83 e1 1f                     	and	ecx, 31
+     118: c1 e1 07                     	shl	ecx, 7
+     11b: 09 c8                        	or	eax, ecx
+     11d: 5d                           	pop	rbp
+     11e: c3                           	ret
+     11f: 90                           	nop
+
+0000000000000120 <sext>:
+     120: 55                           	push	rbp
+     121: 48 89 e5                     	mov	rbp, rsp
+     124: 40 88 f8                     	mov	al, dil
+     127: 88 45 ff                     	mov	byte ptr [rbp - 1], al
+     12a: 0f be 45 ff                  	movsx	eax, byte ptr [rbp - 1]
+     12e: 5d                           	pop	rbp
+     12f: c3                           	ret
+
+0000000000000130 <zext>:
+     130: 55                           	push	rbp
+     131: 48 89 e5                     	mov	rbp, rsp
+     134: 40 88 f8                     	mov	al, dil
+     137: 88 45 ff                     	mov	byte ptr [rbp - 1], al
+     13a: 0f b6 45 ff                  	movzx	eax, byte ptr [rbp - 1]
+     13e: 5d                           	pop	rbp
+     13f: c3                           	ret
+
+0000000000000140 <fetch_add>:
+     140: 55                           	push	rbp
+     141: 48 89 e5                     	mov	rbp, rsp
+     144: 48 89 7d f8                  	mov	qword ptr [rbp - 8], rdi
+     148: 89 75 f4                     	mov	dword ptr [rbp - 12], esi
+     14b: 48 8b 4d f8                  	mov	rcx, qword ptr [rbp - 8]
+     14f: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+     152: 89 45 f0                     	mov	dword ptr [rbp - 16], eax
+     155: 8b 45 f0                     	mov	eax, dword ptr [rbp - 16]
+     158: f0                           	lock
+     159: 0f c1 01                     	xadd	dword ptr [rcx], eax
+     15c: 89 45 ec                     	mov	dword ptr [rbp - 20], eax
+     15f: 8b 45 ec                     	mov	eax, dword ptr [rbp - 20]
+     162: 5d                           	pop	rbp
+     163: c3                           	ret
+     164: 66 66 66 2e 0f 1f 84 00 00 00 00 00  	nop	word ptr cs:[rax + rax]
+
+0000000000000170 <cas>:
+     170: 55                           	push	rbp
+     171: 48 89 e5                     	mov	rbp, rsp
+     174: 48 89 7d f8                  	mov	qword ptr [rbp - 8], rdi
+     178: 89 75 f4                     	mov	dword ptr [rbp - 12], esi
+     17b: 89 55 f0                     	mov	dword ptr [rbp - 16], edx
+     17e: 48 8b 4d f8                  	mov	rcx, qword ptr [rbp - 8]
+     182: 8b 45 f0                     	mov	eax, dword ptr [rbp - 16]
+     185: 89 45 ec                     	mov	dword ptr [rbp - 20], eax
+     188: 8b 45 f4                     	mov	eax, dword ptr [rbp - 12]
+     18b: 8b 55 ec                     	mov	edx, dword ptr [rbp - 20]
+     18e: f0                           	lock
+     18f: 0f b1 11                     	cmpxchg	dword ptr [rcx], edx
+     192: 89 c1                        	mov	ecx, eax
+     194: 0f 94 c0                     	sete	al
+     197: 88 45 e3                     	mov	byte ptr [rbp - 29], al
+     19a: 89 4d e4                     	mov	dword ptr [rbp - 28], ecx
+     19d: a8 01                        	test	al, 1
+     19f: 75 06                        	jne	0x1a7 <cas+0x37>
+     1a1: 8b 45 e4                     	mov	eax, dword ptr [rbp - 28]
+     1a4: 89 45 f4                     	mov	dword ptr [rbp - 12], eax
+     1a7: 8a 45 e3                     	mov	al, byte ptr [rbp - 29]
+     1aa: 24 01                        	and	al, 1
+     1ac: 88 45 eb                     	mov	byte ptr [rbp - 21], al
+     1af: 8a 45 eb                     	mov	al, byte ptr [rbp - 21]
+     1b2: 24 01                        	and	al, 1
+     1b4: 0f b6 c0                     	movzx	eax, al
+     1b7: 5d                           	pop	rbp
+     1b8: c3                           	ret

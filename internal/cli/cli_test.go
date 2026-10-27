@@ -80,3 +80,38 @@ func TestDisasmCommand(t *testing.T) {
 		t.Errorf("unknown function: exit %d, want 1", code)
 	}
 }
+
+func TestFuncsCommand(t *testing.T) {
+	obj := filepath.Join("..", "..", "testdata", "synthetic", "arm", "jumps-O2.o")
+	code, out, errOut := run("funcs", obj, "--filter", "switch")
+	if code != 0 {
+		t.Fatalf("exit %d: %s", code, errOut)
+	}
+	for _, want := range []string{"offset_switch  (1 jump table(s))", "byte_switch"} {
+		if !strings.Contains(out, want) {
+			t.Errorf("output missing %q:\n%s", want, out)
+		}
+	}
+	if strings.Contains(out, "alu") {
+		t.Errorf("--filter switch listed alu:\n%s", out)
+	}
+}
+
+func TestIRCommand(t *testing.T) {
+	obj := filepath.Join("..", "..", "testdata", "synthetic", "thumb", "switch-O0.o")
+	code, out, errOut := run("ir", obj, "--func", "dense")
+	if code != 0 {
+		t.Fatalf("exit %d: %s", code, errOut)
+	}
+	for _, want := range []string{"dense at 0x0:", "jump table at 0xe: 0->0x1a 1->0x20", "tbb [pc,r1]", "BRANCHIND", "RETURN"} {
+		if !strings.Contains(out, want) {
+			t.Errorf("output missing %q:\n%s", want, out)
+		}
+	}
+	if code, _, _ := run("ir", obj); code != 2 {
+		t.Errorf("missing --func: exit %d, want 2", code)
+	}
+	if code, _, _ := run("ir", obj, "--func", "0x1234"); code != 1 {
+		t.Errorf("unknown address: exit %d, want 1", code)
+	}
+}

@@ -13,7 +13,7 @@ import (
 // a crafted header cannot exhaust memory.
 const maxImage = 1 << 30
 
-func loadELF(data []byte) (*Program, error) {
+func loadELF(data []byte, relocate bool) (*Program, error) {
 	f, err := elf.NewFile(bytes.NewReader(data))
 	if err != nil {
 		return nil, fmt.Errorf("elf: %w", err)
@@ -23,14 +23,18 @@ func loadELF(data []byte) (*Program, error) {
 		Language:  elfLanguage(f),
 		BigEndian: f.Data == elf.ELFDATA2MSB,
 		Entry:     f.Entry,
+		HasEntry:  f.Type != elf.ET_REL && f.Entry != 0,
 	}
 
 	// Executables and shared objects say where to map memory in program
 	// headers. Relocatable objects (.o files) only have sections at address
 	// zero, so lay their allocated sections out one after another.
 	var sectionAddr []uint64
+	var externs map[string]uint64
 	if f.Type == elf.ET_REL {
-		sectionAddr, err = p.layoutSections(f)
+		if sectionAddr, err = p.layoutSections(f); err == nil {
+			externs, err = p.placeExterns(f)
+		}
 	} else {
 		err = p.mapProgramHeaders(f, data)
 	}
@@ -44,18 +48,54 @@ func loadELF(data []byte) (*Program, error) {
 		}
 	}
 
-	if err := p.readSymbols(f, sectionAddr); err != nil {
+	if err := p.readSymbols(f, sectionAddr, externs); err != nil {
 		return nil, fmt.Errorf("elf: %w", err)
 	}
-	if err := p.readRelocs(f, sectionAddr); err != nil {
+	if err := p.readRelocs(f, sectionAddr, externs, relocate && f.Type == elf.ET_REL); err != nil {
 		return nil, fmt.Errorf("elf: %w", err)
 	}
 	return p, nil
 }
 
+// placeExterns gives each undefined symbol of a relocatable object a
+// pointer-sized slot in a new segment past the loaded sections.
+func (p *Program) placeExterns(f *elf.File) (map[string]uint64, error) {
+	syms, err := f.Symbols()
+	if err != nil && !errors.Is(err, elf.ErrNoSymbols) {
+		return nil, err
+	}
+	slot := uint64(4)
+	if f.Class == elf.ELFCLASS64 {
+		slot = 8
+	}
+	next := uint64(0)
+	for _, s := range p.Segments {
+		next = max(next, s.End())
+	}
+	base := (next + 15) &^ 15
+	externs := map[string]uint64{}
+	for _, s := range syms {
+		if s.Section != elf.SHN_UNDEF || s.Name == "" {
+			continue
+		}
+		if _, dup := externs[s.Name]; !dup {
+			externs[s.Name] = base + slot*uint64(len(externs))
+		}
+	}
+	if len(externs) > 0 {
+		p.Segments = append(p.Segments, Segment{
+			Name: ExternalSegment,
+			Addr: base,
+			Data: make([]byte, slot*uint64(len(externs))),
+			Perm: PermR,
+		})
+	}
+	return externs, nil
+}
+
 // readRelocs records the REL and RELA entries that patch allocated
-// sections.
-func (p *Program) readRelocs(f *elf.File, sectionAddr []uint64) error {
+// sections, and applies them when relocate is set.
+func (p *Program) readRelocs(f *elf.File, sectionAddr []uint64, externs map[string]uint64, relocate bool) error {
 	syms, err := f.Symbols()
 	if err != nil && !errors.Is(err, elf.ErrNoSymbols) {
 		return err
@@ -105,8 +145,14 @@ func (p *Program) readRelocs(f *elf.File, sectionAddr []uint64) error {
 				}
 			}
 			r.Addr += base
+			var target relocTarget
 			if symIdx > 0 && int(symIdx) <= len(table) {
-				r.Symbol = table[symIdx-1].Name
+				sym := table[symIdx-1]
+				r.Symbol = sym.Name
+				target = resolveSymbol(f, sym, sectionAddr, externs)
+			}
+			if relocate && target.ok {
+				r.Applied = p.applyReloc(f, r, target)
 			}
 			p.Relocs = append(p.Relocs, r)
 		}
@@ -187,7 +233,7 @@ func (p *Program) layoutSections(f *elf.File) ([]uint64, error) {
 	return addrs, nil
 }
 
-func (p *Program) readSymbols(f *elf.File, sectionAddr []uint64) error {
+func (p *Program) readSymbols(f *elf.File, sectionAddr []uint64, externs map[string]uint64) error {
 	syms, err := f.Symbols()
 	if err != nil && !errors.Is(err, elf.ErrNoSymbols) {
 		return err
@@ -212,7 +258,9 @@ func (p *Program) readSymbols(f *elf.File, sectionAddr []uint64) error {
 			addr += sectionAddr[s.Section]
 		}
 		if m, ok := mappingSymbol(f.Machine, s.Name); ok {
-			if s.Section != elf.SHN_UNDEF {
+			// Only mapping symbols in loaded sections mark code; LLVM also
+			// puts a $d in .comment, which is not mapped.
+			if s.Section != elf.SHN_UNDEF && int(s.Section) < len(f.Sections) && f.Sections[s.Section].Flags&elf.SHF_ALLOC != 0 {
 				p.Modes = append(p.Modes, ModeRange{addr, m})
 				mapped[addr] = true
 			}
@@ -222,7 +270,7 @@ func (p *Program) readSymbols(f *elf.File, sectionAddr []uint64) error {
 		sym := Symbol{Name: s.Name, Addr: addr, Size: s.Size}
 		switch {
 		case s.Section == elf.SHN_UNDEF:
-			sym.Kind, sym.Addr = SymImport, 0
+			sym.Kind, sym.Addr = SymImport, externs[s.Name]
 		case s.Section == elf.SHN_COMMON:
 			continue
 		case typ == elf.STT_FUNC:

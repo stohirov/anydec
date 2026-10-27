@@ -1,0 +1,37 @@
+
+testdata/synthetic/aarch64/arith-O2.o:	file format elf64-littleaarch64
+
+Disassembly of section .text:
+
+0000000000000000 <add>:
+       0: 0b000020     	add	w0, w1, w0
+       4: d65f03c0     	ret
+
+0000000000000008 <mul_add>:
+       8: 1b000820     	madd	w0, w1, w0, w2
+       c: d65f03c0     	ret
+
+0000000000000010 <shifts>:
+      10: 4b0103e8     	neg	w8, w1
+      14: 1ac12009     	lsl	w9, w0, w1
+      18: 1ac82408     	lsr	w8, w0, w8
+      1c: 4a090100     	eor	w0, w8, w9
+      20: d65f03c0     	ret
+
+0000000000000024 <sdiv>:
+      24: 34000061     	cbz	w1, 0x30 <sdiv+0xc>
+      28: 1ac10c00     	sdiv	w0, w0, w1
+      2c: d65f03c0     	ret
+      30: 2a1f03e0     	mov	w0, wzr
+      34: d65f03c0     	ret
+
+0000000000000038 <clamp>:
+      38: 6b02001f     	cmp	w0, w2
+      3c: 1a82b008     	csel	w8, w0, w2, lt
+      40: 6b01001f     	cmp	w0, w1
+      44: 1a88b020     	csel	w0, w1, w8, lt
+      48: d65f03c0     	ret
+
+000000000000004c <wide_add>:
+      4c: 8b000020     	add	x0, x1, x0
+      50: d65f03c0     	ret

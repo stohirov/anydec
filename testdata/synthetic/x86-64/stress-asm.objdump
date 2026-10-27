@@ -1,0 +1,79 @@
+
+testdata/synthetic/x86-64/stress-asm.o:	file format elf64-x86-64
+
+Disassembly of section .text:
+
+0000000000000000 <.text>:
+       0: 4d 01 c8                     	add	r8, r9
+       3: 66 89 c8                     	mov	ax, cx
+       6: 41 8a 44 24 01               	mov	al, byte ptr [r12 + 1]
+       b: 48 b8 88 77 66 55 44 33 22 11	movabs	rax, 1234605616436508552
+      15: 64 48 8b 04 25 28 00 00 00   	mov	rax, qword ptr fs:[40]
+      1e: 48 8d 05 00 01 00 00         	lea	rax, [rip + 256]        # 0x125 <.text+0x125>
+      25: f0                           	lock
+      26: 48 81 84 d8 78 56 34 12 78 56 34 12  	add	qword ptr [rax + 8*rbx + 305419896], 305419896
+      32: f3 a4                        	rep		movsb	byte ptr es:[rdi], byte ptr [rsi]
+      34: f3 48 ab                     	rep		stosq	qword ptr es:[rdi], rax
+      37: f2 ae                        	repne		scasb	al, byte ptr es:[rdi]
+      39: f3 0f b8 c1                  	popcnt	eax, ecx
+      3d: f3 48 0f bc c3               	tzcnt	rax, rbx
+      42: f3 0f bd ca                  	lzcnt	ecx, edx
+      46: 49 0f ca                     	bswap	r10
+      49: 0f 4f c3                     	cmovg	eax, ebx
+      4c: 0f 92 c1                     	setb	cl
+      4f: 0f b6 07                     	movzx	eax, byte ptr [rdi]
+      52: 48 0f bf 46 02               	movsx	rax, word ptr [rsi + 2]
+      57: 48 63 c1                     	movsxd	rax, ecx
+      5a: 48 6b c3 64                  	imul	rax, rbx, 100
+      5e: 48 99                        	cqo
+      60: 48 f7 f9                     	idiv	rcx
+      63: 48 91                        	xchg	rax, rcx
+      65: 48 0f b1 37                  	cmpxchg	qword ptr [rdi], rsi
+      69: 0f 05                        	syscall
+      6b: 0f a2                        	cpuid
+      6d: 0f 31                        	rdtsc
+      6f: f3 90                        	pause
+      71: 0f 0b                        	ud2
+      73: cc                           	int3
+      74: 6a 12                        	push	18
+      76: 41 5f                        	pop	r15
+      78: c2 08 00                     	ret	8
+      7b: 48 d3 e0                     	shl	rax, cl
+      7e: c1 fa 03                     	sar	edx, 3
+      81: 41 d1 c9                     	ror	r9d
+      84: 0f ba e0 05                  	bt	eax, 5
+      88: c5 f4 58 c2                  	vaddps	ymm0, ymm1, ymm2
+      8c: c5 fa 6f 18                  	vmovdqu	xmm3, xmmword ptr [rax]
+      90: c5 f9 ef c0                  	vpxor	xmm0, xmm0, xmm0
+      94: c4 e2 69 b8 cb               	vfmadd231ps	xmm1, xmm2, xmm3 # xmm1 = (xmm2 * xmm3) + xmm1
+      99: c5 f8 77                     	vzeroupper
+      9c: 0f 28 44 24 10               	movaps	xmm0, xmmword ptr [rsp + 16]
+      a1: f2 48 0f 2a c0               	cvtsi2sd	xmm0, rax
+      a6: f2 0f 2c c1                  	cvttsd2si	eax, xmm1
+      aa: 66 0f 38 00 c1               	pshufb	xmm0, xmm1
+      af: f2 0f 58 05 40 00 00 00      	addsd	xmm0, qword ptr [rip + 64] # 0xf7 <.text+0xf7>
+      b7: 0f 2e c1                     	ucomiss	xmm0, xmm1
+      ba: f2 0f 51 d3                  	sqrtsd	xmm2, xmm3
+      be: 0f 55 e5                     	andnps	xmm4, xmm5
+      c1: 66 0f ef f7                  	pxor	xmm6, xmm7
+      c5: 66 48 0f 7e c0               	movq	rax, xmm0
+      ca: 66 0f 6e c9                  	movd	xmm1, ecx
+      ce: f2 0f 38 f0 07               	crc32	eax, byte ptr [rdi]
+      d3: 49 83 d3 ff                  	adc	r11, -1
+      d7: 80 1b 01                     	sbb	byte ptr [rbx], 1
+      da: 48 f7 1c 24                  	neg	qword ptr [rsp]
+      de: 41 f7 d0                     	not	r8d
+      e1: 40 84 fe                     	test	sil, dil
+      e4: 41 88 e0                     	mov	r8b, spl
+      e7: 66 c7 03 34 12               	mov	word ptr [rbx], 4660
+      ec: ff 24 c5 00 10 00 00         	jmp	qword ptr [8*rax + 4096]
+      f3: ff 15 10 00 00 00            	call	qword ptr [rip + 16]    # 0x109 <.text+0x109>
+      f9: c8 10 00 00                  	enter	16, 0
+      fd: c9                           	leave
+      fe: 0f 1f 04 00                  	nop	dword ptr [rax + rax]
+     102: 0f c1 11                     	xadd	dword ptr [rcx], edx
+     105: 0f ae f0                     	mfence
+     108: 0f 18 0f                     	prefetcht0	byte ptr [rdi]
+     10b: f5                           	cmc
+     10c: fd                           	std
+     10d: fc                           	cld

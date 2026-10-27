@@ -94,15 +94,22 @@ type ModeRange struct {
 	Mode Mode
 }
 
-// Relocation is a place the linker or dynamic loader patches. The loader
-// records relocations but does not apply them, so bytes at Addr are as the
-// file stores them.
+// Relocation is a place the linker or dynamic loader patches. In
+// relocatable objects the loader applies the relocation types it knows, as a
+// static linker would, and marks them Applied; other relocations, and all of
+// them in linked files, are recorded with the file's bytes left as they are.
 type Relocation struct {
-	Addr   uint64
-	Type   uint32 // ELF r_type for the file's machine
-	Symbol string // target symbol, or "" for section-relative relocations
-	Addend int64
+	Addr    uint64
+	Type    uint32 // ELF r_type for the file's machine
+	Symbol  string // target symbol, or "" for section-relative relocations
+	Addend  int64  // explicit (RELA) addend; implicit addends stay in the bytes
+	Applied bool
 }
+
+// ExternalSegment names the segment where the loader places the undefined
+// symbols of a relocatable object, one pointer-sized slot each, so calls and
+// references to them resolve to distinct addresses. It holds no code.
+const ExternalSegment = "EXTERNAL"
 
 // Program is a loaded executable, ready for decoding and analysis.
 type Program struct {
@@ -112,16 +119,28 @@ type Program struct {
 	Language  string
 	BigEndian bool
 	Entry     uint64
+	HasEntry  bool         // false for relocatable objects and libraries without one
 	Segments  []Segment    // sorted by address, non-overlapping
 	Symbols   []Symbol     // sorted by address, then name
 	Modes     []ModeRange  // sorted by address; empty means ModeDefault throughout
 	Relocs    []Relocation // sorted by address
 }
 
-// Load parses data as an executable in any supported format.
+// Load parses data as an executable in any supported format and applies
+// the relocations of relocatable objects.
 func Load(data []byte) (*Program, error) {
+	return load(data, true)
+}
+
+// LoadUnrelocated is Load without applying relocations, so code bytes match
+// the file. Disassembly tests compare against tools that show those bytes.
+func LoadUnrelocated(data []byte) (*Program, error) {
+	return load(data, false)
+}
+
+func load(data []byte, relocate bool) (*Program, error) {
 	if bytes.HasPrefix(data, []byte("\x7fELF")) {
-		return loadELF(data)
+		return loadELF(data, relocate)
 	}
 	return nil, ErrUnsupportedFormat
 }
@@ -171,6 +190,21 @@ func (p *Program) Symbol(addr uint64) (Symbol, bool) {
 	i := sort.Search(len(p.Symbols), func(i int) bool { return p.Symbols[i].Addr >= addr })
 	for ; i < len(p.Symbols) && p.Symbols[i].Addr == addr; i++ {
 		if p.Symbols[i].Kind != SymImport {
+			return p.Symbols[i], true
+		}
+	}
+	return Symbol{}, false
+}
+
+// Import returns the import placed at addr in the external segment, if any.
+// Imports of linked files have no address and are never returned.
+func (p *Program) Import(addr uint64) (Symbol, bool) {
+	if s := p.Segment(addr); s == nil || s.Name != ExternalSegment {
+		return Symbol{}, false
+	}
+	i := sort.Search(len(p.Symbols), func(i int) bool { return p.Symbols[i].Addr >= addr })
+	for ; i < len(p.Symbols) && p.Symbols[i].Addr == addr; i++ {
+		if p.Symbols[i].Kind == SymImport {
 			return p.Symbols[i], true
 		}
 	}

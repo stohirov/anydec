@@ -1,0 +1,49 @@
+
+testdata/synthetic/aarch64/switch-O2.o:	file format elf64-littleaarch64
+
+Disassembly of section .text:
+
+0000000000000000 <dense>:
+       0: 7100181f     	cmp	w0, #6
+       4: 540000a8     	b.hi	0x18 <dense+0x18>
+       8: 90000008     	adrp	x8, 0x0 <dense>
+       c: 91000108     	add	x8, x8, #0
+      10: b8605900     	ldr	w0, [x8, w0, uxtw #2]
+      14: d65f03c0     	ret
+      18: 12800000     	mov	w0, #-1                 // =0xffffffff
+      1c: d65f03c0     	ret
+
+0000000000000020 <sparse>:
+      20: 710f9c1f     	cmp	w0, #999
+      24: 540000ec     	b.gt	0x40 <sparse+0x20>
+      28: 71000c1f     	cmp	w0, #3
+      2c: 540001e0     	b.eq	0x68 <sparse+0x48>
+      30: 7101901f     	cmp	w0, #100
+      34: 54000161     	b.ne	0x60 <sparse+0x40>
+      38: 52800040     	mov	w0, #2                  // =0x2
+      3c: d65f03c0     	ret
+      40: 710fa01f     	cmp	w0, #1000
+      44: 54000160     	b.eq	0x70 <sparse+0x50>
+      48: 5290d3e8     	mov	w8, #34463              // =0x869f
+      4c: 72a00028     	movk	w8, #1, lsl #16
+      50: 6b08001f     	cmp	w0, w8
+      54: 54000061     	b.ne	0x60 <sparse+0x40>
+      58: 52800080     	mov	w0, #4                  // =0x4
+      5c: d65f03c0     	ret
+      60: 2a1f03e0     	mov	w0, wzr
+      64: d65f03c0     	ret
+      68: 52800020     	mov	w0, #1                  // =0x1
+      6c: d65f03c0     	ret
+      70: 52800060     	mov	w0, #3                  // =0x3
+      74: d65f03c0     	ret
+
+0000000000000078 <dispatch>:
+      78: 7100081f     	cmp	w0, #2
+      7c: 540000c0     	b.eq	0x94 <dispatch+0x1c>
+      80: 7100041f     	cmp	w0, #1
+      84: 54000060     	b.eq	0x90 <dispatch+0x18>
+      88: 35000080     	cbnz	w0, 0x98 <dispatch+0x20>
+      8c: 14000000     	b	0x8c <dispatch+0x14>
+      90: 14000000     	b	0x90 <dispatch+0x18>
+      94: 14000000     	b	0x94 <dispatch+0x1c>
+      98: d65f03c0     	ret

@@ -1,0 +1,86 @@
+
+testdata/synthetic/aarch64/floats-O2.o:	file format elf64-littleaarch64
+
+Disassembly of section .text:
+
+0000000000000000 <lerp>:
+       0: 1e203821     	fsub	s1, s1, s0
+       4: 1f020020     	fmadd	s0, s1, s2, s0
+       8: d65f03c0     	ret
+
+000000000000000c <poly>:
+       c: 1e601001     	fmov	d1, #2.00000000
+      10: 1e611002     	fmov	d2, #3.00000000
+      14: 1f420401     	fmadd	d1, d0, d2, d1
+      18: 1e7e1002     	fmov	d2, #-1.00000000
+      1c: 1f400821     	fmadd	d1, d1, d0, d2
+      20: 1e6c1002     	fmov	d2, #0.50000000
+      24: 1f400820     	fmadd	d0, d1, d0, d2
+      28: d65f03c0     	ret
+
+000000000000002c <to_int>:
+      2c: 1e380000     	fcvtzs	w0, s0
+      30: d65f03c0     	ret
+
+0000000000000034 <from_int>:
+      34: 1e220000     	scvtf	s0, w0
+      38: d65f03c0     	ret
+
+000000000000003c <widen>:
+      3c: 1e22c000     	fcvt	d0, s0
+      40: d65f03c0     	ret
+
+0000000000000044 <fmax_>:
+      44: 1e212000     	fcmp	s0, s1
+      48: 1e21cc00     	fcsel	s0, s0, s1, gt
+      4c: d65f03c0     	ret
+
+0000000000000050 <dot>:
+      50: 7100045f     	cmp	w2, #1
+      54: 540000eb     	b.lt	0x70 <dot+0x20>
+      58: 2f00e400     	movi	d0, #0000000000000000
+      5c: 7100205f     	cmp	w2, #8
+      60: 2a0203e8     	mov	w8, w2
+      64: 540000a2     	b.hs	0x78 <dot+0x28>
+      68: aa1f03e9     	mov	x9, xzr
+      6c: 1400001f     	b	0xe8 <dot+0x98>
+      70: 2f00e400     	movi	d0, #0000000000000000
+      74: d65f03c0     	ret
+      78: 927d6d09     	and	x9, x8, #0x7ffffff8
+      7c: 9100402a     	add	x10, x1, #16
+      80: 9100400b     	add	x11, x0, #16
+      84: aa0903ec     	mov	x12, x9
+      88: ad7f9141     	ldp	q1, q4, [x10, #-16]
+      8c: f100218c     	subs	x12, x12, #8
+      90: ad7f8d62     	ldp	q2, q3, [x11, #-16]
+      94: 9100814a     	add	x10, x10, #32
+      98: 9100816b     	add	x11, x11, #32
+      9c: 6e21dc41     	fmul	v1.4s, v2.4s, v1.4s
+      a0: 5e0c0422     	mov	s2, v1.s[1]
+      a4: 1e212800     	fadd	s0, s0, s1
+      a8: 5e140425     	mov	s5, v1.s[2]
+      ac: 5e1c0421     	mov	s1, v1.s[3]
+      b0: 1e222800     	fadd	s0, s0, s2
+      b4: 6e24dc62     	fmul	v2.4s, v3.4s, v4.4s
+      b8: 1e252800     	fadd	s0, s0, s5
+      bc: 5e140443     	mov	s3, v2.s[2]
+      c0: 1e212800     	fadd	s0, s0, s1
+      c4: 5e0c0441     	mov	s1, v2.s[1]
+      c8: 1e222800     	fadd	s0, s0, s2
+      cc: 1e212800     	fadd	s0, s0, s1
+      d0: 5e1c0441     	mov	s1, v2.s[3]
+      d4: 1e232800     	fadd	s0, s0, s3
+      d8: 1e212800     	fadd	s0, s0, s1
+      dc: 54fffd61     	b.ne	0x88 <dot+0x38>
+      e0: eb08013f     	cmp	x9, x8
+      e4: 54000140     	b.eq	0x10c <dot+0xbc>
+      e8: d37ef52b     	lsl	x11, x9, #2
+      ec: cb090108     	sub	x8, x8, x9
+      f0: 8b0b002a     	add	x10, x1, x11
+      f4: 8b0b000b     	add	x11, x0, x11
+      f8: bc404561     	ldr	s1, [x11], #4
+      fc: f1000508     	subs	x8, x8, #1
+     100: bc404542     	ldr	s2, [x10], #4
+     104: 1f020020     	fmadd	s0, s1, s2, s0
+     108: 54ffff81     	b.ne	0xf8 <dot+0xa8>
+     10c: d65f03c0     	ret

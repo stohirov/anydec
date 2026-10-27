@@ -1,0 +1,68 @@
+
+testdata/synthetic/x86-64/arith-O2.o:	file format elf64-x86-64
+
+Disassembly of section .text:
+
+0000000000000000 <add>:
+       0: 55                           	push	rbp
+       1: 48 89 e5                     	mov	rbp, rsp
+       4: 8d 04 37                     	lea	eax, [rdi + rsi]
+       7: 5d                           	pop	rbp
+       8: c3                           	ret
+       9: 0f 1f 80 00 00 00 00         	nop	dword ptr [rax]
+
+0000000000000010 <mul_add>:
+      10: 55                           	push	rbp
+      11: 48 89 e5                     	mov	rbp, rsp
+      14: 0f af fe                     	imul	edi, esi
+      17: 8d 04 17                     	lea	eax, [rdi + rdx]
+      1a: 5d                           	pop	rbp
+      1b: c3                           	ret
+      1c: 0f 1f 40 00                  	nop	dword ptr [rax]
+
+0000000000000020 <shifts>:
+      20: 55                           	push	rbp
+      21: 48 89 e5                     	mov	rbp, rsp
+      24: 89 f1                        	mov	ecx, esi
+      26: 89 f8                        	mov	eax, edi
+      28: d3 e0                        	shl	eax, cl
+      2a: f6 d9                        	neg	cl
+      2c: d3 ef                        	shr	edi, cl
+      2e: 31 f8                        	xor	eax, edi
+      30: 5d                           	pop	rbp
+      31: c3                           	ret
+      32: 66 66 66 66 66 2e 0f 1f 84 00 00 00 00 00    	nop	word ptr cs:[rax + rax]
+
+0000000000000040 <sdiv>:
+      40: 55                           	push	rbp
+      41: 48 89 e5                     	mov	rbp, rsp
+      44: 85 f6                        	test	esi, esi
+      46: 74 07                        	je	0x4f <sdiv+0xf>
+      48: 89 f8                        	mov	eax, edi
+      4a: 99                           	cdq
+      4b: f7 fe                        	idiv	esi
+      4d: 5d                           	pop	rbp
+      4e: c3                           	ret
+      4f: 31 c0                        	xor	eax, eax
+      51: 5d                           	pop	rbp
+      52: c3                           	ret
+      53: 66 66 66 66 2e 0f 1f 84 00 00 00 00 00       	nop	word ptr cs:[rax + rax]
+
+0000000000000060 <clamp>:
+      60: 55                           	push	rbp
+      61: 48 89 e5                     	mov	rbp, rsp
+      64: 89 d0                        	mov	eax, edx
+      66: 39 d7                        	cmp	edi, edx
+      68: 0f 4c c7                     	cmovl	eax, edi
+      6b: 39 f7                        	cmp	edi, esi
+      6d: 0f 4c c6                     	cmovl	eax, esi
+      70: 5d                           	pop	rbp
+      71: c3                           	ret
+      72: 66 66 66 66 66 2e 0f 1f 84 00 00 00 00 00    	nop	word ptr cs:[rax + rax]
+
+0000000000000080 <wide_add>:
+      80: 55                           	push	rbp
+      81: 48 89 e5                     	mov	rbp, rsp
+      84: 48 8d 04 37                  	lea	rax, [rdi + rsi]
+      88: 5d                           	pop	rbp
+      89: c3                           	ret

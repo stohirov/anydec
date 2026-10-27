@@ -1,0 +1,43 @@
+
+testdata/synthetic/aarch64/structs-Os.o:	file format elf64-littleaarch64
+
+Disassembly of section .text:
+
+0000000000000000 <manhattan>:
+       0: 90000008     	adrp	x8, 0x0 <manhattan>
+       4: fd400000     	ldr	d0, [x0]
+       8: fd400101     	ldr	d1, [x8]
+       c: 0ea17402     	sabd	v2.2s, v0.2s, v1.2s
+      10: 0e0c0442     	dup	v2.2s, v2.s[1]
+      14: 0ea17c02     	saba	v2.2s, v0.2s, v1.2s
+      18: 1e260040     	fmov	w0, s2
+      1c: d65f03c0     	ret
+
+0000000000000020 <list_sum>:
+      20: 2a1f03e8     	mov	w8, wzr
+      24: b40000e0     	cbz	x0, 0x40 <list_sum+0x20>
+      28: 39403009     	ldrb	w9, [x0, #12]
+      2c: 34000069     	cbz	w9, 0x38 <list_sum+0x18>
+      30: b9400809     	ldr	w9, [x0, #8]
+      34: 0b080128     	add	w8, w9, w8
+      38: f9400000     	ldr	x0, [x0]
+      3c: b5ffff60     	cbnz	x0, 0x28 <list_sum+0x8>
+      40: 2a0803e0     	mov	w0, w8
+      44: d65f03c0     	ret
+
+0000000000000048 <bump>:
+      48: 7100043f     	cmp	w1, #1
+      4c: 5400012b     	b.lt	0x70 <bump+0x28>
+      50: 90000008     	adrp	x8, 0x0 <manhattan>
+      54: fd400100     	ldr	d0, [x8]
+      58: 2a0103e8     	mov	w8, w1
+      5c: fd400001     	ldr	d1, [x0]
+      60: f1000508     	subs	x8, x8, #1
+      64: 0ea08421     	add	v1.2s, v1.2s, v0.2s
+      68: fc008401     	str	d1, [x0], #8
+      6c: 54ffff81     	b.ne	0x5c <bump+0x14>
+      70: 90000008     	adrp	x8, 0x0 <manhattan>
+      74: b9400109     	ldr	w9, [x8]
+      78: 0b010129     	add	w9, w9, w1
+      7c: b9000109     	str	w9, [x8]
+      80: d65f03c0     	ret

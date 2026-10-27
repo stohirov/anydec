@@ -1,0 +1,68 @@
+
+testdata/synthetic/aarch64/bits-Os.o:	file format elf64-littleaarch64
+
+Disassembly of section .text:
+
+0000000000000000 <popcount>:
+       0: 1e270000     	fmov	s0, w0
+       4: 0e205800     	cnt	v0.8b, v0.8b
+       8: 0e31b800     	addv	b0, v0.8b
+       c: 1e260000     	fmov	w0, s0
+      10: d65f03c0     	ret
+
+0000000000000014 <bswap>:
+      14: 5ac00800     	rev	w0, w0
+      18: d65f03c0     	ret
+
+000000000000001c <clz>:
+      1c: 5ac01000     	clz	w0, w0
+      20: d65f03c0     	ret
+
+0000000000000024 <mul64>:
+      24: 9b007c20     	mul	x0, x1, x0
+      28: d65f03c0     	ret
+
+000000000000002c <smull>:
+      2c: 9b207c20     	smull	x0, w1, w0
+      30: d65f03c0     	ret
+
+0000000000000034 <rotl>:
+      34: 4b0103e8     	neg	w8, w1
+      38: 1ac82c00     	ror	w0, w0, w8
+      3c: d65f03c0     	ret
+
+0000000000000040 <extract>:
+      40: 53072c00     	ubfx	w0, w0, #7, #5
+      44: d65f03c0     	ret
+
+0000000000000048 <insert>:
+      48: 33191020     	bfi	w0, w1, #7, #5
+      4c: d65f03c0     	ret
+
+0000000000000050 <sext>:
+      50: 13001c00     	sxtb	w0, w0
+      54: d65f03c0     	ret
+
+0000000000000058 <zext>:
+      58: 12001c00     	and	w0, w0, #0xff
+      5c: d65f03c0     	ret
+
+0000000000000060 <fetch_add>:
+      60: 885ffc08     	ldaxr	w8, [x0]
+      64: 0b010109     	add	w9, w8, w1
+      68: 880afc09     	stlxr	w10, w9, [x0]
+      6c: 35ffffaa     	cbnz	w10, 0x60 <fetch_add>
+      70: 2a0803e0     	mov	w0, w8
+      74: d65f03c0     	ret
+
+0000000000000078 <cas>:
+      78: 885ffc08     	ldaxr	w8, [x0]
+      7c: 6b01011f     	cmp	w8, w1
+      80: 540000a1     	b.ne	0x94 <cas+0x1c>
+      84: 8808fc02     	stlxr	w8, w2, [x0]
+      88: 35ffff88     	cbnz	w8, 0x78 <cas>
+      8c: 52800020     	mov	w0, #1                  // =0x1
+      90: d65f03c0     	ret
+      94: 2a1f03e0     	mov	w0, wzr
+      98: d5033f5f     	clrex
+      9c: d65f03c0     	ret

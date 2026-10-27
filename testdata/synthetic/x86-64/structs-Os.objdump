@@ -1,0 +1,55 @@
+
+testdata/synthetic/x86-64/structs-Os.o:	file format elf64-x86-64
+
+Disassembly of section .text:
+
+0000000000000000 <manhattan>:
+       0: 55                           	push	rbp
+       1: 48 89 e5                     	mov	rbp, rsp
+       4: f3 0f 7e 07                  	movq	xmm0, qword ptr [rdi]
+       8: f3 0f 7e 0d 00 00 00 00      	movq	xmm1, qword ptr [rip]   # 0x10 <manhattan+0x10>
+      10: 66 0f fa c1                  	psubd	xmm0, xmm1
+      14: 66 0f 6f c8                  	movdqa	xmm1, xmm0
+      18: 66 0f 72 e1 1f               	psrad	xmm1, 31
+      1d: 66 0f ef c1                  	pxor	xmm0, xmm1
+      21: 66 0f fa c1                  	psubd	xmm0, xmm1
+      25: 66 0f 70 c8 55               	pshufd	xmm1, xmm0, 85          # xmm1 = xmm0[1,1,1,1]
+      2a: 66 0f fe c8                  	paddd	xmm1, xmm0
+      2e: 66 0f 7e c8                  	movd	eax, xmm1
+      32: 5d                           	pop	rbp
+      33: c3                           	ret
+
+0000000000000034 <list_sum>:
+      34: 48 85 ff                     	test	rdi, rdi
+      37: 74 19                        	je	0x52 <list_sum+0x1e>
+      39: 55                           	push	rbp
+      3a: 48 89 e5                     	mov	rbp, rsp
+      3d: 31 c0                        	xor	eax, eax
+      3f: 80 7f 0c 00                  	cmp	byte ptr [rdi + 12], 0
+      43: 74 03                        	je	0x48 <list_sum+0x14>
+      45: 03 47 08                     	add	eax, dword ptr [rdi + 8]
+      48: 48 8b 3f                     	mov	rdi, qword ptr [rdi]
+      4b: 48 85 ff                     	test	rdi, rdi
+      4e: 75 ef                        	jne	0x3f <list_sum+0xb>
+      50: 5d                           	pop	rbp
+      51: c3                           	ret
+      52: 31 c0                        	xor	eax, eax
+      54: c3                           	ret
+
+0000000000000055 <bump>:
+      55: 85 f6                        	test	esi, esi
+      57: 7e 27                        	jle	0x80 <bump+0x2b>
+      59: 55                           	push	rbp
+      5a: 48 89 e5                     	mov	rbp, rsp
+      5d: 89 f0                        	mov	eax, esi
+      5f: 31 c9                        	xor	ecx, ecx
+      61: f3 0f 7e 05 00 00 00 00      	movq	xmm0, qword ptr [rip]   # 0x69 <bump+0x14>
+      69: f3 0f 7e 0c cf               	movq	xmm1, qword ptr [rdi + 8*rcx]
+      6e: 66 0f fe c8                  	paddd	xmm1, xmm0
+      72: 66 0f d6 0c cf               	movq	qword ptr [rdi + 8*rcx], xmm1
+      77: 48 ff c1                     	inc	rcx
+      7a: 48 39 c8                     	cmp	rax, rcx
+      7d: 75 ea                        	jne	0x69 <bump+0x14>
+      7f: 5d                           	pop	rbp
+      80: 01 35 00 00 00 00            	add	dword ptr [rip], esi    # 0x86 <bump+0x31>
+      86: c3                           	ret
