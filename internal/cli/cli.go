@@ -28,10 +28,10 @@ var commands = []command{
 	{"identify", "identify <file>", "classify a file and report high-entropy regions", runIdentify},
 	{"disasm", "disasm <binary> [--func <name|addr>]", "disassemble code with the SLEIGH decoder", runDisasm},
 	{"unpack", "unpack <firmware> -o <dir>", "recursively extract a firmware image", runUnpack},
-	{"ir", "ir <binary> --func <name|addr>", "print a function's control-flow graph in IR", runIR},
-	{"open", "open <binary> --project <file>", "load a binary into a project database", runOpen},
-	{"funcs", "funcs <binary> [--filter <text>] [--sweep=false]", "list discovered functions", runFuncs},
-	{"decompile", "decompile <project> <addr> [--format c|json|html]", "decompile one function", runDecompile},
+	{"ir", "ir <binary|project> --func <name|addr> [--ssa]", "print a function's control-flow graph in IR, or its SSA form", runIR},
+	{"open", "open <binary> --project <file> [--sweep=false]", "analyze a binary into a new project database", runOpen},
+	{"funcs", "funcs <binary|project> [--filter <text>] [--sweep=false]", "list discovered functions", runFuncs},
+	{"decompile", "decompile <binary|project> [<name|addr>] [--addrs] [--format c|json|html]", "decompile a function, or all of them as one C file", runDecompile},
 	{"raw", "raw <dump> --isa <spec> [--base auto|<addr>] [--svd <file>]", "load a headerless flash dump", runRaw},
 	{"serve", "serve <project> [--mcp]", "serve the engine API or an MCP server", runServe},
 	{"version", "version", "print the version", runVersion},
@@ -213,32 +213,74 @@ func runUnpack(args []string, _ io.Writer) error {
 	return engine.ErrNotImplemented
 }
 
-func runOpen(args []string, _ io.Writer) error {
+func runOpen(args []string, stdout io.Writer) error {
 	fs := flag.NewFlagSet("open", flag.ContinueOnError)
-	project := fs.String("project", "", "project database to create or update")
-	if _, err := parse(fs, args, 1); err != nil {
+	project := fs.String("project", "", "project database to create")
+	sweep := fs.Bool("sweep", true, "also look for functions no call reaches, as stripped binaries need")
+	pos, err := parse(fs, args, 1)
+	if err != nil {
 		return err
 	}
 	if *project == "" {
 		return errUsage
 	}
-	return engine.ErrNotImplemented
+	data, err := os.ReadFile(pos[0])
+	if err != nil {
+		return err
+	}
+	p, err := engine.CreateProject(*project, pos[0], data, *sweep)
+	if err != nil {
+		return err
+	}
+	defer p.Close()
+	fns, err := p.Functions()
+	if err != nil {
+		return err
+	}
+	warn := 0
+	for _, f := range fns {
+		if f.Status != "decompiled" {
+			warn++
+		}
+	}
+	fmt.Fprintf(stdout, "%s: %d functions (%d with warnings) from %s\n", *project, len(fns), warn, pos[0])
+	return nil
 }
 
-// analyze loads and analyzes the binary at path.
-func analyze(path string, sweep bool) (*engine.Analysis, error) {
+// analyze opens the project or analyzes the binary at path. The returned
+// function releases the project.
+func analyze(path string, sweep bool) (*engine.Analysis, func(), error) {
+	if engine.IsProject(path) {
+		p, err := engine.OpenProject(path)
+		if err != nil {
+			return nil, nil, err
+		}
+		return p.Analysis, func() { p.Close() }, nil
+	}
 	data, err := os.ReadFile(path)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	prog, err := engine.Load(data)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	return engine.Analyze(prog, sweep)
+	a, err := engine.Analyze(prog, sweep)
+	return a, func() {}, err
 }
 
-// Until project databases exist, funcs analyzes a binary directly.
+// findFunction looks a function up by name or entry address.
+func findFunction(a *engine.Analysis, name string) (*engine.Function, error) {
+	if fn := a.Function(0, name); fn != nil {
+		return fn, nil
+	}
+	addr, err := strconv.ParseUint(name, 0, 64)
+	if fn := a.Function(addr, ""); err == nil && fn != nil {
+		return fn, nil
+	}
+	return nil, fmt.Errorf("no function %q", name)
+}
+
 func runFuncs(args []string, stdout io.Writer) error {
 	fs := flag.NewFlagSet("funcs", flag.ContinueOnError)
 	filter := fs.String("filter", "", "only list functions whose name contains this text")
@@ -247,10 +289,11 @@ func runFuncs(args []string, stdout io.Writer) error {
 	if err != nil {
 		return err
 	}
-	a, err := analyze(pos[0], *sweep)
+	a, done, err := analyze(pos[0], *sweep)
 	if err != nil {
 		return err
 	}
+	defer done()
 	w := bufio.NewWriter(stdout)
 	defer w.Flush()
 	fmt.Fprintf(w, "%-10s %6s %6s %6s %5s  %s\n", "entry", "bytes", "insns", "blocks", "calls", "name")
@@ -284,6 +327,7 @@ func runFuncs(args []string, stdout io.Writer) error {
 func runIR(args []string, stdout io.Writer) error {
 	fs := flag.NewFlagSet("ir", flag.ContinueOnError)
 	name := fs.String("func", "", "function name or entry address")
+	ssaForm := fs.Bool("ssa", false, "print the SSA form after simplification and prototype analysis")
 	pos, err := parse(fs, args, 1)
 	if err != nil {
 		return err
@@ -291,19 +335,25 @@ func runIR(args []string, stdout io.Writer) error {
 	if *name == "" {
 		return errUsage
 	}
-	a, err := analyze(pos[0], true)
+	a, done, err := analyze(pos[0], true)
 	if err != nil {
 		return err
 	}
-	fn := a.Function(0, *name)
-	if fn == nil {
-		addr, perr := strconv.ParseUint(*name, 0, 64)
-		if fn = a.Function(addr, ""); perr != nil || fn == nil {
-			return fmt.Errorf("no function %q", *name)
-		}
+	defer done()
+	fn, err := findFunction(a, *name)
+	if err != nil {
+		return err
 	}
 	w := bufio.NewWriter(stdout)
 	defer w.Flush()
+	if *ssaForm {
+		f, err := a.SSA(fn)
+		if err != nil {
+			return err
+		}
+		fmt.Fprint(w, f)
+		return nil
+	}
 	writeIR(w, a, fn)
 	return nil
 }
@@ -365,22 +415,53 @@ func writeIR(w io.Writer, a *engine.Analysis, fn *engine.Function) {
 	}
 }
 
-func runDecompile(args []string, _ io.Writer) error {
+func runDecompile(args []string, stdout io.Writer) error {
 	fs := flag.NewFlagSet("decompile", flag.ContinueOnError)
 	format := fs.String("format", "c", "output format: c, json or html")
-	pos, err := parse(fs, args, 2)
-	if err != nil {
-		return err
+	addrs := fs.Bool("addrs", false, "comment each statement with its instruction address")
+	sweep := fs.Bool("sweep", true, "for binaries, also look for functions no call reaches")
+	fs.SetOutput(io.Discard)
+	var pos []string
+	for {
+		if err := fs.Parse(args); err != nil {
+			return err
+		}
+		if fs.NArg() == 0 {
+			break
+		}
+		pos = append(pos, fs.Arg(0))
+		args = fs.Args()[1:]
 	}
-	if _, err := strconv.ParseUint(pos[1], 0, 64); err != nil {
-		return fmt.Errorf("invalid address %q", pos[1])
+	if len(pos) < 1 || len(pos) > 2 {
+		return errUsage
 	}
 	switch *format {
-	case "c", "json", "html":
+	case "c":
+	case "json", "html":
+		return fmt.Errorf("format %s: %w", *format, engine.ErrNotImplemented)
 	default:
 		return fmt.Errorf("unknown format %q", *format)
 	}
-	return engine.ErrNotImplemented
+	a, done, err := analyze(pos[0], *sweep)
+	if err != nil {
+		return err
+	}
+	defer done()
+	var out string
+	if len(pos) == 1 {
+		out, err = a.Source(*addrs)
+	} else {
+		fn, ferr := findFunction(a, pos[1])
+		if ferr != nil {
+			return ferr
+		}
+		out, err = a.Decompile(fn, *addrs)
+	}
+	if err != nil {
+		return err
+	}
+	_, err = io.WriteString(stdout, out)
+	return err
 }
 
 func runRaw(args []string, _ io.Writer) error {

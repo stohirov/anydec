@@ -104,6 +104,9 @@ type Relocation struct {
 	Symbol  string // target symbol, or "" for section-relative relocations
 	Addend  int64  // explicit (RELA) addend; implicit addends stay in the bytes
 	Applied bool
+	// Target is the address of Symbol, when it has one (TargetOK).
+	Target   uint64
+	TargetOK bool
 }
 
 // ExternalSegment names the segment where the loader places the undefined
@@ -124,6 +127,9 @@ type Program struct {
 	Symbols   []Symbol     // sorted by address, then name
 	Modes     []ModeRange  // sorted by address; empty means ModeDefault throughout
 	Relocs    []Relocation // sorted by address
+	// HardFloat is set when floating-point arguments travel in FP
+	// registers (ARM's Tag_ABI_VFP_args); other ISAs always pass them so.
+	HardFloat bool
 }
 
 // Load parses data as an executable in any supported format and applies

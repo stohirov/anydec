@@ -2,7 +2,7 @@
 
 A local-first decompiler that turns firmware and binaries from devices you own into readable C-like code. It needs no hosted AI service: a deterministic engine does all the analysis, and an optional AI layer explains results using models you run yourself.
 
-> **Status:** phase 2 (lifting and control flow). An ELF loader that applies object relocations and a pure-Go SLEIGH runtime decode ARM, Thumb, AArch64, x86 and MIPS code, checked against llvm-objdump on a synthetic corpus (MIPS by hand-encoded tests only). P-code is lifted to an architecture-neutral IR, and the engine discovers functions (including in stripped code), builds their control-flow graphs and resolves jump tables. Running the lifted IR reproduces native results for every corpus function. `identify`, `disasm`, `funcs` and `ir` work; the other commands parse their arguments and report "not implemented yet". See [the design doc](docs/design.md) for the plan.
+> **Status:** phase 3 (first decompiler). An ELF loader and a pure-Go SLEIGH runtime decode ARM, Thumb, AArch64, x86 and MIPS code. Their output is checked against llvm-objdump on a synthetic corpus (MIPS only by hand-encoded tests). P-code is lifted to an architecture-neutral IR, and the engine discovers functions and builds their control-flow graphs. The decompiler puts each function into SSA form and simplifies it, turns stack slots into variables, and infers prototypes from the vendored Ghidra calling conventions. It then structures the control flow and prints C. Every `-O0` corpus function decompiles to C that recompiles for its target and reproduces the native results. Projects are saved as SQLite files. `identify`, `disasm`, `funcs`, `ir`, `open` and `decompile` (C output) work; the other commands parse their arguments and report "not implemented yet". See [the design doc](docs/design.md) for the plan.
 
 ## Goals
 
@@ -31,7 +31,7 @@ Requires Go 1.27+.
 
 ```sh
 make build        # static binary at bin/anydec (CGO_ENABLED=0)
-make test         # go test ./...
+make test         # go test ./... (the decompiler gate needs clang with ARM, AArch64 and x86 targets; it is skipped without one)
 make check        # vet + gofmt check + tests
 make corpus       # rebuild testdata/synthetic (needs clang with ARM, AArch64 and x86 targets)
 ```
@@ -41,12 +41,12 @@ make corpus       # rebuild testdata/synthetic (needs clang with ARM, AArch64 an
 ```sh
 anydec identify firmware.bin
 anydec disasm extracted/usr/bin/tvservice --func main
-anydec funcs extracted/usr/bin/tvservice --filter net   # a binary, until projects exist
-anydec ir extracted/usr/bin/tvservice --func main       # lifted IR and CFG
-anydec unpack firmware.bin -o extracted/
+anydec ir extracted/usr/bin/tvservice --func main       # lifted IR and CFG (--ssa: SSA form)
 anydec open extracted/usr/bin/tvservice --project tv.adb
-anydec funcs tv.adb --filter net
-anydec decompile tv.adb 0x401a20 --format c
+anydec funcs tv.adb --filter net                        # a project or a binary
+anydec decompile tv.adb main                            # one function as C (--addrs: address comments)
+anydec decompile tv.adb > tv.c                          # every function as one compilable C file
+anydec unpack firmware.bin -o extracted/
 anydec raw dump.bin --isa ARM:LE:32:Cortex --base auto --svd stm32f4.svd
 anydec serve tv.adb --mcp
 ```
@@ -62,13 +62,15 @@ anydec serve tv.adb --mcp
 | `internal/sleigh` | Pure-Go SLEIGH runtime: decode bytes, emit P-code |
 | `internal/lift` | P-code into IR; the only stage that knows about SLEIGH |
 | `internal/ir` | Architecture-neutral IR (varnodes, ops, blocks, functions) and op semantics |
-| `internal/analysis` | Function discovery, CFG, jump tables; later SSA, simplification, stack, calling conventions |
-| `internal/irexec` | IR interpreter the tests use to check lifting against native runs |
+| `internal/analysis` | Function discovery, CFG, jump tables |
+| `internal/ssa` | SSA form, simplification, stack promotion, prototype inference and call binding |
+| `internal/abi` | Calling conventions read from Ghidra compiler specs |
+| `internal/irexec` | IR interpreter the tests use to check lifting and recompiled output against native runs |
 | `internal/typerec` | Constraint-based type, struct and array recovery |
 | `internal/structure` | CFG back into `if`/`while`/`switch` |
-| `internal/emit` | C text, JSON AST, HTML output |
+| `internal/emit` | C text (JSON AST and HTML later) |
 | `internal/baremetal` | ISA, base address and peripheral inference for raw dumps |
-| `internal/store` | SQLite project database |
+| `internal/store` | SQLite project database (pure Go driver) |
 | `internal/ai` | Optional MCP server and local-model adapters, outside the pipeline |
 | `third_party/ghidra` | Vendored compiled SLEIGH specs and their license notices |
 | `testdata` | Ground-truth corpus built from open-source code |

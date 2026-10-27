@@ -23,8 +23,18 @@ type LanguageInfo struct {
 	Size        int
 	Variant     string
 	Description string
-	slaPath     string
-	pspecPath   string
+	// Compilers lists the vendored compiler specs (.cspec) for the
+	// language, in .ldefs order.
+	Compilers []CompilerSpec
+	slaPath   string
+	pspecPath string
+}
+
+// CompilerSpec names one compiler's calling conventions for a language.
+type CompilerSpec struct {
+	ID   string // e.g. "default", "gcc"
+	Name string
+	Path string // in the specs file system
 }
 
 // Language is a loaded spec plus the context defaults from its .pspec.
@@ -49,6 +59,11 @@ type ldefsFile struct {
 		SlaFile     string `xml:"slafile,attr"`
 		Pspec       string `xml:"processorspec,attr"`
 		Description string `xml:"description"`
+		Compilers   []struct {
+			Name string `xml:"name,attr"`
+			Spec string `xml:"spec,attr"`
+			ID   string `xml:"id,attr"`
+		} `xml:"compiler"`
 	} `xml:"language"`
 }
 
@@ -92,6 +107,12 @@ func Languages(fsys fs.FS) ([]LanguageInfo, error) {
 			}
 			if _, err := fs.Stat(fsys, info.slaPath); err != nil {
 				continue // spec not vendored
+			}
+			for _, c := range l.Compilers {
+				p := path.Join(dir, c.Spec)
+				if _, err := fs.Stat(fsys, p); err == nil {
+					info.Compilers = append(info.Compilers, CompilerSpec{ID: c.ID, Name: c.Name, Path: p})
+				}
 			}
 			out = append(out, info)
 		}

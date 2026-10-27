@@ -20,5 +20,6 @@ Tests that use the corpus:
 - `engine/corpus_test.go` decodes every object and compares each instruction with the objdump listing: boundaries must match exactly, and mnemonics and operands must match after syntax normalization or a documented Ghidra divergence.
 - `engine/exec_test.go` lifts every object, discovers its functions, and runs each one in the IR interpreter on the recorded inputs, passing arguments as the target's calling convention does. Results must match the native ones to the bit, except where a vendored spec is known to differ from the hardware (named divergences).
 - `engine/analyze_test.go` checks that discovered functions match the symbol table, with symbols and without, that every CFG is well formed, and that jump tables resolve.
+- `engine/recompile_test.go` is the decompiler gate. It decompiles every `-O0` object to C and compiles that C again with clang for the object's own target (`CORPUS_CC`, skipped when clang is missing). It then runs each recompiled function in the IR interpreter on the recorded vectors. At least 90% of the functions must pass every vector. `RECOMPILE_OPT=O2` or `Os` runs the same check on optimized objects and reports the result without enforcing it.
 
 Rebuild the corpus after changing a source file, then the vectors, and commit the objects, listings and vectors together.

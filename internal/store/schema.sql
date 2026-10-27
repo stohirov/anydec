@@ -1,4 +1,10 @@
 -- anydec project database. One SQLite file per project, next to the input.
+-- The input's bytes are stored too, so the file alone reopens the project.
+
+CREATE TABLE IF NOT EXISTS meta (
+    key   TEXT PRIMARY KEY,
+    value TEXT NOT NULL
+);
 
 CREATE TABLE IF NOT EXISTS artifacts (
     id        INTEGER PRIMARY KEY,
@@ -6,7 +12,8 @@ CREATE TABLE IF NOT EXISTS artifacts (
     offset    INTEGER NOT NULL DEFAULT 0,
     kind      TEXT    NOT NULL,
     path      TEXT,
-    sha256    TEXT    NOT NULL
+    sha256    TEXT    NOT NULL,
+    data      BLOB
 );
 
 CREATE TABLE IF NOT EXISTS segments (
@@ -29,6 +36,7 @@ CREATE TABLE IF NOT EXISTS symbols (
 
 CREATE TABLE IF NOT EXISTS functions (
     address   INTEGER PRIMARY KEY,
+    name      TEXT NOT NULL,
     prototype TEXT,
     status    TEXT NOT NULL DEFAULT 'discovered',
     overrides TEXT -- JSON of user overrides

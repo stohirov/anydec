@@ -7,6 +7,7 @@ import (
 	"github.com/stohirov/decompile-anything/internal/analysis"
 	"github.com/stohirov/decompile-anything/internal/ir"
 	"github.com/stohirov/decompile-anything/internal/lift"
+	"github.com/stohirov/decompile-anything/internal/ssa"
 )
 
 // Function is a discovered function with its control-flow graph in IR.
@@ -21,27 +22,34 @@ type Analysis struct {
 	Arch      *ir.Arch
 	Functions []*Function // sorted by entry address
 	lifter    *lift.Lifter
+	abi       *ssa.ABI
+	lowered   map[uint64]*ssa.Func
 }
 
 // Analyze discovers the functions of p and builds their CFGs, resolving
 // jump tables. With sweep set it also looks for functions in code that no
 // known function reaches, as stripped binaries need.
 func Analyze(p *Program, sweep bool) (*Analysis, error) {
-	d, err := NewDisassembler(p)
+	a, d, err := newAnalysis(p)
 	if err != nil {
 		return nil, err
 	}
-	l := lift.New(p.Language, d.dec)
 	opt := analysis.Options{Alignment: max(d.Spec().Alignment, 1), Sweep: sweep}
 	if sweep {
 		opt.Prologue = prologue(p.Language)
 	}
-	return &Analysis{
-		Program:   p,
-		Arch:      l.Arch(),
-		Functions: analysis.Discover(p, l, opt),
-		lifter:    l,
-	}, nil
+	a.Functions = analysis.Discover(p, a.lifter, opt)
+	return a, nil
+}
+
+// newAnalysis prepares to lift p's code, with no functions yet.
+func newAnalysis(p *Program) (*Analysis, *Disassembler, error) {
+	d, err := NewDisassembler(p)
+	if err != nil {
+		return nil, nil, err
+	}
+	l := lift.New(p.Language, d.dec)
+	return &Analysis{Program: p, Arch: l.Arch(), lifter: l}, d, nil
 }
 
 // Function returns the function with the given entry address or name.

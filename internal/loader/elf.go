@@ -54,7 +54,97 @@ func loadELF(data []byte, relocate bool) (*Program, error) {
 	if err := p.readRelocs(f, sectionAddr, externs, relocate && f.Type == elf.ET_REL); err != nil {
 		return nil, fmt.Errorf("elf: %w", err)
 	}
+	p.HardFloat = f.Machine != elf.EM_ARM || armVFPArgs(f)
 	return p, nil
+}
+
+// armVFPArgs reports whether an ARM file's build attributes say floating-
+// point arguments go in VFP registers (Tag_ABI_VFP_args = 1).
+func armVFPArgs(f *elf.File) bool {
+	s := f.Section(".ARM.attributes")
+	if s == nil {
+		return false
+	}
+	data, err := s.Data()
+	if err != nil || len(data) == 0 || data[0] != 'A' {
+		return false
+	}
+	bo := f.ByteOrder
+	data = data[1:]
+	// Subsections: length, vendor name, then tagged sub-subsections.
+	for len(data) >= 4 {
+		n := int(bo.Uint32(data))
+		if n < 4 || n > len(data) {
+			return false
+		}
+		sub := data[4:n]
+		data = data[n:]
+		vendor, rest, ok := bytes.Cut(sub, []byte{0})
+		if !ok || string(vendor) != "aeabi" {
+			continue
+		}
+		for len(rest) > 0 {
+			tag, k := uleb(rest)
+			if k == 0 || len(rest) < k+4 {
+				return false
+			}
+			size := int(bo.Uint32(rest[k:]))
+			if size < k+4 || size > len(rest) {
+				return false
+			}
+			attrs := rest[k+4 : size]
+			rest = rest[size:]
+			if tag != 1 { // only whole-file attributes
+				continue
+			}
+			for len(attrs) > 0 {
+				t, k := uleb(attrs)
+				if k == 0 {
+					return false
+				}
+				attrs = attrs[k:]
+				// Tags 4, 5 and 67, and odd tags from 32 up, hold strings;
+				// 32 holds a number and then a string.
+				if t == 32 {
+					_, k = uleb(attrs)
+					attrs = attrs[k:]
+				}
+				if t == 4 || t == 5 || t == 67 || t == 32 || (t > 32 && t%2 == 1) {
+					i := bytes.IndexByte(attrs, 0)
+					if i < 0 {
+						return false
+					}
+					attrs = attrs[i+1:]
+					continue
+				}
+				v, k := uleb(attrs)
+				if k == 0 {
+					return false
+				}
+				attrs = attrs[k:]
+				if t == 28 {
+					return v == 1
+				}
+			}
+		}
+	}
+	return false
+}
+
+// uleb decodes an unsigned LEB128 number, returning it and its length, or a
+// length of 0 when b ends inside it.
+func uleb(b []byte) (uint64, int) {
+	var v uint64
+	for i, c := range b {
+		if i == 10 {
+			return 0, 0
+		}
+		v |= uint64(c&0x7f) << (7 * i)
+		if c&0x80 == 0 {
+			return v, i + 1
+		}
+	}
+	return 0, 0
 }
 
 // placeExterns gives each undefined symbol of a relocatable object a
@@ -150,6 +240,7 @@ func (p *Program) readRelocs(f *elf.File, sectionAddr []uint64, externs map[stri
 				sym := table[symIdx-1]
 				r.Symbol = sym.Name
 				target = resolveSymbol(f, sym, sectionAddr, externs)
+				r.Target, r.TargetOK = target.addr, target.ok
 			}
 			if relocate && target.ok {
 				r.Applied = p.applyReloc(f, r, target)

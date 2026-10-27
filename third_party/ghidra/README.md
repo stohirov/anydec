@@ -18,7 +18,7 @@ This directory holds compiled SLEIGH processor specs from [Ghidra](https://githu
 | x86 | `x86.ldefs`, `x86.sla`, `x86-64.sla`, `x86.pspec`, `x86-64.pspec`, `x86-64-compat32.pspec`, `x86-16.pspec`, `x86-16-real.pspec`, `x86gcc.cspec`, `x86-64-gcc.cspec`, `x86-16.cspec` | `x86:LE:32:default`, `x86:LE:64:default`, `x86:LE:64:compat32`, `x86:LE:32:System Management Mode`, `x86:LE:16:{Real,Protected} Mode` |
 | MIPS | `mips.ldefs`, `mips32{be,le}.sla`, `mips64{be,le}.sla`, `mips32.pspec`, `mips32_16e.pspec`, `mips32micro.pspec`, `mips64.pspec`, `mips64_16e.pspec`, `mips64micro.pspec`, `mips64R6.pspec`, `mips32{be,le}.cspec`, `mips64{be,le}.cspec` | `MIPS:{BE,LE}:32:{default,16e,micro}`, `MIPS:{BE,LE}:64:{default,16e,micro,R6,64-32addr,micro64-32addr,64-32R6addr}` |
 
-Only each language's default (or gcc) compiler spec is vendored; `.ldefs` entries naming other `.cspec` files load fine, since the decoder reads only `.sla` and `.pspec`.
+Only each language's default (or gcc) compiler spec is vendored. `.ldefs` entries naming other `.cspec` files still load: the decoder reads only `.sla` and `.pspec`, and the decompiler takes calling conventions from the first vendored `.cspec` with compiler id `default` or `gcc` (`internal/abi`).
 
 Languages in an `.ldefs` file whose `.sla` is not vendored are ignored.
 

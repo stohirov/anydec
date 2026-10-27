@@ -312,7 +312,10 @@ func execute(t *testing.T, a *Analysis, fn *Function, v vector, dir string) (str
 		}
 		h, ok := hooks[s.Name]
 		if !ok {
-			return "", fmt.Errorf("no hook for %s: %w", s.Name, irexec.ErrUnsupported)
+			name := s.Name
+			h = func(*irexec.Machine) error {
+				return fmt.Errorf("call to %s, which has no hook: %w", name, irexec.ErrUnsupported)
+			}
 		}
 		m.Hooks[s.Addr] = h
 	}

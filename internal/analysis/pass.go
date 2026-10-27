@@ -1,7 +1,6 @@
-// Package analysis holds the pass manager and the per-function passes:
-// function discovery, CFG construction, jump-table resolution, SSA and
-// simplification, stack analysis, calling conventions and interprocedural
-// facts.
+// Package analysis holds the pass manager and the passes that find code:
+// function discovery, CFG construction and jump-table resolution. Data-
+// flow analysis on the result lives in package ssa.
 package analysis
 
 import (

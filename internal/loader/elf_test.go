@@ -290,3 +290,19 @@ func TestUnrelocatedKeepsFileBytes(t *testing.T) {
 		}
 	}
 }
+
+func TestARMFloatABI(t *testing.T) {
+	for dir, want := range map[string]bool{"arm": false, "thumb": false, "thumb-hf": true, "aarch64": true} {
+		data, err := os.ReadFile(filepath.Join("..", "..", "testdata", "synthetic", dir, "floats-O0.o"))
+		if err != nil {
+			t.Fatal(err)
+		}
+		p, err := Load(data)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if p.HardFloat != want {
+			t.Errorf("%s: HardFloat = %v, want %v", dir, p.HardFloat, want)
+		}
+	}
+}
