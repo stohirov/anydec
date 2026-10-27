@@ -1,0 +1,15 @@
+# Build output
+/bin/
+*.test
+*.out
+
+# Project databases and unpack output
+*.adb
+*.adb-journal
+*.adb-wal
+extracted/
+
+# Third-party firmware must never be committed; keep local samples here.
+/samples/
+
+.DS_Store
