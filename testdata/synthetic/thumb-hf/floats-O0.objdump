@@ -1,0 +1,153 @@
+
+testdata/synthetic/thumb-hf/floats-O0.o:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00000000 <lerp>:
+       0: b083         	sub	sp, #12
+       2: ed8d 0a02    	vstr	s0, [sp, #8]
+       6: edcd 0a01    	vstr	s1, [sp, #4]
+       a: ed8d 1a00    	vstr	s2, [sp]
+       e: ed9d 1a02    	vldr	s2, [sp, #8]
+      12: ed9d 0a01    	vldr	s0, [sp, #4]
+      16: ee30 0a41    	vsub.f32	s0, s0, s2
+      1a: ed9d 2a00    	vldr	s4, [sp]
+      1e: ee20 0a02    	vmul.f32	s0, s0, s4
+      22: ee30 0a01    	vadd.f32	s0, s0, s2
+      26: b003         	add	sp, #12
+      28: 4770         	bx	lr
+      2a: bf00         	nop
+      2c: bf00         	nop
+      2e: bf00         	nop
+
+00000030 <poly>:
+      30: b580         	push	{r7, lr}
+      32: b084         	sub	sp, #16
+      34: ed8d 0b02    	vstr	d0, [sp, #8]
+      38: 9802         	ldr	r0, [sp, #8]
+      3a: 9000         	str	r0, [sp]
+      3c: 9903         	ldr	r1, [sp, #12]
+      3e: 9101         	str	r1, [sp, #4]
+      40: ed9f 0b1b    	vldr	d0, [pc, #108]          @ 0xb0 <poly+0x80>
+      44: ec53 2b10    	vmov	r2, r3, d0
+      48: f7ff fffe    	bl	0x48 <poly+0x18>        @ imm = #-4
+      4c: ec41 0b10    	vmov	d0, r0, r1
+      50: ec51 0b10    	vmov	r0, r1, d0
+      54: ed9f 0b18    	vldr	d0, [pc, #96]           @ 0xb8 <poly+0x88>
+      58: ec53 2b10    	vmov	r2, r3, d0
+      5c: f7ff fffe    	bl	0x5c <poly+0x2c>        @ imm = #-4
+      60: 9a00         	ldr	r2, [sp]
+      62: 9b01         	ldr	r3, [sp, #4]
+      64: ec41 0b10    	vmov	d0, r0, r1
+      68: ec51 0b10    	vmov	r0, r1, d0
+      6c: f7ff fffe    	bl	0x6c <poly+0x3c>        @ imm = #-4
+      70: ec41 0b10    	vmov	d0, r0, r1
+      74: ec51 0b10    	vmov	r0, r1, d0
+      78: ed9f 0b11    	vldr	d0, [pc, #68]           @ 0xc0 <poly+0x90>
+      7c: ec53 2b10    	vmov	r2, r3, d0
+      80: f7ff fffe    	bl	0x80 <poly+0x50>        @ imm = #-4
+      84: 9a00         	ldr	r2, [sp]
+      86: 9b01         	ldr	r3, [sp, #4]
+      88: ec41 0b10    	vmov	d0, r0, r1
+      8c: ec51 0b10    	vmov	r0, r1, d0
+      90: f7ff fffe    	bl	0x90 <poly+0x60>        @ imm = #-4
+      94: ec41 0b10    	vmov	d0, r0, r1
+      98: ec51 0b10    	vmov	r0, r1, d0
+      9c: ed9f 0b0a    	vldr	d0, [pc, #40]           @ 0xc8 <poly+0x98>
+      a0: ec53 2b10    	vmov	r2, r3, d0
+      a4: f7ff fffe    	bl	0xa4 <poly+0x74>        @ imm = #-4
+      a8: ec41 0b10    	vmov	d0, r0, r1
+      ac: b004         	add	sp, #16
+      ae: bd80         	pop	{r7, pc}
+      b0: 00 00 00 00  	.word	0x00000000
+      b4: 00 00 08 40  	.word	0x40080000
+      b8: 00 00 00 00  	.word	0x00000000
+      bc: 00 00 00 40  	.word	0x40000000
+      c0: 00 00 00 00  	.word	0x00000000
+      c4: 00 00 f0 bf  	.word	0xbff00000
+      c8: 00 00 00 00  	.word	0x00000000
+      cc: 00 00 e0 3f  	.word	0x3fe00000
+
+000000d0 <to_int>:
+      d0: b081         	sub	sp, #4
+      d2: ed8d 0a00    	vstr	s0, [sp]
+      d6: ed9d 0a00    	vldr	s0, [sp]
+      da: eebd 0ac0    	vcvt.s32.f32	s0, s0
+      de: ee10 0a10    	vmov	r0, s0
+      e2: b001         	add	sp, #4
+      e4: 4770         	bx	lr
+      e6: bf00         	nop
+
+000000e8 <from_int>:
+      e8: b081         	sub	sp, #4
+      ea: 9000         	str	r0, [sp]
+      ec: ed9d 0a00    	vldr	s0, [sp]
+      f0: eeb8 0ac0    	vcvt.f32.s32	s0, s0
+      f4: b001         	add	sp, #4
+      f6: 4770         	bx	lr
+
+000000f8 <widen>:
+      f8: b580         	push	{r7, lr}
+      fa: b082         	sub	sp, #8
+      fc: ed8d 0a01    	vstr	s0, [sp, #4]
+     100: 9801         	ldr	r0, [sp, #4]
+     102: f7ff fffe    	bl	0x102 <widen+0xa>       @ imm = #-4
+     106: ec41 0b10    	vmov	d0, r0, r1
+     10a: b002         	add	sp, #8
+     10c: bd80         	pop	{r7, pc}
+     10e: bf00         	nop
+
+00000110 <fmax_>:
+     110: b083         	sub	sp, #12
+     112: ed8d 0a02    	vstr	s0, [sp, #8]
+     116: edcd 0a01    	vstr	s1, [sp, #4]
+     11a: ed9d 0a02    	vldr	s0, [sp, #8]
+     11e: ed9d 1a01    	vldr	s2, [sp, #4]
+     122: eeb4 0a41    	vcmp.f32	s0, s2
+     126: eef1 fa10    	vmrs	APSR_nzcv, fpscr
+     12a: dd05         	ble	0x138 <fmax_+0x28>      @ imm = #10
+     12c: e7ff         	b	0x12e <fmax_+0x1e>      @ imm = #-2
+     12e: ed9d 0a02    	vldr	s0, [sp, #8]
+     132: ed8d 0a00    	vstr	s0, [sp]
+     136: e004         	b	0x142 <fmax_+0x32>      @ imm = #8
+     138: ed9d 0a01    	vldr	s0, [sp, #4]
+     13c: ed8d 0a00    	vstr	s0, [sp]
+     140: e7ff         	b	0x142 <fmax_+0x32>      @ imm = #-2
+     142: ed9d 0a00    	vldr	s0, [sp]
+     146: b003         	add	sp, #12
+     148: 4770         	bx	lr
+     14a: bf00         	nop
+
+0000014c <dot>:
+     14c: b085         	sub	sp, #20
+     14e: 9004         	str	r0, [sp, #16]
+     150: 9103         	str	r1, [sp, #12]
+     152: 9202         	str	r2, [sp, #8]
+     154: 2000         	movs	r0, #0
+     156: 9001         	str	r0, [sp, #4]
+     158: 9000         	str	r0, [sp]
+     15a: e7ff         	b	0x15c <dot+0x10>        @ imm = #-2
+     15c: 9800         	ldr	r0, [sp]
+     15e: 9902         	ldr	r1, [sp, #8]
+     160: 4288         	cmp	r0, r1
+     162: da18         	bge	0x196 <dot+0x4a>        @ imm = #48
+     164: e7ff         	b	0x166 <dot+0x1a>        @ imm = #-2
+     166: 9804         	ldr	r0, [sp, #16]
+     168: 9900         	ldr	r1, [sp]
+     16a: eb00 0081    	add.w	r0, r0, r1, lsl #2
+     16e: ed90 0a00    	vldr	s0, [r0]
+     172: 9803         	ldr	r0, [sp, #12]
+     174: eb00 0081    	add.w	r0, r0, r1, lsl #2
+     178: ed90 2a00    	vldr	s4, [r0]
+     17c: ed9d 1a01    	vldr	s2, [sp, #4]
+     180: ee20 0a02    	vmul.f32	s0, s0, s4
+     184: ee30 0a01    	vadd.f32	s0, s0, s2
+     188: ed8d 0a01    	vstr	s0, [sp, #4]
+     18c: e7ff         	b	0x18e <dot+0x42>        @ imm = #-2
+     18e: 9800         	ldr	r0, [sp]
+     190: 3001         	adds	r0, #1
+     192: 9000         	str	r0, [sp]
+     194: e7e2         	b	0x15c <dot+0x10>        @ imm = #-60
+     196: ed9d 0a01    	vldr	s0, [sp, #4]
+     19a: b005         	add	sp, #20
+     19c: 4770         	bx	lr

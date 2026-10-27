@@ -1,0 +1,39 @@
+
+testdata/synthetic/arm/arith-Os.o:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00000000 <add>:
+       0: e0810000     	add	r0, r1, r0
+       4: e12fff1e     	bx	lr
+
+00000008 <mul_add>:
+       8: e0202091     	mla	r0, r1, r0, r2
+       c: e12fff1e     	bx	lr
+
+00000010 <shifts>:
+      10: e2612020     	rsb	r2, r1, #32
+      14: e1a02230     	lsr	r2, r0, r2
+      18: e0220110     	eor	r0, r2, r0, lsl r1
+      1c: e12fff1e     	bx	lr
+
+00000020 <sdiv>:
+      20: e3510000     	cmp	r1, #0
+      24: 03a00000     	moveq	r0, #0
+      28: 012fff1e     	bxeq	lr
+      2c: e92d4800     	push	{r11, lr}
+      30: ebfffffe     	bl	0x30 <sdiv+0x10>        @ imm = #-8
+      34: e8bd8800     	pop	{r11, pc}
+
+00000038 <clamp>:
+      38: e1500002     	cmp	r0, r2
+      3c: b1a02000     	movlt	r2, r0
+      40: e1500001     	cmp	r0, r1
+      44: b1a02001     	movlt	r2, r1
+      48: e1a00002     	mov	r0, r2
+      4c: e12fff1e     	bx	lr
+
+00000050 <wide_add>:
+      50: e0920000     	adds	r0, r2, r0
+      54: e0a31001     	adc	r1, r3, r1
+      58: e12fff1e     	bx	lr

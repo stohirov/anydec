@@ -2,7 +2,7 @@
 
 A local-first decompiler that turns firmware and binaries from devices you own into readable C-like code. It needs no hosted AI service: a deterministic engine does all the analysis, and an optional AI layer explains results using models you run yourself.
 
-> **Status:** early scaffolding. `anydec identify` works; the other commands parse their arguments and report "not implemented yet". See [the design doc](docs/design.md) for the plan.
+> **Status:** phase 1 (foundations). `anydec identify` and `anydec disasm` work: an ELF loader and a pure-Go SLEIGH runtime decode ARM and Thumb code and emit P-code, checked against llvm-objdump on a synthetic corpus. The other commands parse their arguments and report "not implemented yet". See [the design doc](docs/design.md) for the plan.
 
 ## Goals
 
@@ -33,12 +33,14 @@ Requires Go 1.27+.
 make build        # static binary at bin/anydec (CGO_ENABLED=0)
 make test         # go test ./...
 make check        # vet + gofmt check + tests
+make corpus       # rebuild testdata/synthetic (needs clang with ARM targets)
 ```
 
 ## Usage
 
 ```sh
 anydec identify firmware.bin
+anydec disasm extracted/usr/bin/tvservice --func main
 anydec unpack firmware.bin -o extracted/
 anydec open extracted/usr/bin/tvservice --project tv.adb
 anydec funcs tv.adb --filter net

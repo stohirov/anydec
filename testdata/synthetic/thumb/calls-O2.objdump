@@ -1,0 +1,62 @@
+
+testdata/synthetic/thumb/calls-O2.o:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00000000 <many>:
+       0: b580         	push	{r7, lr}
+       2: 4408         	add	r0, r1
+       4: e9dd ec02    	ldrd	lr, r12, [sp, #8]
+       8: 4410         	add	r0, r2
+       a: 4418         	add	r0, r3
+       c: 4470         	add	r0, lr
+       e: 4460         	add	r0, r12
+      10: bd80         	pop	{r7, pc}
+      12: bf00         	nop
+
+00000014 <call_many>:
+      14: 2015         	movs	r0, #21
+      16: 4770         	bx	lr
+
+00000018 <fib>:
+      18: b5b0         	push	{r4, r5, r7, lr}
+      1a: 4604         	mov	r4, r0
+      1c: 2500         	movs	r5, #0
+      1e: 2802         	cmp	r0, #2
+      20: d307         	blo	0x32 <fib+0x1a>         @ imm = #14
+      22: bf00         	nop
+      24: 1e60         	subs	r0, r4, #1
+      26: f7ff fffe    	bl	0x26 <fib+0xe>          @ imm = #-4
+      2a: 3c02         	subs	r4, #2
+      2c: 2c01         	cmp	r4, #1
+      2e: 4405         	add	r5, r0
+      30: d8f8         	bhi	0x24 <fib+0xc>          @ imm = #-16
+      32: 1960         	adds	r0, r4, r5
+      34: bdb0         	pop	{r4, r5, r7, pc}
+      36: bf00         	nop
+
+00000038 <apply>:
+      38: 460b         	mov	r3, r1
+      3a: 4602         	mov	r2, r0
+      3c: 3101         	adds	r1, #1
+      3e: 4618         	mov	r0, r3
+      40: 4710         	bx	r2
+      42: bf00         	nop
+
+00000044 <report>:
+      44: 460a         	mov	r2, r1
+      46: 4601         	mov	r1, r0
+      48: f240 0000    	movw	r0, #0
+      4c: f2c0 0000    	movt	r0, #0
+      50: f7ff bffe    	b.w	0x50 <report+0xc>       @ imm = #-4
+
+00000054 <copy16>:
+      54: f8d1 c000    	ldr.w	r12, [r1]
+      58: 684b         	ldr	r3, [r1, #4]
+      5a: 68ca         	ldr	r2, [r1, #12]
+      5c: 6889         	ldr	r1, [r1, #8]
+      5e: 60c2         	str	r2, [r0, #12]
+      60: 6081         	str	r1, [r0, #8]
+      62: 6043         	str	r3, [r0, #4]
+      64: f8c0 c000    	str.w	r12, [r0]
+      68: 4770         	bx	lr

@@ -1,0 +1,191 @@
+
+testdata/synthetic/thumb-hf/loops-O0.o:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00000000 <sum>:
+       0: b084         	sub	sp, #16
+       2: 9003         	str	r0, [sp, #12]
+       4: 9102         	str	r1, [sp, #8]
+       6: 2000         	movs	r0, #0
+       8: 9001         	str	r0, [sp, #4]
+       a: 9000         	str	r0, [sp]
+       c: e7ff         	b	0xe <sum+0xe>           @ imm = #-2
+       e: 9800         	ldr	r0, [sp]
+      10: 9902         	ldr	r1, [sp, #8]
+      12: 4288         	cmp	r0, r1
+      14: da0c         	bge	0x30 <sum+0x30>         @ imm = #24
+      16: e7ff         	b	0x18 <sum+0x18>         @ imm = #-2
+      18: 9803         	ldr	r0, [sp, #12]
+      1a: 9900         	ldr	r1, [sp]
+      1c: f850 1021    	ldr.w	r1, [r0, r1, lsl #2]
+      20: 9801         	ldr	r0, [sp, #4]
+      22: 4408         	add	r0, r1
+      24: 9001         	str	r0, [sp, #4]
+      26: e7ff         	b	0x28 <sum+0x28>         @ imm = #-2
+      28: 9800         	ldr	r0, [sp]
+      2a: 3001         	adds	r0, #1
+      2c: 9000         	str	r0, [sp]
+      2e: e7ee         	b	0xe <sum+0xe>           @ imm = #-36
+      30: 9801         	ldr	r0, [sp, #4]
+      32: b004         	add	sp, #16
+      34: 4770         	bx	lr
+      36: bf00         	nop
+
+00000038 <strlen_>:
+      38: b082         	sub	sp, #8
+      3a: 9001         	str	r0, [sp, #4]
+      3c: 2000         	movs	r0, #0
+      3e: 9000         	str	r0, [sp]
+      40: e7ff         	b	0x42 <strlen_+0xa>      @ imm = #-2
+      42: 9801         	ldr	r0, [sp, #4]
+      44: 9900         	ldr	r1, [sp]
+      46: 5c40         	ldrb	r0, [r0, r1]
+      48: b120         	cbz	r0, 0x54 <strlen_+0x1c> @ imm = #8
+      4a: e7ff         	b	0x4c <strlen_+0x14>     @ imm = #-2
+      4c: 9800         	ldr	r0, [sp]
+      4e: 3001         	adds	r0, #1
+      50: 9000         	str	r0, [sp]
+      52: e7f6         	b	0x42 <strlen_+0xa>      @ imm = #-20
+      54: 9800         	ldr	r0, [sp]
+      56: b002         	add	sp, #8
+      58: 4770         	bx	lr
+      5a: bf00         	nop
+
+0000005c <find>:
+      5c: b085         	sub	sp, #20
+      5e: 9003         	str	r0, [sp, #12]
+      60: 9102         	str	r1, [sp, #8]
+      62: 9201         	str	r2, [sp, #4]
+      64: 2000         	movs	r0, #0
+      66: 9000         	str	r0, [sp]
+      68: e7ff         	b	0x6a <find+0xe>         @ imm = #-2
+      6a: 9800         	ldr	r0, [sp]
+      6c: 9902         	ldr	r1, [sp, #8]
+      6e: 4288         	cmp	r0, r1
+      70: da10         	bge	0x94 <find+0x38>        @ imm = #32
+      72: e7ff         	b	0x74 <find+0x18>        @ imm = #-2
+      74: 9803         	ldr	r0, [sp, #12]
+      76: 9900         	ldr	r1, [sp]
+      78: f850 0021    	ldr.w	r0, [r0, r1, lsl #2]
+      7c: 9901         	ldr	r1, [sp, #4]
+      7e: 4288         	cmp	r0, r1
+      80: d103         	bne	0x8a <find+0x2e>        @ imm = #6
+      82: e7ff         	b	0x84 <find+0x28>        @ imm = #-2
+      84: 9800         	ldr	r0, [sp]
+      86: 9004         	str	r0, [sp, #16]
+      88: e008         	b	0x9c <find+0x40>        @ imm = #16
+      8a: e7ff         	b	0x8c <find+0x30>        @ imm = #-2
+      8c: 9800         	ldr	r0, [sp]
+      8e: 3001         	adds	r0, #1
+      90: 9000         	str	r0, [sp]
+      92: e7ea         	b	0x6a <find+0xe>         @ imm = #-44
+      94: f04f 30ff    	mov.w	r0, #4294967295
+      98: 9004         	str	r0, [sp, #16]
+      9a: e7ff         	b	0x9c <find+0x40>        @ imm = #-2
+      9c: 9804         	ldr	r0, [sp, #16]
+      9e: b005         	add	sp, #20
+      a0: 4770         	bx	lr
+      a2: bf00         	nop
+
+000000a4 <matmul>:
+      a4: b088         	sub	sp, #32
+      a6: 9007         	str	r0, [sp, #28]
+      a8: 9106         	str	r1, [sp, #24]
+      aa: 9205         	str	r2, [sp, #20]
+      ac: 9304         	str	r3, [sp, #16]
+      ae: 2000         	movs	r0, #0
+      b0: 9003         	str	r0, [sp, #12]
+      b2: e7ff         	b	0xb4 <matmul+0x10>      @ imm = #-2
+      b4: 9803         	ldr	r0, [sp, #12]
+      b6: 9907         	ldr	r1, [sp, #28]
+      b8: 4288         	cmp	r0, r1
+      ba: da3d         	bge	0x138 <matmul+0x94>     @ imm = #122
+      bc: e7ff         	b	0xbe <matmul+0x1a>      @ imm = #-2
+      be: 2000         	movs	r0, #0
+      c0: 9002         	str	r0, [sp, #8]
+      c2: e7ff         	b	0xc4 <matmul+0x20>      @ imm = #-2
+      c4: 9802         	ldr	r0, [sp, #8]
+      c6: 9907         	ldr	r1, [sp, #28]
+      c8: 4288         	cmp	r0, r1
+      ca: da30         	bge	0x12e <matmul+0x8a>     @ imm = #96
+      cc: e7ff         	b	0xce <matmul+0x2a>      @ imm = #-2
+      ce: 2000         	movs	r0, #0
+      d0: 9001         	str	r0, [sp, #4]
+      d2: 9000         	str	r0, [sp]
+      d4: e7ff         	b	0xd6 <matmul+0x32>      @ imm = #-2
+      d6: 9800         	ldr	r0, [sp]
+      d8: 9907         	ldr	r1, [sp, #28]
+      da: 4288         	cmp	r0, r1
+      dc: da18         	bge	0x110 <matmul+0x6c>     @ imm = #48
+      de: e7ff         	b	0xe0 <matmul+0x3c>      @ imm = #-2
+      e0: 9806         	ldr	r0, [sp, #24]
+      e2: 9903         	ldr	r1, [sp, #12]
+      e4: 9b07         	ldr	r3, [sp, #28]
+      e6: 9a00         	ldr	r2, [sp]
+      e8: fb01 2103    	mla	r1, r1, r3, r2
+      ec: f850 0021    	ldr.w	r0, [r0, r1, lsl #2]
+      f0: 9905         	ldr	r1, [sp, #20]
+      f2: f8dd c008    	ldr.w	r12, [sp, #8]
+      f6: fb02 c203    	mla	r2, r2, r3, r12
+      fa: f851 1022    	ldr.w	r1, [r1, r2, lsl #2]
+      fe: 9a01         	ldr	r2, [sp, #4]
+     100: fb00 2001    	mla	r0, r0, r1, r2
+     104: 9001         	str	r0, [sp, #4]
+     106: e7ff         	b	0x108 <matmul+0x64>     @ imm = #-2
+     108: 9800         	ldr	r0, [sp]
+     10a: 3001         	adds	r0, #1
+     10c: 9000         	str	r0, [sp]
+     10e: e7e2         	b	0xd6 <matmul+0x32>      @ imm = #-60
+     110: 9801         	ldr	r0, [sp, #4]
+     112: 9904         	ldr	r1, [sp, #16]
+     114: 9a03         	ldr	r2, [sp, #12]
+     116: 9b07         	ldr	r3, [sp, #28]
+     118: f8dd c008    	ldr.w	r12, [sp, #8]
+     11c: fb02 c203    	mla	r2, r2, r3, r12
+     120: f841 0022    	str.w	r0, [r1, r2, lsl #2]
+     124: e7ff         	b	0x126 <matmul+0x82>     @ imm = #-2
+     126: 9802         	ldr	r0, [sp, #8]
+     128: 3001         	adds	r0, #1
+     12a: 9002         	str	r0, [sp, #8]
+     12c: e7ca         	b	0xc4 <matmul+0x20>      @ imm = #-108
+     12e: e7ff         	b	0x130 <matmul+0x8c>     @ imm = #-2
+     130: 9803         	ldr	r0, [sp, #12]
+     132: 3001         	adds	r0, #1
+     134: 9003         	str	r0, [sp, #12]
+     136: e7bd         	b	0xb4 <matmul+0x10>      @ imm = #-134
+     138: b008         	add	sp, #32
+     13a: 4770         	bx	lr
+
+0000013c <collatz>:
+     13c: b083         	sub	sp, #12
+     13e: 9002         	str	r0, [sp, #8]
+     140: 2000         	movs	r0, #0
+     142: 9001         	str	r0, [sp, #4]
+     144: e7ff         	b	0x146 <collatz+0xa>     @ imm = #-2
+     146: f89d 0008    	ldrb.w	r0, [sp, #8]
+     14a: 07c0         	lsls	r0, r0, #31
+     14c: b130         	cbz	r0, 0x15c <collatz+0x20> @ imm = #12
+     14e: e7ff         	b	0x150 <collatz+0x14>    @ imm = #-2
+     150: 9802         	ldr	r0, [sp, #8]
+     152: eb00 0040    	add.w	r0, r0, r0, lsl #1
+     156: 3001         	adds	r0, #1
+     158: 9000         	str	r0, [sp]
+     15a: e003         	b	0x164 <collatz+0x28>    @ imm = #6
+     15c: 9802         	ldr	r0, [sp, #8]
+     15e: 0840         	lsrs	r0, r0, #1
+     160: 9000         	str	r0, [sp]
+     162: e7ff         	b	0x164 <collatz+0x28>    @ imm = #-2
+     164: 9800         	ldr	r0, [sp]
+     166: 9002         	str	r0, [sp, #8]
+     168: 9801         	ldr	r0, [sp, #4]
+     16a: 3001         	adds	r0, #1
+     16c: 9001         	str	r0, [sp, #4]
+     16e: e7ff         	b	0x170 <collatz+0x34>    @ imm = #-2
+     170: 9802         	ldr	r0, [sp, #8]
+     172: 2801         	cmp	r0, #1
+     174: d1e7         	bne	0x146 <collatz+0xa>     @ imm = #-50
+     176: e7ff         	b	0x178 <collatz+0x3c>    @ imm = #-2
+     178: 9801         	ldr	r0, [sp, #4]
+     17a: b003         	add	sp, #12
+     17c: 4770         	bx	lr

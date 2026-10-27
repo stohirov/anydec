@@ -1,0 +1,43 @@
+
+testdata/synthetic/thumb-hf/arith-O2.o:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00000000 <add>:
+       0: 4408         	add	r0, r1
+       2: 4770         	bx	lr
+
+00000004 <mul_add>:
+       4: fb01 2000    	mla	r0, r1, r0, r2
+       8: 4770         	bx	lr
+       a: bf00         	nop
+
+0000000c <shifts>:
+       c: fa00 f201    	lsl.w	r2, r0, r1
+      10: f1c1 0120    	rsb.w	r1, r1, #32
+      14: 40c8         	lsrs	r0, r1
+      16: 4050         	eors	r0, r2
+      18: 4770         	bx	lr
+      1a: bf00         	nop
+
+0000001c <sdiv>:
+      1c: 2900         	cmp	r1, #0
+      1e: bf14         	ite	ne
+      20: fb90 f0f1    	sdivne	r0, r0, r1
+      24: 2000         	moveq	r0, #0
+      26: 4770         	bx	lr
+
+00000028 <clamp>:
+      28: 4290         	cmp	r0, r2
+      2a: bfb8         	it	lt
+      2c: 4602         	movlt	r2, r0
+      2e: 4288         	cmp	r0, r1
+      30: bfb8         	it	lt
+      32: 460a         	movlt	r2, r1
+      34: 4610         	mov	r0, r2
+      36: 4770         	bx	lr
+
+00000038 <wide_add>:
+      38: 1880         	adds	r0, r0, r2
+      3a: 4159         	adcs	r1, r3
+      3c: 4770         	bx	lr

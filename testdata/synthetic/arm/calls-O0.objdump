@@ -1,0 +1,105 @@
+
+testdata/synthetic/arm/calls-O0.o:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00000000 <many>:
+       0: e24dd010     	sub	sp, sp, #16
+       4: e59dc014     	ldr	r12, [sp, #20]
+       8: e59dc010     	ldr	r12, [sp, #16]
+       c: e58d000c     	str	r0, [sp, #12]
+      10: e58d1008     	str	r1, [sp, #8]
+      14: e58d2004     	str	r2, [sp, #4]
+      18: e58d3000     	str	r3, [sp]
+      1c: e59d000c     	ldr	r0, [sp, #12]
+      20: e59d1008     	ldr	r1, [sp, #8]
+      24: e0800001     	add	r0, r0, r1
+      28: e59d1004     	ldr	r1, [sp, #4]
+      2c: e0800001     	add	r0, r0, r1
+      30: e59d1000     	ldr	r1, [sp]
+      34: e0800001     	add	r0, r0, r1
+      38: e59d1010     	ldr	r1, [sp, #16]
+      3c: e0800001     	add	r0, r0, r1
+      40: e59d1014     	ldr	r1, [sp, #20]
+      44: e0800001     	add	r0, r0, r1
+      48: e28dd010     	add	sp, sp, #16
+      4c: e12fff1e     	bx	lr
+
+00000050 <call_many>:
+      50: e92d4800     	push	{r11, lr}
+      54: e24dd008     	sub	sp, sp, #8
+      58: e1a0100d     	mov	r1, sp
+      5c: e3a00006     	mov	r0, #6
+      60: e5810004     	str	r0, [r1, #4]
+      64: e3a00005     	mov	r0, #5
+      68: e5810000     	str	r0, [r1]
+      6c: e3a00001     	mov	r0, #1
+      70: e3a01002     	mov	r1, #2
+      74: e3a02003     	mov	r2, #3
+      78: e3a03004     	mov	r3, #4
+      7c: ebfffffe     	bl	0x7c <call_many+0x2c>   @ imm = #-8
+      80: e28dd008     	add	sp, sp, #8
+      84: e8bd8800     	pop	{r11, pc}
+
+00000088 <fib>:
+      88: e92d4800     	push	{r11, lr}
+      8c: e24dd010     	sub	sp, sp, #16
+      90: e58d000c     	str	r0, [sp, #12]
+      94: e59d000c     	ldr	r0, [sp, #12]
+      98: e3500001     	cmp	r0, #1
+      9c: 8a000003     	bhi	0xb0 <fib+0x28>         @ imm = #12
+      a0: eaffffff     	b	0xa4 <fib+0x1c>         @ imm = #-4
+      a4: e59d000c     	ldr	r0, [sp, #12]
+      a8: e58d0008     	str	r0, [sp, #8]
+      ac: ea00000b     	b	0xe0 <fib+0x58>         @ imm = #44
+      b0: e59d000c     	ldr	r0, [sp, #12]
+      b4: e2400001     	sub	r0, r0, #1
+      b8: ebfffffe     	bl	0xb8 <fib+0x30>         @ imm = #-8
+      bc: e58d0004     	str	r0, [sp, #4]
+      c0: e59d000c     	ldr	r0, [sp, #12]
+      c4: e2400002     	sub	r0, r0, #2
+      c8: ebfffffe     	bl	0xc8 <fib+0x40>         @ imm = #-8
+      cc: e1a01000     	mov	r1, r0
+      d0: e59d0004     	ldr	r0, [sp, #4]
+      d4: e0800001     	add	r0, r0, r1
+      d8: e58d0008     	str	r0, [sp, #8]
+      dc: eaffffff     	b	0xe0 <fib+0x58>         @ imm = #-4
+      e0: e59d0008     	ldr	r0, [sp, #8]
+      e4: e28dd010     	add	sp, sp, #16
+      e8: e8bd8800     	pop	{r11, pc}
+
+000000ec <apply>:
+      ec: e92d4800     	push	{r11, lr}
+      f0: e24dd008     	sub	sp, sp, #8
+      f4: e58d0004     	str	r0, [sp, #4]
+      f8: e58d1000     	str	r1, [sp]
+      fc: e59d2004     	ldr	r2, [sp, #4]
+     100: e59d0000     	ldr	r0, [sp]
+     104: e2801001     	add	r1, r0, #1
+     108: e12fff32     	blx	r2
+     10c: e28dd008     	add	sp, sp, #8
+     110: e8bd8800     	pop	{r11, pc}
+
+00000114 <report>:
+     114: e92d4800     	push	{r11, lr}
+     118: e24dd008     	sub	sp, sp, #8
+     11c: e58d0004     	str	r0, [sp, #4]
+     120: e58d1000     	str	r1, [sp]
+     124: e59d1004     	ldr	r1, [sp, #4]
+     128: e59d2000     	ldr	r2, [sp]
+     12c: e3000000     	movw	r0, #0
+     130: e3400000     	movt	r0, #0
+     134: ebfffffe     	bl	0x134 <report+0x20>     @ imm = #-8
+     138: e28dd008     	add	sp, sp, #8
+     13c: e8bd8800     	pop	{r11, pc}
+
+00000140 <copy16>:
+     140: e24dd008     	sub	sp, sp, #8
+     144: e58d0004     	str	r0, [sp, #4]
+     148: e58d1000     	str	r1, [sp]
+     14c: e59d0004     	ldr	r0, [sp, #4]
+     150: e59d1000     	ldr	r1, [sp]
+     154: f4610a0f     	vld1.8	{d16, d17}, [r1]
+     158: f4400a0f     	vst1.8	{d16, d17}, [r0]
+     15c: e28dd008     	add	sp, sp, #8
+     160: e12fff1e     	bx	lr

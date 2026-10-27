@@ -1,0 +1,133 @@
+
+testdata/synthetic/thumb-hf/structs-O2.o:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00000000 <manhattan>:
+       0: f240 0100    	movw	r1, #0
+       4: f2c0 0100    	movt	r1, #0
+       8: 6802         	ldr	r2, [r0]
+       a: 6843         	ldr	r3, [r0, #4]
+       c: 6808         	ldr	r0, [r1]
+       e: 6849         	ldr	r1, [r1, #4]
+      10: 1a10         	subs	r0, r2, r0
+      12: eba3 0101    	sub.w	r1, r3, r1
+      16: bf48         	it	mi
+      18: 4240         	rsbmi	r0, r0, #0
+      1a: 2900         	cmp	r1, #0
+      1c: bf48         	it	mi
+      1e: 4249         	rsbmi	r1, r1, #0
+      20: 4408         	add	r0, r1
+      22: 4770         	bx	lr
+
+00000024 <list_sum>:
+      24: b308         	cbz	r0, 0x6a <list_sum+0x46> @ imm = #66
+      26: 4601         	mov	r1, r0
+      28: 2000         	movs	r0, #0
+      2a: bf00         	nop
+      2c: 7a0a         	ldrb	r2, [r1, #8]
+      2e: 2a00         	cmp	r2, #0
+      30: bf1c         	itt	ne
+      32: 684a         	ldrne	r2, [r1, #4]
+      34: 4410         	addne	r0, r2
+      36: 6809         	ldr	r1, [r1]
+      38: b1c1         	cbz	r1, 0x6c <list_sum+0x48> @ imm = #48
+      3a: 7a0a         	ldrb	r2, [r1, #8]
+      3c: 2a00         	cmp	r2, #0
+      3e: bf1c         	itt	ne
+      40: 684a         	ldrne	r2, [r1, #4]
+      42: 4410         	addne	r0, r2
+      44: 6809         	ldr	r1, [r1]
+      46: b189         	cbz	r1, 0x6c <list_sum+0x48> @ imm = #34
+      48: 7a0a         	ldrb	r2, [r1, #8]
+      4a: 2a00         	cmp	r2, #0
+      4c: bf1c         	itt	ne
+      4e: 684a         	ldrne	r2, [r1, #4]
+      50: 4410         	addne	r0, r2
+      52: 6809         	ldr	r1, [r1]
+      54: b151         	cbz	r1, 0x6c <list_sum+0x48> @ imm = #20
+      56: 7a0a         	ldrb	r2, [r1, #8]
+      58: 2a00         	cmp	r2, #0
+      5a: bf1c         	itt	ne
+      5c: 684a         	ldrne	r2, [r1, #4]
+      5e: 4410         	addne	r0, r2
+      60: 6809         	ldr	r1, [r1]
+      62: 2900         	cmp	r1, #0
+      64: bf08         	it	eq
+      66: 4770         	bxeq	lr
+      68: e7e0         	b	0x2c <list_sum+0x8>     @ imm = #-64
+      6a: 2000         	movs	r0, #0
+      6c: 4770         	bx	lr
+      6e: bf00         	nop
+
+00000070 <bump>:
+      70: 2901         	cmp	r1, #1
+      72: db5a         	blt	0x12a <bump+0xba>       @ imm = #180
+      74: b5f0         	push	{r4, r5, r6, r7, lr}
+      76: f001 0c03    	and	r12, r1, #3
+      7a: ea5f 0e91    	lsrs.w	lr, r1, #2
+      7e: f04f 0400    	mov.w	r4, #0
+      82: d030         	beq	0xe6 <bump+0x76>        @ imm = #96
+      84: f02e 4360    	bic	r3, lr, #3758096384
+      88: f100 021c    	add.w	r2, r0, #28
+      8c: eba4 0e83    	sub.w	lr, r4, r3, lsl #2
+      90: f852 3c1c    	ldr	r3, [r2, #-28]
+      94: f852 5c18    	ldr	r5, [r2, #-24]
+      98: f852 6c14    	ldr	r6, [r2, #-20]
+      9c: 3301         	adds	r3, #1
+      9e: f852 7c10    	ldr	r7, [r2, #-16]
+      a2: f842 3c1c    	str	r3, [r2, #-28]
+      a6: 1cab         	adds	r3, r5, #2
+      a8: f842 3c18    	str	r3, [r2, #-24]
+      ac: 1c73         	adds	r3, r6, #1
+      ae: f852 5c0c    	ldr	r5, [r2, #-12]
+      b2: f842 3c14    	str	r3, [r2, #-20]
+      b6: 1cbb         	adds	r3, r7, #2
+      b8: f842 3c10    	str	r3, [r2, #-16]
+      bc: 1c6b         	adds	r3, r5, #1
+      be: f852 5c08    	ldr	r5, [r2, #-8]
+      c2: f842 3c0c    	str	r3, [r2, #-12]
+      c6: 1cab         	adds	r3, r5, #2
+      c8: f852 5c04    	ldr	r5, [r2, #-4]
+      cc: f842 3c08    	str	r3, [r2, #-8]
+      d0: 1c6b         	adds	r3, r5, #1
+      d2: 6815         	ldr	r5, [r2]
+      d4: f842 3c04    	str	r3, [r2, #-4]
+      d8: 1cab         	adds	r3, r5, #2
+      da: 3c04         	subs	r4, #4
+      dc: f842 3b20    	str	r3, [r2], #32
+      e0: 45a6         	cmp	lr, r4
+      e2: d1d5         	bne	0x90 <bump+0x20>        @ imm = #-86
+      e4: 4264         	rsbs	r4, r4, #0
+      e6: f1bc 0f00    	cmp.w	r12, #0
+      ea: d01c         	beq	0x126 <bump+0xb6>       @ imm = #56
+      ec: f850 3034    	ldr.w	r3, [r0, r4, lsl #3]
+      f0: eb00 02c4    	add.w	r2, r0, r4, lsl #3
+      f4: f103 0e01    	add.w	lr, r3, #1
+      f8: 6853         	ldr	r3, [r2, #4]
+      fa: f840 e034    	str.w	lr, [r0, r4, lsl #3]
+      fe: 1c98         	adds	r0, r3, #2
+     100: f1bc 0f01    	cmp.w	r12, #1
+     104: 6050         	str	r0, [r2, #4]
+     106: d00e         	beq	0x126 <bump+0xb6>       @ imm = #28
+     108: 6890         	ldr	r0, [r2, #8]
+     10a: 68d3         	ldr	r3, [r2, #12]
+     10c: 3001         	adds	r0, #1
+     10e: 6090         	str	r0, [r2, #8]
+     110: 1c98         	adds	r0, r3, #2
+     112: f1bc 0f02    	cmp.w	r12, #2
+     116: 60d0         	str	r0, [r2, #12]
+     118: d005         	beq	0x126 <bump+0xb6>       @ imm = #10
+     11a: 6910         	ldr	r0, [r2, #16]
+     11c: 6953         	ldr	r3, [r2, #20]
+     11e: 3001         	adds	r0, #1
+     120: 6110         	str	r0, [r2, #16]
+     122: 1c98         	adds	r0, r3, #2
+     124: 6150         	str	r0, [r2, #20]
+     126: e8bd 40f0    	pop.w	{r4, r5, r6, r7, lr}
+     12a: f240 0000    	movw	r0, #0
+     12e: f2c0 0000    	movt	r0, #0
+     132: 6802         	ldr	r2, [r0]
+     134: 4411         	add	r1, r2
+     136: 6001         	str	r1, [r0]
+     138: 4770         	bx	lr

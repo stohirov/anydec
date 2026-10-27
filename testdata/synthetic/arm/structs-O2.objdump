@@ -1,0 +1,68 @@
+
+testdata/synthetic/arm/structs-O2.o:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00000000 <manhattan>:
+       0: e3001000     	movw	r1, #0
+       4: edd01b00     	vldr	d17, [r0]
+       8: e3401000     	movt	r1, #0
+       c: edd10b00     	vldr	d16, [r1]
+      10: f26127a0     	vabd.s32	d18, d17, d16
+      14: f3fc2c22     	vdup.32	d18, d18[1]
+      18: f26127b0     	vaba.s32	d18, d17, d16
+      1c: ee120b90     	vmov.32	r0, d18[0]
+      20: e12fff1e     	bx	lr
+
+00000024 <list_sum>:
+      24: e3500000     	cmp	r0, #0
+      28: 0a000009     	beq	0x54 <list_sum+0x30>    @ imm = #36
+      2c: e1a01000     	mov	r1, r0
+      30: e3a00000     	mov	r0, #0
+      34: e5d12008     	ldrb	r2, [r1, #8]
+      38: e3520000     	cmp	r2, #0
+      3c: 15912004     	ldrne	r2, [r1, #4]
+      40: e5911000     	ldr	r1, [r1]
+      44: 10820000     	addne	r0, r2, r0
+      48: e3510000     	cmp	r1, #0
+      4c: 012fff1e     	bxeq	lr
+      50: eafffff7     	b	0x34 <list_sum+0x10>    @ imm = #-36
+      54: e3a00000     	mov	r0, #0
+      58: e12fff1e     	bx	lr
+
+0000005c <bump>:
+      5c: e3510001     	cmp	r1, #1
+      60: ba00001a     	blt	0xd0 <bump+0x74>        @ imm = #104
+      64: e3a0c000     	mov	r12, #0
+      68: e3510004     	cmp	r1, #4
+      6c: 3a00000c     	blo	0xa4 <bump+0x48>        @ imm = #48
+      70: e3c1c10e     	bic	r12, r1, #-2147483645
+      74: f2c00052     	vmov.i32	q8, #0x2
+      78: f2c02051     	vmov.i32	q9, #0x1
+      7c: e1a03000     	mov	r3, r0
+      80: e1a0200c     	mov	r2, r12
+      84: f463438f     	vld2.32	{d20, d21, d22, d23}, [r3]
+      88: f266a8e0     	vadd.i32	q13, q11, q8
+      8c: f26488e2     	vadd.i32	q12, q10, q9
+      90: e2522004     	subs	r2, r2, #4
+      94: f443838d     	vst2.32	{d24, d25, d26, d27}, [r3]!
+      98: 1afffff9     	bne	0x84 <bump+0x28>        @ imm = #-28
+      9c: e151000c     	cmp	r1, r12
+      a0: 0a00000a     	beq	0xd0 <bump+0x74>        @ imm = #40
+      a4: e080018c     	add	r0, r0, r12, lsl #3
+      a8: e041300c     	sub	r3, r1, r12
+      ac: e2800004     	add	r0, r0, #4
+      b0: e5102004     	ldr	r2, [r0, #-4]
+      b4: e2533001     	subs	r3, r3, #1
+      b8: e590c000     	ldr	r12, [r0]
+      bc: e2822001     	add	r2, r2, #1
+      c0: e5002004     	str	r2, [r0, #-4]
+      c4: e28c2002     	add	r2, r12, #2
+      c8: e4802008     	str	r2, [r0], #8
+      cc: 1afffff7     	bne	0xb0 <bump+0x54>        @ imm = #-36
+      d0: e3000000     	movw	r0, #0
+      d4: e3400000     	movt	r0, #0
+      d8: e5902000     	ldr	r2, [r0]
+      dc: e0821001     	add	r1, r2, r1
+      e0: e5801000     	str	r1, [r0]
+      e4: e12fff1e     	bx	lr

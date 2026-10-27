@@ -1,0 +1,94 @@
+
+testdata/synthetic/thumb/floats-Os.o:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00000000 <lerp>:
+       0: b5b0         	push	{r4, r5, r7, lr}
+       2: 4605         	mov	r5, r0
+       4: 4608         	mov	r0, r1
+       6: 4629         	mov	r1, r5
+       8: 4614         	mov	r4, r2
+       a: f7ff fffe    	bl	0xa <lerp+0xa>          @ imm = #-4
+       e: 4621         	mov	r1, r4
+      10: f7ff fffe    	bl	0x10 <lerp+0x10>        @ imm = #-4
+      14: 4629         	mov	r1, r5
+      16: f7ff fffe    	bl	0x16 <lerp+0x16>        @ imm = #-4
+      1a: bdb0         	pop	{r4, r5, r7, pc}
+
+0000001c <poly>:
+      1c: b5b0         	push	{r4, r5, r7, lr}
+      1e: 2300         	movs	r3, #0
+      20: f2c4 0308    	movt	r3, #16392
+      24: 2200         	movs	r2, #0
+      26: 460c         	mov	r4, r1
+      28: 4605         	mov	r5, r0
+      2a: f7ff fffe    	bl	0x2a <poly+0xe>         @ imm = #-4
+      2e: 2200         	movs	r2, #0
+      30: f04f 4380    	mov.w	r3, #1073741824
+      34: f7ff fffe    	bl	0x34 <poly+0x18>        @ imm = #-4
+      38: 462a         	mov	r2, r5
+      3a: 4623         	mov	r3, r4
+      3c: f7ff fffe    	bl	0x3c <poly+0x20>        @ imm = #-4
+      40: 2300         	movs	r3, #0
+      42: f6cb 73f0    	movt	r3, #49136
+      46: 2200         	movs	r2, #0
+      48: f7ff fffe    	bl	0x48 <poly+0x2c>        @ imm = #-4
+      4c: 462a         	mov	r2, r5
+      4e: 4623         	mov	r3, r4
+      50: f7ff fffe    	bl	0x50 <poly+0x34>        @ imm = #-4
+      54: 2300         	movs	r3, #0
+      56: f6c3 73e0    	movt	r3, #16352
+      5a: 2200         	movs	r2, #0
+      5c: f7ff fffe    	bl	0x5c <poly+0x40>        @ imm = #-4
+      60: bdb0         	pop	{r4, r5, r7, pc}
+
+00000062 <to_int>:
+      62: b580         	push	{r7, lr}
+      64: f7ff fffe    	bl	0x64 <to_int+0x2>       @ imm = #-4
+      68: bd80         	pop	{r7, pc}
+
+0000006a <from_int>:
+      6a: b580         	push	{r7, lr}
+      6c: f7ff fffe    	bl	0x6c <from_int+0x2>     @ imm = #-4
+      70: bd80         	pop	{r7, pc}
+
+00000072 <widen>:
+      72: b580         	push	{r7, lr}
+      74: f7ff fffe    	bl	0x74 <widen+0x2>        @ imm = #-4
+      78: bd80         	pop	{r7, pc}
+
+0000007a <fmax_>:
+      7a: b5b0         	push	{r4, r5, r7, lr}
+      7c: 460c         	mov	r4, r1
+      7e: 4605         	mov	r5, r0
+      80: f7ff fffe    	bl	0x80 <fmax_+0x6>        @ imm = #-4
+      84: 2800         	cmp	r0, #0
+      86: bf18         	it	ne
+      88: 462c         	movne	r4, r5
+      8a: 4620         	mov	r0, r4
+      8c: bdb0         	pop	{r4, r5, r7, pc}
+
+0000008e <dot>:
+      8e: b5f0         	push	{r4, r5, r6, r7, lr}
+      90: b081         	sub	sp, #4
+      92: 2a01         	cmp	r2, #1
+      94: db11         	blt	0xba <dot+0x2c>         @ imm = #34
+      96: 4614         	mov	r4, r2
+      98: 460d         	mov	r5, r1
+      9a: 4606         	mov	r6, r0
+      9c: 2700         	movs	r7, #0
+      9e: bf00         	nop
+      a0: f856 0b04    	ldr	r0, [r6], #4
+      a4: f855 1b04    	ldr	r1, [r5], #4
+      a8: f7ff fffe    	bl	0xa8 <dot+0x1a>         @ imm = #-4
+      ac: 4639         	mov	r1, r7
+      ae: f7ff fffe    	bl	0xae <dot+0x20>         @ imm = #-4
+      b2: 3c01         	subs	r4, #1
+      b4: 4607         	mov	r7, r0
+      b6: d1f3         	bne	0xa0 <dot+0x12>         @ imm = #-26
+      b8: e000         	b	0xbc <dot+0x2e>         @ imm = #0
+      ba: 2700         	movs	r7, #0
+      bc: 4638         	mov	r0, r7
+      be: b001         	add	sp, #4
+      c0: bdf0         	pop	{r4, r5, r6, r7, pc}

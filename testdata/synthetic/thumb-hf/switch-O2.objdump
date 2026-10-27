@@ -1,0 +1,51 @@
+
+testdata/synthetic/thumb-hf/switch-O2.o:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00000000 <dense>:
+       0: 2806         	cmp	r0, #6
+       2: bf8f         	iteee	hi
+       4: f04f 30ff    	movhi.w	r0, #4294967295
+       8: f240 0100    	movwls	r1, #0
+       c: f2c0 0100    	movtls	r1, #0
+      10: f851 0020    	ldrls.w	r0, [r1, r0, lsl #2]
+      14: 4770         	bx	lr
+      16: bf00         	nop
+
+00000018 <sparse>:
+      18: f5b0 7f7a    	cmp.w	r0, #1000
+      1c: da09         	bge	0x32 <sparse+0x1a>      @ imm = #18
+      1e: 2803         	cmp	r0, #3
+      20: bf04         	itt	eq
+      22: 2001         	moveq	r0, #1
+      24: 4770         	bxeq	lr
+      26: 2864         	cmp	r0, #100
+      28: bf04         	itt	eq
+      2a: 2002         	moveq	r0, #2
+      2c: 4770         	bxeq	lr
+      2e: 2000         	movs	r0, #0
+      30: 4770         	bx	lr
+      32: bf04         	itt	eq
+      34: 2003         	moveq	r0, #3
+      36: 4770         	bxeq	lr
+      38: f248 619f    	movw	r1, #34463
+      3c: f2c0 0101    	movt	r1, #1
+      40: 4288         	cmp	r0, r1
+      42: bf04         	itt	eq
+      44: 2004         	moveq	r0, #4
+      46: 4770         	bxeq	lr
+      48: e7f1         	b	0x2e <sparse+0x16>      @ imm = #-30
+      4a: bf00         	nop
+
+0000004c <dispatch>:
+      4c: 2802         	cmp	r0, #2
+      4e: bf08         	it	eq
+      50: f7ff bffe    	beq.w	0x50 <dispatch+0x4>     @ imm = #-4
+      54: 2801         	cmp	r0, #1
+      56: d004         	beq	0x62 <dispatch+0x16>    @ imm = #8
+      58: 2800         	cmp	r0, #0
+      5a: bf18         	it	ne
+      5c: 4770         	bxne	lr
+      5e: f7ff bffe    	b.w	0x5e <dispatch+0x12>    @ imm = #-4
+      62: f7ff bffe    	b.w	0x62 <dispatch+0x16>    @ imm = #-4

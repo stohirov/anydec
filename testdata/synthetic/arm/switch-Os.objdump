@@ -1,0 +1,44 @@
+
+testdata/synthetic/arm/switch-Os.o:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00000000 <dense>:
+       0: e1a01000     	mov	r1, r0
+       4: e3e00000     	mvn	r0, #0
+       8: e3510006     	cmp	r1, #6
+       c: 93000000     	movwls	r0, #0
+      10: 93400000     	movtls	r0, #0
+      14: 97900101     	ldrls	r0, [r0, r1, lsl #2]
+      18: e12fff1e     	bx	lr
+
+0000001c <sparse>:
+      1c: e3500ffa     	cmp	r0, #1000
+      20: aa000007     	bge	0x44 <sparse+0x28>      @ imm = #28
+      24: e3500003     	cmp	r0, #3
+      28: 03a00001     	moveq	r0, #1
+      2c: 012fff1e     	bxeq	lr
+      30: e3500064     	cmp	r0, #100
+      34: 03a00002     	moveq	r0, #2
+      38: 012fff1e     	bxeq	lr
+      3c: e3a00000     	mov	r0, #0
+      40: e12fff1e     	bx	lr
+      44: 03a00003     	moveq	r0, #3
+      48: 012fff1e     	bxeq	lr
+      4c: e308169f     	movw	r1, #34463
+      50: e3401001     	movt	r1, #1
+      54: e1500001     	cmp	r0, r1
+      58: 03a00004     	moveq	r0, #4
+      5c: 012fff1e     	bxeq	lr
+      60: eafffff5     	b	0x3c <sparse+0x20>      @ imm = #-44
+
+00000064 <dispatch>:
+      64: e3500002     	cmp	r0, #2
+      68: 0a000005     	beq	0x84 <dispatch+0x20>    @ imm = #20
+      6c: e3500001     	cmp	r0, #1
+      70: 0a000002     	beq	0x80 <dispatch+0x1c>    @ imm = #8
+      74: e3500000     	cmp	r0, #0
+      78: 112fff1e     	bxne	lr
+      7c: eafffffe     	b	0x7c <dispatch+0x18>    @ imm = #-8
+      80: eafffffe     	b	0x80 <dispatch+0x1c>    @ imm = #-8
+      84: eafffffe     	b	0x84 <dispatch+0x20>    @ imm = #-8

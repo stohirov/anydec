@@ -1,0 +1,161 @@
+
+testdata/synthetic/thumb/floats-O2.o:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00000000 <lerp>:
+       0: b5b0         	push	{r4, r5, r7, lr}
+       2: 4605         	mov	r5, r0
+       4: 4608         	mov	r0, r1
+       6: 4629         	mov	r1, r5
+       8: 4614         	mov	r4, r2
+       a: f7ff fffe    	bl	0xa <lerp+0xa>          @ imm = #-4
+       e: 4621         	mov	r1, r4
+      10: f7ff fffe    	bl	0x10 <lerp+0x10>        @ imm = #-4
+      14: 4629         	mov	r1, r5
+      16: f7ff fffe    	bl	0x16 <lerp+0x16>        @ imm = #-4
+      1a: bdb0         	pop	{r4, r5, r7, pc}
+
+0000001c <poly>:
+      1c: b5b0         	push	{r4, r5, r7, lr}
+      1e: 2300         	movs	r3, #0
+      20: f2c4 0308    	movt	r3, #16392
+      24: 2200         	movs	r2, #0
+      26: 460c         	mov	r4, r1
+      28: 4605         	mov	r5, r0
+      2a: f7ff fffe    	bl	0x2a <poly+0xe>         @ imm = #-4
+      2e: 2200         	movs	r2, #0
+      30: f04f 4380    	mov.w	r3, #1073741824
+      34: f7ff fffe    	bl	0x34 <poly+0x18>        @ imm = #-4
+      38: 462a         	mov	r2, r5
+      3a: 4623         	mov	r3, r4
+      3c: f7ff fffe    	bl	0x3c <poly+0x20>        @ imm = #-4
+      40: 2300         	movs	r3, #0
+      42: f6cb 73f0    	movt	r3, #49136
+      46: 2200         	movs	r2, #0
+      48: f7ff fffe    	bl	0x48 <poly+0x2c>        @ imm = #-4
+      4c: 462a         	mov	r2, r5
+      4e: 4623         	mov	r3, r4
+      50: f7ff fffe    	bl	0x50 <poly+0x34>        @ imm = #-4
+      54: 2300         	movs	r3, #0
+      56: f6c3 73e0    	movt	r3, #16352
+      5a: 2200         	movs	r2, #0
+      5c: f7ff fffe    	bl	0x5c <poly+0x40>        @ imm = #-4
+      60: bdb0         	pop	{r4, r5, r7, pc}
+      62: bf00         	nop
+
+00000064 <to_int>:
+      64: b580         	push	{r7, lr}
+      66: f7ff fffe    	bl	0x66 <to_int+0x2>       @ imm = #-4
+      6a: bd80         	pop	{r7, pc}
+
+0000006c <from_int>:
+      6c: b580         	push	{r7, lr}
+      6e: f7ff fffe    	bl	0x6e <from_int+0x2>     @ imm = #-4
+      72: bd80         	pop	{r7, pc}
+
+00000074 <widen>:
+      74: b580         	push	{r7, lr}
+      76: f7ff fffe    	bl	0x76 <widen+0x2>        @ imm = #-4
+      7a: bd80         	pop	{r7, pc}
+
+0000007c <fmax_>:
+      7c: b5b0         	push	{r4, r5, r7, lr}
+      7e: 460c         	mov	r4, r1
+      80: 4605         	mov	r5, r0
+      82: f7ff fffe    	bl	0x82 <fmax_+0x6>        @ imm = #-4
+      86: 2800         	cmp	r0, #0
+      88: bf18         	it	ne
+      8a: 462c         	movne	r4, r5
+      8c: 4620         	mov	r0, r4
+      8e: bdb0         	pop	{r4, r5, r7, pc}
+
+00000090 <dot>:
+      90: e92d 4ff0    	push.w	{r4, r5, r6, r7, r8, r9, r10, r11, lr}
+      94: b085         	sub	sp, #20
+      96: 2a01         	cmp	r2, #1
+      98: db4d         	blt	0x136 <dot+0xa6>        @ imm = #154
+      9a: 4689         	mov	r9, r1
+      9c: 4607         	mov	r7, r0
+      9e: f002 0503    	and	r5, r2, #3
+      a2: 0890         	lsrs	r0, r2, #2
+      a4: f04f 0400    	mov.w	r4, #0
+      a8: d047         	beq	0x13a <dot+0xaa>        @ imm = #142
+      aa: f020 4060    	bic	r0, r0, #3758096384
+      ae: f1a7 0810    	sub.w	r8, r7, #16
+      b2: f8cd 900c    	str.w	r9, [sp, #12]
+      b6: f1a9 0910    	sub.w	r9, r9, #16
+      ba: eba4 0080    	sub.w	r0, r4, r0, lsl #2
+      be: 2600         	movs	r6, #0
+      c0: e9cd 5701    	strd	r5, r7, [sp, #4]
+      c4: 9004         	str	r0, [sp, #16]
+      c6: bf00         	nop
+      c8: f858 0f10    	ldr	r0, [r8, #16]!
+      cc: f859 1f10    	ldr	r1, [r9, #16]!
+      d0: f7ff fffe    	bl	0xd0 <dot+0x40>         @ imm = #-4
+      d4: 4631         	mov	r1, r6
+      d6: f7ff fffe    	bl	0xd6 <dot+0x46>         @ imm = #-4
+      da: 4606         	mov	r6, r0
+      dc: f8d8 0004    	ldr.w	r0, [r8, #4]
+      e0: f8d9 1004    	ldr.w	r1, [r9, #4]
+      e4: f8d8 7008    	ldr.w	r7, [r8, #8]
+      e8: f8d8 a00c    	ldr.w	r10, [r8, #12]
+      ec: f8d9 5008    	ldr.w	r5, [r9, #8]
+      f0: f8d9 b00c    	ldr.w	r11, [r9, #12]
+      f4: f7ff fffe    	bl	0xf4 <dot+0x64>         @ imm = #-4
+      f8: 4631         	mov	r1, r6
+      fa: f7ff fffe    	bl	0xfa <dot+0x6a>         @ imm = #-4
+      fe: 4606         	mov	r6, r0
+     100: 4638         	mov	r0, r7
+     102: 4629         	mov	r1, r5
+     104: f7ff fffe    	bl	0x104 <dot+0x74>        @ imm = #-4
+     108: 4631         	mov	r1, r6
+     10a: f7ff fffe    	bl	0x10a <dot+0x7a>        @ imm = #-4
+     10e: 4605         	mov	r5, r0
+     110: 4650         	mov	r0, r10
+     112: 4659         	mov	r1, r11
+     114: f7ff fffe    	bl	0x114 <dot+0x84>        @ imm = #-4
+     118: 4629         	mov	r1, r5
+     11a: f7ff fffe    	bl	0x11a <dot+0x8a>        @ imm = #-4
+     11e: 9904         	ldr	r1, [sp, #16]
+     120: 3c04         	subs	r4, #4
+     122: 42a1         	cmp	r1, r4
+     124: 4606         	mov	r6, r0
+     126: d1cf         	bne	0xc8 <dot+0x38>         @ imm = #-98
+     128: f10d 0904    	add.w	r9, sp, #4
+     12c: e899 02a0    	ldm.w	r9, {r5, r7, r9}
+     130: 4264         	rsbs	r4, r4, #0
+     132: b925         	cbnz	r5, 0x13e <dot+0xae>    @ imm = #8
+     134: e01c         	b	0x170 <dot+0xe0>        @ imm = #56
+     136: 2600         	movs	r6, #0
+     138: e01a         	b	0x170 <dot+0xe0>        @ imm = #52
+     13a: 2600         	movs	r6, #0
+     13c: b1c5         	cbz	r5, 0x170 <dot+0xe0>    @ imm = #48
+     13e: f857 0024    	ldr.w	r0, [r7, r4, lsl #2]
+     142: f859 1024    	ldr.w	r1, [r9, r4, lsl #2]
+     146: f7ff fffe    	bl	0x146 <dot+0xb6>        @ imm = #-4
+     14a: 4631         	mov	r1, r6
+     14c: f7ff fffe    	bl	0x14c <dot+0xbc>        @ imm = #-4
+     150: 2d01         	cmp	r5, #1
+     152: 4606         	mov	r6, r0
+     154: d00c         	beq	0x170 <dot+0xe0>        @ imm = #24
+     156: 1c61         	adds	r1, r4, #1
+     158: f857 0021    	ldr.w	r0, [r7, r1, lsl #2]
+     15c: f859 1021    	ldr.w	r1, [r9, r1, lsl #2]
+     160: f7ff fffe    	bl	0x160 <dot+0xd0>        @ imm = #-4
+     164: 4631         	mov	r1, r6
+     166: f7ff fffe    	bl	0x166 <dot+0xd6>        @ imm = #-4
+     16a: 2d02         	cmp	r5, #2
+     16c: 4606         	mov	r6, r0
+     16e: d103         	bne	0x178 <dot+0xe8>        @ imm = #6
+     170: 4630         	mov	r0, r6
+     172: b005         	add	sp, #20
+     174: e8bd 8ff0    	pop.w	{r4, r5, r6, r7, r8, r9, r10, r11, pc}
+     178: 1ca1         	adds	r1, r4, #2
+     17a: f857 0021    	ldr.w	r0, [r7, r1, lsl #2]
+     17e: f859 1021    	ldr.w	r1, [r9, r1, lsl #2]
+     182: f7ff fffe    	bl	0x182 <dot+0xf2>        @ imm = #-4
+     186: 4631         	mov	r1, r6
+     188: f7ff fffe    	bl	0x188 <dot+0xf8>        @ imm = #-4
+     18c: b005         	add	sp, #20
+     18e: e8bd 8ff0    	pop.w	{r4, r5, r6, r7, r8, r9, r10, r11, pc}

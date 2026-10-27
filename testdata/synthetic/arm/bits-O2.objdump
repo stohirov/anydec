@@ -1,0 +1,85 @@
+
+testdata/synthetic/arm/bits-O2.o:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00000000 <popcount>:
+       0: e3500000     	cmp	r0, #0
+       4: 03a00000     	moveq	r0, #0
+       8: 012fff1e     	bxeq	lr
+       c: e1a01000     	mov	r1, r0
+      10: e3a00000     	mov	r0, #0
+      14: e2412001     	sub	r2, r1, #1
+      18: e2800001     	add	r0, r0, #1
+      1c: e0121001     	ands	r1, r2, r1
+      20: 1afffffb     	bne	0x14 <popcount+0x14>    @ imm = #-20
+      24: e12fff1e     	bx	lr
+
+00000028 <bswap>:
+      28: e6bf0f30     	rev	r0, r0
+      2c: e12fff1e     	bx	lr
+
+00000030 <clz>:
+      30: e16f0f10     	clz	r0, r0
+      34: e12fff1e     	bx	lr
+
+00000038 <mul64>:
+      38: e92d4800     	push	{r11, lr}
+      3c: e08ec092     	umull	r12, lr, r2, r0
+      40: e021e192     	mla	r1, r2, r1, lr
+      44: e0211093     	mla	r1, r3, r0, r1
+      48: e1a0000c     	mov	r0, r12
+      4c: e8bd8800     	pop	{r11, pc}
+
+00000050 <smull>:
+      50: e0c10091     	smull	r0, r1, r1, r0
+      54: e12fff1e     	bx	lr
+
+00000058 <rotl>:
+      58: e2611000     	rsb	r1, r1, #0
+      5c: e1a00170     	ror	r0, r0, r1
+      60: e12fff1e     	bx	lr
+
+00000064 <extract>:
+      64: e7e403d0     	ubfx	r0, r0, #7, #5
+      68: e12fff1e     	bx	lr
+
+0000006c <insert>:
+      6c: e7cb0391     	bfi	r0, r1, #7, #5
+      70: e12fff1e     	bx	lr
+
+00000074 <sext>:
+      74: e12fff1e     	bx	lr
+
+00000078 <zext>:
+      78: e12fff1e     	bx	lr
+
+0000007c <fetch_add>:
+      7c: f57ff05b     	dmb	ish
+      80: e190cf9f     	ldrex	r12, [r0]
+      84: e08c3001     	add	r3, r12, r1
+      88: e1802f93     	strex	r2, r3, [r0]
+      8c: e3520000     	cmp	r2, #0
+      90: 1afffffa     	bne	0x80 <fetch_add+0x4>    @ imm = #-24
+      94: e1a0000c     	mov	r0, r12
+      98: f57ff05b     	dmb	ish
+      9c: e12fff1e     	bx	lr
+
+000000a0 <cas>:
+      a0: e1903f9f     	ldrex	r3, [r0]
+      a4: e1530001     	cmp	r3, r1
+      a8: 1a000006     	bne	0xc8 <cas+0x28>         @ imm = #24
+      ac: f57ff05b     	dmb	ish
+      b0: e1803f92     	strex	r3, r2, [r0]
+      b4: e3530000     	cmp	r3, #0
+      b8: 0a000006     	beq	0xd8 <cas+0x38>         @ imm = #24
+      bc: e1903f9f     	ldrex	r3, [r0]
+      c0: e1530001     	cmp	r3, r1
+      c4: 0afffff9     	beq	0xb0 <cas+0x10>         @ imm = #-28
+      c8: f57ff01f     	clrex
+      cc: e3a00000     	mov	r0, #0
+      d0: f57ff05b     	dmb	ish
+      d4: e12fff1e     	bx	lr
+      d8: e3a00001     	mov	r0, #1
+      dc: f57ff05b     	dmb	ish
+      e0: e12fff1e     	bx	lr

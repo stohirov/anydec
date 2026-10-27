@@ -1,0 +1,113 @@
+
+testdata/synthetic/thumb-hf/calls-O0.o:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00000000 <many>:
+       0: b084         	sub	sp, #16
+       2: f8dd c014    	ldr.w	r12, [sp, #20]
+       6: f8dd c010    	ldr.w	r12, [sp, #16]
+       a: 9003         	str	r0, [sp, #12]
+       c: 9102         	str	r1, [sp, #8]
+       e: 9201         	str	r2, [sp, #4]
+      10: 9300         	str	r3, [sp]
+      12: 9803         	ldr	r0, [sp, #12]
+      14: 9902         	ldr	r1, [sp, #8]
+      16: 4408         	add	r0, r1
+      18: 9901         	ldr	r1, [sp, #4]
+      1a: 4408         	add	r0, r1
+      1c: 9900         	ldr	r1, [sp]
+      1e: 4408         	add	r0, r1
+      20: 9904         	ldr	r1, [sp, #16]
+      22: 4408         	add	r0, r1
+      24: 9905         	ldr	r1, [sp, #20]
+      26: 4408         	add	r0, r1
+      28: b004         	add	sp, #16
+      2a: 4770         	bx	lr
+
+0000002c <call_many>:
+      2c: b580         	push	{r7, lr}
+      2e: b082         	sub	sp, #8
+      30: 4669         	mov	r1, sp
+      32: 2006         	movs	r0, #6
+      34: 6048         	str	r0, [r1, #4]
+      36: 2005         	movs	r0, #5
+      38: 6008         	str	r0, [r1]
+      3a: 2001         	movs	r0, #1
+      3c: 2102         	movs	r1, #2
+      3e: 2203         	movs	r2, #3
+      40: 2304         	movs	r3, #4
+      42: f7ff fffe    	bl	0x42 <call_many+0x16>   @ imm = #-4
+      46: b002         	add	sp, #8
+      48: bd80         	pop	{r7, pc}
+      4a: bf00         	nop
+
+0000004c <fib>:
+      4c: b580         	push	{r7, lr}
+      4e: b084         	sub	sp, #16
+      50: 9003         	str	r0, [sp, #12]
+      52: 9803         	ldr	r0, [sp, #12]
+      54: 2801         	cmp	r0, #1
+      56: d803         	bhi	0x60 <fib+0x14>         @ imm = #6
+      58: e7ff         	b	0x5a <fib+0xe>          @ imm = #-2
+      5a: 9803         	ldr	r0, [sp, #12]
+      5c: 9002         	str	r0, [sp, #8]
+      5e: e00d         	b	0x7c <fib+0x30>         @ imm = #26
+      60: 9803         	ldr	r0, [sp, #12]
+      62: 3801         	subs	r0, #1
+      64: f7ff fffe    	bl	0x64 <fib+0x18>         @ imm = #-4
+      68: 9001         	str	r0, [sp, #4]
+      6a: 9803         	ldr	r0, [sp, #12]
+      6c: 3802         	subs	r0, #2
+      6e: f7ff fffe    	bl	0x6e <fib+0x22>         @ imm = #-4
+      72: 4601         	mov	r1, r0
+      74: 9801         	ldr	r0, [sp, #4]
+      76: 4408         	add	r0, r1
+      78: 9002         	str	r0, [sp, #8]
+      7a: e7ff         	b	0x7c <fib+0x30>         @ imm = #-2
+      7c: 9802         	ldr	r0, [sp, #8]
+      7e: b004         	add	sp, #16
+      80: bd80         	pop	{r7, pc}
+      82: bf00         	nop
+
+00000084 <apply>:
+      84: b580         	push	{r7, lr}
+      86: b082         	sub	sp, #8
+      88: 9001         	str	r0, [sp, #4]
+      8a: 9100         	str	r1, [sp]
+      8c: 9a01         	ldr	r2, [sp, #4]
+      8e: 9800         	ldr	r0, [sp]
+      90: 1c41         	adds	r1, r0, #1
+      92: 4790         	blx	r2
+      94: b002         	add	sp, #8
+      96: bd80         	pop	{r7, pc}
+
+00000098 <report>:
+      98: b580         	push	{r7, lr}
+      9a: b082         	sub	sp, #8
+      9c: 9001         	str	r0, [sp, #4]
+      9e: 9100         	str	r1, [sp]
+      a0: 9901         	ldr	r1, [sp, #4]
+      a2: 9a00         	ldr	r2, [sp]
+      a4: f240 0000    	movw	r0, #0
+      a8: f2c0 0000    	movt	r0, #0
+      ac: f7ff fffe    	bl	0xac <report+0x14>      @ imm = #-4
+      b0: b002         	add	sp, #8
+      b2: bd80         	pop	{r7, pc}
+
+000000b4 <copy16>:
+      b4: b082         	sub	sp, #8
+      b6: 9001         	str	r0, [sp, #4]
+      b8: 9100         	str	r1, [sp]
+      ba: 9901         	ldr	r1, [sp, #4]
+      bc: f8dd c000    	ldr.w	r12, [sp]
+      c0: f8dc 0000    	ldr.w	r0, [r12]
+      c4: f8dc 2004    	ldr.w	r2, [r12, #4]
+      c8: f8dc 3008    	ldr.w	r3, [r12, #8]
+      cc: f8dc c00c    	ldr.w	r12, [r12, #12]
+      d0: f8c1 c00c    	str.w	r12, [r1, #12]
+      d4: 608b         	str	r3, [r1, #8]
+      d6: 604a         	str	r2, [r1, #4]
+      d8: 6008         	str	r0, [r1]
+      da: b002         	add	sp, #8
+      dc: 4770         	bx	lr

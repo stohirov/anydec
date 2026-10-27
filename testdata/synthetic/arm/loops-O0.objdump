@@ -1,0 +1,189 @@
+
+testdata/synthetic/arm/loops-O0.o:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00000000 <sum>:
+       0: e24dd010     	sub	sp, sp, #16
+       4: e58d000c     	str	r0, [sp, #12]
+       8: e58d1008     	str	r1, [sp, #8]
+       c: e3a00000     	mov	r0, #0
+      10: e58d0004     	str	r0, [sp, #4]
+      14: e58d0000     	str	r0, [sp]
+      18: eaffffff     	b	0x1c <sum+0x1c>         @ imm = #-4
+      1c: e59d0000     	ldr	r0, [sp]
+      20: e59d1008     	ldr	r1, [sp, #8]
+      24: e1500001     	cmp	r0, r1
+      28: aa00000b     	bge	0x5c <sum+0x5c>         @ imm = #44
+      2c: eaffffff     	b	0x30 <sum+0x30>         @ imm = #-4
+      30: e59d000c     	ldr	r0, [sp, #12]
+      34: e59d1000     	ldr	r1, [sp]
+      38: e7901101     	ldr	r1, [r0, r1, lsl #2]
+      3c: e59d0004     	ldr	r0, [sp, #4]
+      40: e0800001     	add	r0, r0, r1
+      44: e58d0004     	str	r0, [sp, #4]
+      48: eaffffff     	b	0x4c <sum+0x4c>         @ imm = #-4
+      4c: e59d0000     	ldr	r0, [sp]
+      50: e2800001     	add	r0, r0, #1
+      54: e58d0000     	str	r0, [sp]
+      58: eaffffef     	b	0x1c <sum+0x1c>         @ imm = #-68
+      5c: e59d0004     	ldr	r0, [sp, #4]
+      60: e28dd010     	add	sp, sp, #16
+      64: e12fff1e     	bx	lr
+
+00000068 <strlen_>:
+      68: e24dd008     	sub	sp, sp, #8
+      6c: e58d0004     	str	r0, [sp, #4]
+      70: e3a00000     	mov	r0, #0
+      74: e58d0000     	str	r0, [sp]
+      78: eaffffff     	b	0x7c <strlen_+0x14>     @ imm = #-4
+      7c: e59d0004     	ldr	r0, [sp, #4]
+      80: e59d1000     	ldr	r1, [sp]
+      84: e7d00001     	ldrb	r0, [r0, r1]
+      88: e3500000     	cmp	r0, #0
+      8c: 0a000004     	beq	0xa4 <strlen_+0x3c>     @ imm = #16
+      90: eaffffff     	b	0x94 <strlen_+0x2c>     @ imm = #-4
+      94: e59d0000     	ldr	r0, [sp]
+      98: e2800001     	add	r0, r0, #1
+      9c: e58d0000     	str	r0, [sp]
+      a0: eafffff5     	b	0x7c <strlen_+0x14>     @ imm = #-44
+      a4: e59d0000     	ldr	r0, [sp]
+      a8: e28dd008     	add	sp, sp, #8
+      ac: e12fff1e     	bx	lr
+
+000000b0 <find>:
+      b0: e24dd014     	sub	sp, sp, #20
+      b4: e58d000c     	str	r0, [sp, #12]
+      b8: e58d1008     	str	r1, [sp, #8]
+      bc: e58d2004     	str	r2, [sp, #4]
+      c0: e3a00000     	mov	r0, #0
+      c4: e58d0000     	str	r0, [sp]
+      c8: eaffffff     	b	0xcc <find+0x1c>        @ imm = #-4
+      cc: e59d0000     	ldr	r0, [sp]
+      d0: e59d1008     	ldr	r1, [sp, #8]
+      d4: e1500001     	cmp	r0, r1
+      d8: aa00000f     	bge	0x11c <find+0x6c>       @ imm = #60
+      dc: eaffffff     	b	0xe0 <find+0x30>        @ imm = #-4
+      e0: e59d000c     	ldr	r0, [sp, #12]
+      e4: e59d1000     	ldr	r1, [sp]
+      e8: e7900101     	ldr	r0, [r0, r1, lsl #2]
+      ec: e59d1004     	ldr	r1, [sp, #4]
+      f0: e1500001     	cmp	r0, r1
+      f4: 1a000003     	bne	0x108 <find+0x58>       @ imm = #12
+      f8: eaffffff     	b	0xfc <find+0x4c>        @ imm = #-4
+      fc: e59d0000     	ldr	r0, [sp]
+     100: e58d0010     	str	r0, [sp, #16]
+     104: ea000007     	b	0x128 <find+0x78>       @ imm = #28
+     108: eaffffff     	b	0x10c <find+0x5c>       @ imm = #-4
+     10c: e59d0000     	ldr	r0, [sp]
+     110: e2800001     	add	r0, r0, #1
+     114: e58d0000     	str	r0, [sp]
+     118: eaffffeb     	b	0xcc <find+0x1c>        @ imm = #-84
+     11c: e3e00000     	mvn	r0, #0
+     120: e58d0010     	str	r0, [sp, #16]
+     124: eaffffff     	b	0x128 <find+0x78>       @ imm = #-4
+     128: e59d0010     	ldr	r0, [sp, #16]
+     12c: e28dd014     	add	sp, sp, #20
+     130: e12fff1e     	bx	lr
+
+00000134 <matmul>:
+     134: e24dd020     	sub	sp, sp, #32
+     138: e58d001c     	str	r0, [sp, #28]
+     13c: e58d1018     	str	r1, [sp, #24]
+     140: e58d2014     	str	r2, [sp, #20]
+     144: e58d3010     	str	r3, [sp, #16]
+     148: e3a00000     	mov	r0, #0
+     14c: e58d000c     	str	r0, [sp, #12]
+     150: eaffffff     	b	0x154 <matmul+0x20>     @ imm = #-4
+     154: e59d000c     	ldr	r0, [sp, #12]
+     158: e59d101c     	ldr	r1, [sp, #28]
+     15c: e1500001     	cmp	r0, r1
+     160: aa000034     	bge	0x238 <matmul+0x104>    @ imm = #208
+     164: eaffffff     	b	0x168 <matmul+0x34>     @ imm = #-4
+     168: e3a00000     	mov	r0, #0
+     16c: e58d0008     	str	r0, [sp, #8]
+     170: eaffffff     	b	0x174 <matmul+0x40>     @ imm = #-4
+     174: e59d0008     	ldr	r0, [sp, #8]
+     178: e59d101c     	ldr	r1, [sp, #28]
+     17c: e1500001     	cmp	r0, r1
+     180: aa000027     	bge	0x224 <matmul+0xf0>     @ imm = #156
+     184: eaffffff     	b	0x188 <matmul+0x54>     @ imm = #-4
+     188: e3a00000     	mov	r0, #0
+     18c: e58d0004     	str	r0, [sp, #4]
+     190: e58d0000     	str	r0, [sp]
+     194: eaffffff     	b	0x198 <matmul+0x64>     @ imm = #-4
+     198: e59d0000     	ldr	r0, [sp]
+     19c: e59d101c     	ldr	r1, [sp, #28]
+     1a0: e1500001     	cmp	r0, r1
+     1a4: aa000012     	bge	0x1f4 <matmul+0xc0>     @ imm = #72
+     1a8: eaffffff     	b	0x1ac <matmul+0x78>     @ imm = #-4
+     1ac: e59d0018     	ldr	r0, [sp, #24]
+     1b0: e59d100c     	ldr	r1, [sp, #12]
+     1b4: e59d301c     	ldr	r3, [sp, #28]
+     1b8: e59d2000     	ldr	r2, [sp]
+     1bc: e0212391     	mla	r1, r1, r3, r2
+     1c0: e7900101     	ldr	r0, [r0, r1, lsl #2]
+     1c4: e59d1014     	ldr	r1, [sp, #20]
+     1c8: e59dc008     	ldr	r12, [sp, #8]
+     1cc: e022c392     	mla	r2, r2, r3, r12
+     1d0: e7911102     	ldr	r1, [r1, r2, lsl #2]
+     1d4: e59d2004     	ldr	r2, [sp, #4]
+     1d8: e0202190     	mla	r0, r0, r1, r2
+     1dc: e58d0004     	str	r0, [sp, #4]
+     1e0: eaffffff     	b	0x1e4 <matmul+0xb0>     @ imm = #-4
+     1e4: e59d0000     	ldr	r0, [sp]
+     1e8: e2800001     	add	r0, r0, #1
+     1ec: e58d0000     	str	r0, [sp]
+     1f0: eaffffe8     	b	0x198 <matmul+0x64>     @ imm = #-96
+     1f4: e59d0004     	ldr	r0, [sp, #4]
+     1f8: e59d1010     	ldr	r1, [sp, #16]
+     1fc: e59d200c     	ldr	r2, [sp, #12]
+     200: e59d301c     	ldr	r3, [sp, #28]
+     204: e59dc008     	ldr	r12, [sp, #8]
+     208: e022c392     	mla	r2, r2, r3, r12
+     20c: e7810102     	str	r0, [r1, r2, lsl #2]
+     210: eaffffff     	b	0x214 <matmul+0xe0>     @ imm = #-4
+     214: e59d0008     	ldr	r0, [sp, #8]
+     218: e2800001     	add	r0, r0, #1
+     21c: e58d0008     	str	r0, [sp, #8]
+     220: eaffffd3     	b	0x174 <matmul+0x40>     @ imm = #-180
+     224: eaffffff     	b	0x228 <matmul+0xf4>     @ imm = #-4
+     228: e59d000c     	ldr	r0, [sp, #12]
+     22c: e2800001     	add	r0, r0, #1
+     230: e58d000c     	str	r0, [sp, #12]
+     234: eaffffc6     	b	0x154 <matmul+0x20>     @ imm = #-232
+     238: e28dd020     	add	sp, sp, #32
+     23c: e12fff1e     	bx	lr
+
+00000240 <collatz>:
+     240: e24dd00c     	sub	sp, sp, #12
+     244: e58d0008     	str	r0, [sp, #8]
+     248: e3a00000     	mov	r0, #0
+     24c: e58d0004     	str	r0, [sp, #4]
+     250: eaffffff     	b	0x254 <collatz+0x14>    @ imm = #-4
+     254: e5dd0008     	ldrb	r0, [sp, #8]
+     258: e3100001     	tst	r0, #1
+     25c: 0a000005     	beq	0x278 <collatz+0x38>    @ imm = #20
+     260: eaffffff     	b	0x264 <collatz+0x24>    @ imm = #-4
+     264: e59d0008     	ldr	r0, [sp, #8]
+     268: e0800080     	add	r0, r0, r0, lsl #1
+     26c: e2800001     	add	r0, r0, #1
+     270: e58d0000     	str	r0, [sp]
+     274: ea000003     	b	0x288 <collatz+0x48>    @ imm = #12
+     278: e59d0008     	ldr	r0, [sp, #8]
+     27c: e1a000a0     	lsr	r0, r0, #1
+     280: e58d0000     	str	r0, [sp]
+     284: eaffffff     	b	0x288 <collatz+0x48>    @ imm = #-4
+     288: e59d0000     	ldr	r0, [sp]
+     28c: e58d0008     	str	r0, [sp, #8]
+     290: e59d0004     	ldr	r0, [sp, #4]
+     294: e2800001     	add	r0, r0, #1
+     298: e58d0004     	str	r0, [sp, #4]
+     29c: eaffffff     	b	0x2a0 <collatz+0x60>    @ imm = #-4
+     2a0: e59d0008     	ldr	r0, [sp, #8]
+     2a4: e3500001     	cmp	r0, #1
+     2a8: 1affffe9     	bne	0x254 <collatz+0x14>    @ imm = #-92
+     2ac: eaffffff     	b	0x2b0 <collatz+0x70>    @ imm = #-4
+     2b0: e59d0004     	ldr	r0, [sp, #4]
+     2b4: e28dd00c     	add	sp, sp, #12
+     2b8: e12fff1e     	bx	lr

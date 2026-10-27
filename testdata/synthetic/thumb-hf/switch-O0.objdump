@@ -1,0 +1,110 @@
+
+testdata/synthetic/thumb-hf/switch-O0.o:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00000000 <dense>:
+       0: b083         	sub	sp, #12
+       2: 9001         	str	r0, [sp, #4]
+       4: 9801         	ldr	r0, [sp, #4]
+       6: 9000         	str	r0, [sp]
+       8: 2806         	cmp	r0, #6
+       a: d81b         	bhi	0x44 <dense+0x44>       @ imm = #54
+       c: 9900         	ldr	r1, [sp]
+       e: e8df f001    	tbb	[pc, r1]
+      12: 04 07 0a 0d  	.word	0x0d0a0704
+      16: 10 13 16 00  	.word	0x00161310
+      1a: 200b         	movs	r0, #11
+      1c: 9002         	str	r0, [sp, #8]
+      1e: e015         	b	0x4c <dense+0x4c>       @ imm = #42
+      20: 2017         	movs	r0, #23
+      22: 9002         	str	r0, [sp, #8]
+      24: e012         	b	0x4c <dense+0x4c>       @ imm = #36
+      26: 2025         	movs	r0, #37
+      28: 9002         	str	r0, [sp, #8]
+      2a: e00f         	b	0x4c <dense+0x4c>       @ imm = #30
+      2c: 2029         	movs	r0, #41
+      2e: 9002         	str	r0, [sp, #8]
+      30: e00c         	b	0x4c <dense+0x4c>       @ imm = #24
+      32: 203b         	movs	r0, #59
+      34: 9002         	str	r0, [sp, #8]
+      36: e009         	b	0x4c <dense+0x4c>       @ imm = #18
+      38: 203d         	movs	r0, #61
+      3a: 9002         	str	r0, [sp, #8]
+      3c: e006         	b	0x4c <dense+0x4c>       @ imm = #12
+      3e: 2049         	movs	r0, #73
+      40: 9002         	str	r0, [sp, #8]
+      42: e003         	b	0x4c <dense+0x4c>       @ imm = #6
+      44: f04f 30ff    	mov.w	r0, #4294967295
+      48: 9002         	str	r0, [sp, #8]
+      4a: e7ff         	b	0x4c <dense+0x4c>       @ imm = #-2
+      4c: 9802         	ldr	r0, [sp, #8]
+      4e: b003         	add	sp, #12
+      50: 4770         	bx	lr
+      52: bf00         	nop
+
+00000054 <sparse>:
+      54: b083         	sub	sp, #12
+      56: 9001         	str	r0, [sp, #4]
+      58: 9801         	ldr	r0, [sp, #4]
+      5a: 9000         	str	r0, [sp]
+      5c: 2803         	cmp	r0, #3
+      5e: d011         	beq	0x84 <sparse+0x30>      @ imm = #34
+      60: e7ff         	b	0x62 <sparse+0xe>       @ imm = #-2
+      62: 9800         	ldr	r0, [sp]
+      64: 2864         	cmp	r0, #100
+      66: d010         	beq	0x8a <sparse+0x36>      @ imm = #32
+      68: e7ff         	b	0x6a <sparse+0x16>      @ imm = #-2
+      6a: 9800         	ldr	r0, [sp]
+      6c: f5b0 7f7a    	cmp.w	r0, #1000
+      70: d00e         	beq	0x90 <sparse+0x3c>      @ imm = #28
+      72: e7ff         	b	0x74 <sparse+0x20>      @ imm = #-2
+      74: 9800         	ldr	r0, [sp]
+      76: f248 619f    	movw	r1, #34463
+      7a: f2c0 0101    	movt	r1, #1
+      7e: 4288         	cmp	r0, r1
+      80: d009         	beq	0x96 <sparse+0x42>      @ imm = #18
+      82: e00b         	b	0x9c <sparse+0x48>      @ imm = #22
+      84: 2001         	movs	r0, #1
+      86: 9002         	str	r0, [sp, #8]
+      88: e00b         	b	0xa2 <sparse+0x4e>      @ imm = #22
+      8a: 2002         	movs	r0, #2
+      8c: 9002         	str	r0, [sp, #8]
+      8e: e008         	b	0xa2 <sparse+0x4e>      @ imm = #16
+      90: 2003         	movs	r0, #3
+      92: 9002         	str	r0, [sp, #8]
+      94: e005         	b	0xa2 <sparse+0x4e>      @ imm = #10
+      96: 2004         	movs	r0, #4
+      98: 9002         	str	r0, [sp, #8]
+      9a: e002         	b	0xa2 <sparse+0x4e>      @ imm = #4
+      9c: 2000         	movs	r0, #0
+      9e: 9002         	str	r0, [sp, #8]
+      a0: e7ff         	b	0xa2 <sparse+0x4e>      @ imm = #-2
+      a2: 9802         	ldr	r0, [sp, #8]
+      a4: b003         	add	sp, #12
+      a6: 4770         	bx	lr
+
+000000a8 <dispatch>:
+      a8: b580         	push	{r7, lr}
+      aa: b082         	sub	sp, #8
+      ac: 9001         	str	r0, [sp, #4]
+      ae: 9801         	ldr	r0, [sp, #4]
+      b0: 9000         	str	r0, [sp]
+      b2: b140         	cbz	r0, 0xc6 <dispatch+0x1e> @ imm = #16
+      b4: e7ff         	b	0xb6 <dispatch+0xe>     @ imm = #-2
+      b6: 9800         	ldr	r0, [sp]
+      b8: 2801         	cmp	r0, #1
+      ba: d007         	beq	0xcc <dispatch+0x24>    @ imm = #14
+      bc: e7ff         	b	0xbe <dispatch+0x16>    @ imm = #-2
+      be: 9800         	ldr	r0, [sp]
+      c0: 2802         	cmp	r0, #2
+      c2: d006         	beq	0xd2 <dispatch+0x2a>    @ imm = #12
+      c4: e008         	b	0xd8 <dispatch+0x30>    @ imm = #16
+      c6: f7ff fffe    	bl	0xc6 <dispatch+0x1e>    @ imm = #-4
+      ca: e005         	b	0xd8 <dispatch+0x30>    @ imm = #10
+      cc: f7ff fffe    	bl	0xcc <dispatch+0x24>    @ imm = #-4
+      d0: e002         	b	0xd8 <dispatch+0x30>    @ imm = #4
+      d2: f7ff fffe    	bl	0xd2 <dispatch+0x2a>    @ imm = #-4
+      d6: e7ff         	b	0xd8 <dispatch+0x30>    @ imm = #-2
+      d8: b002         	add	sp, #8
+      da: bd80         	pop	{r7, pc}

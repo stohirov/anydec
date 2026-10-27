@@ -1,0 +1,110 @@
+
+testdata/synthetic/thumb/bits-O2.o:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00000000 <popcount>:
+       0: 2800         	cmp	r0, #0
+       2: bf04         	itt	eq
+       4: 2000         	moveq	r0, #0
+       6: 4770         	bxeq	lr
+       8: 4601         	mov	r1, r0
+       a: 2001         	movs	r0, #1
+       c: 1e4a         	subs	r2, r1, #1
+       e: 4011         	ands	r1, r2
+      10: bf08         	it	eq
+      12: 4770         	bxeq	lr
+      14: 1e4a         	subs	r2, r1, #1
+      16: 4011         	ands	r1, r2
+      18: d00c         	beq	0x34 <popcount+0x34>    @ imm = #24
+      1a: 1e4a         	subs	r2, r1, #1
+      1c: 4011         	ands	r1, r2
+      1e: bf04         	itt	eq
+      20: 3002         	addeq	r0, #2
+      22: 4770         	bxeq	lr
+      24: 1e4a         	subs	r2, r1, #1
+      26: 4011         	ands	r1, r2
+      28: f100 0004    	add.w	r0, r0, #4
+      2c: bf04         	itt	eq
+      2e: 3801         	subeq	r0, #1
+      30: 4770         	bxeq	lr
+      32: e7eb         	b	0xc <popcount+0xc>      @ imm = #-42
+      34: 3001         	adds	r0, #1
+      36: 4770         	bx	lr
+
+00000038 <bswap>:
+      38: ba00         	rev	r0, r0
+      3a: 4770         	bx	lr
+
+0000003c <clz>:
+      3c: fab0 f080    	clz	r0, r0
+      40: 4770         	bx	lr
+      42: bf00         	nop
+
+00000044 <mul64>:
+      44: b580         	push	{r7, lr}
+      46: fba2 ce00    	umull	r12, lr, r2, r0
+      4a: fb02 e101    	mla	r1, r2, r1, lr
+      4e: fb03 1100    	mla	r1, r3, r0, r1
+      52: 4660         	mov	r0, r12
+      54: bd80         	pop	{r7, pc}
+      56: bf00         	nop
+
+00000058 <smull>:
+      58: fb81 0100    	smull	r0, r1, r1, r0
+      5c: 4770         	bx	lr
+      5e: bf00         	nop
+
+00000060 <rotl>:
+      60: 4249         	rsbs	r1, r1, #0
+      62: 41c8         	rors	r0, r1
+      64: 4770         	bx	lr
+      66: bf00         	nop
+
+00000068 <extract>:
+      68: f3c0 10c4    	ubfx	r0, r0, #7, #5
+      6c: 4770         	bx	lr
+      6e: bf00         	nop
+
+00000070 <insert>:
+      70: f361 10cb    	bfi	r0, r1, #7, #5
+      74: 4770         	bx	lr
+      76: bf00         	nop
+
+00000078 <sext>:
+      78: 4770         	bx	lr
+      7a: bf00         	nop
+
+0000007c <zext>:
+      7c: 4770         	bx	lr
+      7e: bf00         	nop
+
+00000080 <fetch_add>:
+      80: 4684         	mov	r12, r0
+      82: f3bf 8f5f    	dmb	sy
+      86: bf00         	nop
+      88: e85c 0f00    	ldrex	r0, [r12]
+      8c: 1843         	adds	r3, r0, r1
+      8e: e84c 3200    	strex	r2, r3, [r12]
+      92: 2a00         	cmp	r2, #0
+      94: d1f8         	bne	0x88 <fetch_add+0x8>    @ imm = #-16
+      96: f3bf 8f5f    	dmb	sy
+      9a: 4770         	bx	lr
+
+0000009c <cas>:
+      9c: e850 3f00    	ldrex	r3, [r0]
+      a0: 428b         	cmp	r3, r1
+      a2: d108         	bne	0xb6 <cas+0x1a>         @ imm = #16
+      a4: f3bf 8f5f    	dmb	sy
+      a8: e840 2300    	strex	r3, r2, [r0]
+      ac: b14b         	cbz	r3, 0xc2 <cas+0x26>     @ imm = #18
+      ae: e850 3f00    	ldrex	r3, [r0]
+      b2: 428b         	cmp	r3, r1
+      b4: d0f8         	beq	0xa8 <cas+0xc>          @ imm = #-16
+      b6: f3bf 8f2f    	clrex
+      ba: 2000         	movs	r0, #0
+      bc: f3bf 8f5f    	dmb	sy
+      c0: 4770         	bx	lr
+      c2: 2001         	movs	r0, #1
+      c4: f3bf 8f5f    	dmb	sy
+      c8: 4770         	bx	lr

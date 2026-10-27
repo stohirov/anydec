@@ -61,3 +61,22 @@ func TestBadAddress(t *testing.T) {
 		t.Errorf("exit %d, stderr %q", code, errOut)
 	}
 }
+
+func TestDisasmCommand(t *testing.T) {
+	obj := filepath.Join("..", "..", "testdata", "synthetic", "thumb", "arith-O2.o")
+	code, out, errOut := run("disasm", obj, "--func", "sdiv")
+	if code != 0 {
+		t.Fatalf("exit %d: %s", code, errOut)
+	}
+	for _, want := range []string{"<sdiv>:", "ite ne", "sdiv.ne r0,r0,r1", "bx lr"} {
+		if !strings.Contains(out, want) {
+			t.Errorf("output missing %q:\n%s", want, out)
+		}
+	}
+	if strings.Contains(out, "<add>") {
+		t.Errorf("--func sdiv printed other functions:\n%s", out)
+	}
+	if code, _, _ := run("disasm", obj, "--func", "nope"); code != 1 {
+		t.Errorf("unknown function: exit %d, want 1", code)
+	}
+}

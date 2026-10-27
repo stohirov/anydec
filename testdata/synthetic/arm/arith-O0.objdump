@@ -1,0 +1,102 @@
+
+testdata/synthetic/arm/arith-O0.o:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00000000 <add>:
+       0: e24dd008     	sub	sp, sp, #8
+       4: e58d0004     	str	r0, [sp, #4]
+       8: e58d1000     	str	r1, [sp]
+       c: e59d0004     	ldr	r0, [sp, #4]
+      10: e59d1000     	ldr	r1, [sp]
+      14: e0800001     	add	r0, r0, r1
+      18: e28dd008     	add	sp, sp, #8
+      1c: e12fff1e     	bx	lr
+
+00000020 <mul_add>:
+      20: e24dd00c     	sub	sp, sp, #12
+      24: e58d0008     	str	r0, [sp, #8]
+      28: e58d1004     	str	r1, [sp, #4]
+      2c: e58d2000     	str	r2, [sp]
+      30: e59d0008     	ldr	r0, [sp, #8]
+      34: e59d1004     	ldr	r1, [sp, #4]
+      38: e59d2000     	ldr	r2, [sp]
+      3c: e0202190     	mla	r0, r0, r1, r2
+      40: e28dd00c     	add	sp, sp, #12
+      44: e12fff1e     	bx	lr
+
+00000048 <shifts>:
+      48: e24dd008     	sub	sp, sp, #8
+      4c: e58d0004     	str	r0, [sp, #4]
+      50: e58d1000     	str	r1, [sp]
+      54: e59d1004     	ldr	r1, [sp, #4]
+      58: e59d2000     	ldr	r2, [sp]
+      5c: e1a00211     	lsl	r0, r1, r2
+      60: e2622020     	rsb	r2, r2, #32
+      64: e0200231     	eor	r0, r0, r1, lsr r2
+      68: e28dd008     	add	sp, sp, #8
+      6c: e12fff1e     	bx	lr
+
+00000070 <sdiv>:
+      70: e92d4800     	push	{r11, lr}
+      74: e24dd010     	sub	sp, sp, #16
+      78: e58d000c     	str	r0, [sp, #12]
+      7c: e58d1008     	str	r1, [sp, #8]
+      80: e59d0008     	ldr	r0, [sp, #8]
+      84: e3500000     	cmp	r0, #0
+      88: 0a000005     	beq	0xa4 <sdiv+0x34>        @ imm = #20
+      8c: eaffffff     	b	0x90 <sdiv+0x20>        @ imm = #-4
+      90: e59d000c     	ldr	r0, [sp, #12]
+      94: e59d1008     	ldr	r1, [sp, #8]
+      98: ebfffffe     	bl	0x98 <sdiv+0x28>        @ imm = #-8
+      9c: e58d0004     	str	r0, [sp, #4]
+      a0: ea000002     	b	0xb0 <sdiv+0x40>        @ imm = #8
+      a4: e3a00000     	mov	r0, #0
+      a8: e58d0004     	str	r0, [sp, #4]
+      ac: eaffffff     	b	0xb0 <sdiv+0x40>        @ imm = #-4
+      b0: e59d0004     	ldr	r0, [sp, #4]
+      b4: e28dd010     	add	sp, sp, #16
+      b8: e8bd8800     	pop	{r11, pc}
+
+000000bc <clamp>:
+      bc: e24dd010     	sub	sp, sp, #16
+      c0: e58d0008     	str	r0, [sp, #8]
+      c4: e58d1004     	str	r1, [sp, #4]
+      c8: e58d2000     	str	r2, [sp]
+      cc: e59d0008     	ldr	r0, [sp, #8]
+      d0: e59d1004     	ldr	r1, [sp, #4]
+      d4: e1500001     	cmp	r0, r1
+      d8: aa000003     	bge	0xec <clamp+0x30>       @ imm = #12
+      dc: eaffffff     	b	0xe0 <clamp+0x24>       @ imm = #-4
+      e0: e59d0004     	ldr	r0, [sp, #4]
+      e4: e58d000c     	str	r0, [sp, #12]
+      e8: ea00000a     	b	0x118 <clamp+0x5c>      @ imm = #40
+      ec: e59d0008     	ldr	r0, [sp, #8]
+      f0: e59d1000     	ldr	r1, [sp]
+      f4: e1500001     	cmp	r0, r1
+      f8: da000003     	ble	0x10c <clamp+0x50>      @ imm = #12
+      fc: eaffffff     	b	0x100 <clamp+0x44>      @ imm = #-4
+     100: e59d0000     	ldr	r0, [sp]
+     104: e58d000c     	str	r0, [sp, #12]
+     108: ea000002     	b	0x118 <clamp+0x5c>      @ imm = #8
+     10c: e59d0008     	ldr	r0, [sp, #8]
+     110: e58d000c     	str	r0, [sp, #12]
+     114: eaffffff     	b	0x118 <clamp+0x5c>      @ imm = #-4
+     118: e59d000c     	ldr	r0, [sp, #12]
+     11c: e28dd010     	add	sp, sp, #16
+     120: e12fff1e     	bx	lr
+
+00000124 <wide_add>:
+     124: e24dd010     	sub	sp, sp, #16
+     128: e58d100c     	str	r1, [sp, #12]
+     12c: e58d0008     	str	r0, [sp, #8]
+     130: e58d3004     	str	r3, [sp, #4]
+     134: e58d2000     	str	r2, [sp]
+     138: e59d0008     	ldr	r0, [sp, #8]
+     13c: e59d100c     	ldr	r1, [sp, #12]
+     140: e59d3000     	ldr	r3, [sp]
+     144: e59d2004     	ldr	r2, [sp, #4]
+     148: e0900003     	adds	r0, r0, r3
+     14c: e0a11002     	adc	r1, r1, r2
+     150: e28dd010     	add	sp, sp, #16
+     154: e12fff1e     	bx	lr

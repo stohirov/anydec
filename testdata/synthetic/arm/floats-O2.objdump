@@ -1,0 +1,65 @@
+
+testdata/synthetic/arm/floats-O2.o:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00000000 <lerp>:
+       0: ee000a10     	vmov	s0, r0
+       4: ee011a10     	vmov	s2, r1
+       8: ee022a10     	vmov	s4, r2
+       c: ee311a40     	vsub.f32	s2, s2, s0
+      10: ee010a02     	vmla.f32	s0, s2, s4
+      14: ee100a10     	vmov	r0, s0
+      18: e12fff1e     	bx	lr
+
+0000001c <poly>:
+      1c: eef00b08     	vmov.f64	d16, #3.000000e+00
+      20: eef01b00     	vmov.f64	d17, #2.000000e+00
+      24: ec410b32     	vmov	d18, r0, r1
+      28: ee421ba0     	vmla.f64	d17, d18, d16
+      2c: eeff0b00     	vmov.f64	d16, #-1.000000e+00
+      30: ee410ba2     	vmla.f64	d16, d17, d18
+      34: eef61b00     	vmov.f64	d17, #5.000000e-01
+      38: ee401ba2     	vmla.f64	d17, d16, d18
+      3c: ec510b31     	vmov	r0, r1, d17
+      40: e12fff1e     	bx	lr
+
+00000044 <to_int>:
+      44: ee000a10     	vmov	s0, r0
+      48: eebd0ac0     	vcvt.s32.f32	s0, s0
+      4c: ee100a10     	vmov	r0, s0
+      50: e12fff1e     	bx	lr
+
+00000054 <from_int>:
+      54: ee000a10     	vmov	s0, r0
+      58: eeb80ac0     	vcvt.f32.s32	s0, s0
+      5c: ee100a10     	vmov	r0, s0
+      60: e12fff1e     	bx	lr
+
+00000064 <widen>:
+      64: ee000a10     	vmov	s0, r0
+      68: eef70ac0     	vcvt.f64.f32	d16, s0
+      6c: ec510b30     	vmov	r0, r1, d16
+      70: e12fff1e     	bx	lr
+
+00000074 <fmax_>:
+      74: ee001a10     	vmov	s0, r1
+      78: ee010a10     	vmov	s2, r0
+      7c: eeb41a40     	vcmp.f32	s2, s0
+      80: eef1fa10     	vmrs	APSR_nzcv, fpscr
+      84: ceb00a41     	vmovgt.f32	s0, s2
+      88: ee100a10     	vmov	r0, s0
+      8c: e12fff1e     	bx	lr
+
+00000090 <dot>:
+      90: ed9f0a08     	vldr	s0, [pc, #32]           @ 0xb8 <dot+0x28>
+      94: e3520001     	cmp	r2, #1
+      98: ba000004     	blt	0xb0 <dot+0x20>         @ imm = #16
+      9c: ecb11a01     	vldmia	r1!, {s2}
+      a0: e2522001     	subs	r2, r2, #1
+      a4: ecb02a01     	vldmia	r0!, {s4}
+      a8: ee020a01     	vmla.f32	s0, s4, s2
+      ac: 1afffffa     	bne	0x9c <dot+0xc>          @ imm = #-24
+      b0: ee100a10     	vmov	r0, s0
+      b4: e12fff1e     	bx	lr
+      b8: 00 00 00 00  	.word	0x00000000

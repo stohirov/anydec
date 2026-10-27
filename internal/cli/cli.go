@@ -2,6 +2,8 @@
 package cli
 
 import (
+	"bufio"
+	"encoding/hex"
 	"errors"
 	"flag"
 	"fmt"
@@ -11,6 +13,7 @@ import (
 
 	"github.com/stohirov/decompile-anything/engine"
 	"github.com/stohirov/decompile-anything/internal/intake"
+	"github.com/stohirov/decompile-anything/internal/loader"
 )
 
 type command struct {
@@ -22,6 +25,7 @@ type command struct {
 
 var commands = []command{
 	{"identify", "identify <file>", "classify a file and report high-entropy regions", runIdentify},
+	{"disasm", "disasm <binary> [--func <name|addr>]", "disassemble code with the SLEIGH decoder", runDisasm},
 	{"unpack", "unpack <firmware> -o <dir>", "recursively extract a firmware image", runUnpack},
 	{"open", "open <binary> --project <file>", "load a binary into a project database", runOpen},
 	{"funcs", "funcs <project> [--filter <text>]", "list discovered functions", runFuncs},
@@ -115,6 +119,84 @@ func runIdentify(args []string, stdout io.Writer) error {
 		fmt.Fprintf(stdout, "  %#08x  %.3f\n", i*intake.BlockSize, r.Entropy[i])
 	}
 	return nil
+}
+
+func runDisasm(args []string, stdout io.Writer) error {
+	fs := flag.NewFlagSet("disasm", flag.ContinueOnError)
+	fn := fs.String("func", "", "only disassemble the function with this name or address")
+	pos, err := parse(fs, args, 1)
+	if err != nil {
+		return err
+	}
+	data, err := os.ReadFile(pos[0])
+	if err != nil {
+		return err
+	}
+	prog, err := engine.Load(data)
+	if err != nil {
+		return err
+	}
+	d, err := engine.NewDisassembler(prog)
+	if err != nil {
+		return err
+	}
+	ranges, err := disasmRanges(prog, *fn)
+	if err != nil {
+		return err
+	}
+	w := bufio.NewWriter(stdout)
+	defer w.Flush()
+	for _, r := range ranges {
+		fmt.Fprintf(w, "\n%s:\n", r.name)
+		err := d.Range(r.start, r.end, func(l engine.Line) {
+			if s, ok := prog.Symbol(l.Addr); ok && s.Kind == loader.SymFunction {
+				fmt.Fprintf(w, "\n%08x <%s>:\n", l.Addr, s.Name)
+			}
+			fmt.Fprintf(w, "%8x: %-12s %s\n", l.Addr, hex.EncodeToString(l.Bytes), l.Text())
+		})
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+type addrRange struct {
+	name       string
+	start, end uint64
+}
+
+// disasmRanges returns the executable segments, or the one function fn
+// names by symbol or address.
+func disasmRanges(prog *engine.Program, fn string) ([]addrRange, error) {
+	if fn == "" {
+		var out []addrRange
+		for _, s := range prog.Segments {
+			if s.Perm&loader.PermX != 0 {
+				out = append(out, addrRange{s.Name, s.Addr, s.End()})
+			}
+		}
+		return out, nil
+	}
+	sym, ok := prog.Lookup(fn)
+	if !ok {
+		addr, err := strconv.ParseUint(fn, 0, 64)
+		if err != nil {
+			return nil, fmt.Errorf("no function %q", fn)
+		}
+		if sym, ok = prog.Symbol(addr); !ok {
+			sym = loader.Symbol{Name: fn, Addr: addr}
+		}
+	}
+	end := sym.Addr + sym.Size
+	if sym.Size == 0 {
+		seg := prog.Segment(sym.Addr)
+		if seg == nil {
+			return nil, fmt.Errorf("address %#x is not mapped", sym.Addr)
+		}
+		end = seg.End()
+	}
+	return []addrRange{{sym.Name, sym.Addr, end}}, nil
 }
 
 func runUnpack(args []string, _ io.Writer) error {

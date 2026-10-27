@@ -1,0 +1,86 @@
+
+testdata/synthetic/thumb-hf/floats-Os.o:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00000000 <lerp>:
+       0: ee30 2ac0    	vsub.f32	s4, s1, s0
+       4: ee22 1a01    	vmul.f32	s2, s4, s2
+       8: ee31 0a00    	vadd.f32	s0, s2, s0
+       c: 4770         	bx	lr
+       e: bf00         	nop
+
+00000010 <poly>:
+      10: b5b0         	push	{r4, r5, r7, lr}
+      12: ed9f 1b13    	vldr	d1, [pc, #76]           @ 0x60 <poly+0x50>
+      16: ec54 5b10    	vmov	r5, r4, d0
+      1a: ec53 2b11    	vmov	r2, r3, d1
+      1e: 4628         	mov	r0, r5
+      20: 4621         	mov	r1, r4
+      22: f7ff fffe    	bl	0x22 <poly+0x12>        @ imm = #-4
+      26: ed9f 0b10    	vldr	d0, [pc, #64]           @ 0x68 <poly+0x58>
+      2a: ec53 2b10    	vmov	r2, r3, d0
+      2e: f7ff fffe    	bl	0x2e <poly+0x1e>        @ imm = #-4
+      32: 462a         	mov	r2, r5
+      34: 4623         	mov	r3, r4
+      36: f7ff fffe    	bl	0x36 <poly+0x26>        @ imm = #-4
+      3a: ed9f 0b0d    	vldr	d0, [pc, #52]           @ 0x70 <poly+0x60>
+      3e: ec53 2b10    	vmov	r2, r3, d0
+      42: f7ff fffe    	bl	0x42 <poly+0x32>        @ imm = #-4
+      46: 462a         	mov	r2, r5
+      48: 4623         	mov	r3, r4
+      4a: f7ff fffe    	bl	0x4a <poly+0x3a>        @ imm = #-4
+      4e: ed9f 0b0a    	vldr	d0, [pc, #40]           @ 0x78 <poly+0x68>
+      52: ec53 2b10    	vmov	r2, r3, d0
+      56: f7ff fffe    	bl	0x56 <poly+0x46>        @ imm = #-4
+      5a: ec41 0b10    	vmov	d0, r0, r1
+      5e: bdb0         	pop	{r4, r5, r7, pc}
+      60: 00 00 00 00  	.word	0x00000000
+      64: 00 00 08 40  	.word	0x40080000
+      68: 00 00 00 00  	.word	0x00000000
+      6c: 00 00 00 40  	.word	0x40000000
+      70: 00 00 00 00  	.word	0x00000000
+      74: 00 00 f0 bf  	.word	0xbff00000
+      78: 00 00 00 00  	.word	0x00000000
+      7c: 00 00 e0 3f  	.word	0x3fe00000
+
+00000080 <to_int>:
+      80: eebd 0ac0    	vcvt.s32.f32	s0, s0
+      84: ee10 0a10    	vmov	r0, s0
+      88: 4770         	bx	lr
+
+0000008a <from_int>:
+      8a: ee00 0a10    	vmov	s0, r0
+      8e: eeb8 0ac0    	vcvt.f32.s32	s0, s0
+      92: 4770         	bx	lr
+
+00000094 <widen>:
+      94: b580         	push	{r7, lr}
+      96: ee10 0a10    	vmov	r0, s0
+      9a: f7ff fffe    	bl	0x9a <widen+0x6>        @ imm = #-4
+      9e: ec41 0b10    	vmov	d0, r0, r1
+      a2: bd80         	pop	{r7, pc}
+
+000000a4 <fmax_>:
+      a4: eeb4 0a60    	vcmp.f32	s0, s1
+      a8: eef1 fa10    	vmrs	APSR_nzcv, fpscr
+      ac: bfc8         	it	gt
+      ae: eef0 0a40    	vmovgt.f32	s1, s0
+      b2: eeb0 0a60    	vmov.f32	s0, s1
+      b6: 4770         	bx	lr
+
+000000b8 <dot>:
+      b8: ed9f 0a08    	vldr	s0, [pc, #32]           @ 0xdc <dot+0x24>
+      bc: 2a01         	cmp	r2, #1
+      be: bfb8         	it	lt
+      c0: 4770         	bxlt	lr
+      c2: bf00         	nop
+      c4: ecb0 1a01    	vldmia	r0!, {s2}
+      c8: ecb1 2a01    	vldmia	r1!, {s4}
+      cc: 3a01         	subs	r2, #1
+      ce: ee21 1a02    	vmul.f32	s2, s2, s4
+      d2: ee31 0a00    	vadd.f32	s0, s2, s0
+      d6: d1f5         	bne	0xc4 <dot+0xc>          @ imm = #-22
+      d8: 4770         	bx	lr
+      da: bf00         	nop
+      dc: 00 00 00 00  	.word	0x00000000

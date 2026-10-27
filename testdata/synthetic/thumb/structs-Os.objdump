@@ -1,0 +1,59 @@
+
+testdata/synthetic/thumb/structs-Os.o:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00000000 <manhattan>:
+       0: f240 0100    	movw	r1, #0
+       4: f2c0 0100    	movt	r1, #0
+       8: 6802         	ldr	r2, [r0]
+       a: 6843         	ldr	r3, [r0, #4]
+       c: 6808         	ldr	r0, [r1]
+       e: 6849         	ldr	r1, [r1, #4]
+      10: 1a10         	subs	r0, r2, r0
+      12: eba3 0101    	sub.w	r1, r3, r1
+      16: bf48         	it	mi
+      18: 4240         	rsbmi	r0, r0, #0
+      1a: 2900         	cmp	r1, #0
+      1c: d500         	bpl	0x20 <manhattan+0x20>   @ imm = #0
+      1e: 4249         	rsbs	r1, r1, #0
+      20: 4408         	add	r0, r1
+      22: 4770         	bx	lr
+
+00000024 <list_sum>:
+      24: b158         	cbz	r0, 0x3e <list_sum+0x1a> @ imm = #22
+      26: 4601         	mov	r1, r0
+      28: 2000         	movs	r0, #0
+      2a: bf00         	nop
+      2c: 7a0a         	ldrb	r2, [r1, #8]
+      2e: b10a         	cbz	r2, 0x34 <list_sum+0x10> @ imm = #2
+      30: 684a         	ldr	r2, [r1, #4]
+      32: 4410         	add	r0, r2
+      34: 6809         	ldr	r1, [r1]
+      36: 2900         	cmp	r1, #0
+      38: bf08         	it	eq
+      3a: 4770         	bxeq	lr
+      3c: e7f6         	b	0x2c <list_sum+0x8>     @ imm = #-20
+      3e: 2000         	movs	r0, #0
+      40: 4770         	bx	lr
+
+00000042 <bump>:
+      42: 2901         	cmp	r1, #1
+      44: db0f         	blt	0x66 <bump+0x24>        @ imm = #30
+      46: 3004         	adds	r0, #4
+      48: 460a         	mov	r2, r1
+      4a: bf00         	nop
+      4c: f850 3c04    	ldr	r3, [r0, #-4]
+      50: 3a01         	subs	r2, #1
+      52: f103 0c01    	add.w	r12, r3, #1
+      56: 6803         	ldr	r3, [r0]
+      58: f840 cc04    	str	r12, [r0, #-4]
+      5c: f103 0302    	add.w	r3, r3, #2
+      60: f840 3b08    	str	r3, [r0], #8
+      64: d1f2         	bne	0x4c <bump+0xa>         @ imm = #-28
+      66: f240 0000    	movw	r0, #0
+      6a: f2c0 0000    	movt	r0, #0
+      6e: 6802         	ldr	r2, [r0]
+      70: 4411         	add	r1, r2
+      72: 6001         	str	r1, [r0]
+      74: 4770         	bx	lr

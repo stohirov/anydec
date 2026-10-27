@@ -1,0 +1,122 @@
+
+testdata/synthetic/arm/floats-O0.o:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00000000 <lerp>:
+       0: e24dd00c     	sub	sp, sp, #12
+       4: ee002a10     	vmov	s0, r2
+       8: ee001a10     	vmov	s0, r1
+       c: ee000a10     	vmov	s0, r0
+      10: e58d0008     	str	r0, [sp, #8]
+      14: e58d1004     	str	r1, [sp, #4]
+      18: e58d2000     	str	r2, [sp]
+      1c: ed9d0a02     	vldr	s0, [sp, #8]
+      20: ed9d1a01     	vldr	s2, [sp, #4]
+      24: ee311a40     	vsub.f32	s2, s2, s0
+      28: ed9d2a00     	vldr	s4, [sp]
+      2c: ee010a02     	vmla.f32	s0, s2, s4
+      30: ee100a10     	vmov	r0, s0
+      34: e28dd00c     	add	sp, sp, #12
+      38: e12fff1e     	bx	lr
+
+0000003c <poly>:
+      3c: e24dd008     	sub	sp, sp, #8
+      40: ec410b30     	vmov	d16, r0, r1
+      44: edcd0b00     	vstr	d16, [sp]
+      48: eddd2b00     	vldr	d18, [sp]
+      4c: eef01b08     	vmov.f64	d17, #3.000000e+00
+      50: eef00b00     	vmov.f64	d16, #2.000000e+00
+      54: ee420ba1     	vmla.f64	d16, d18, d17
+      58: eeff1b00     	vmov.f64	d17, #-1.000000e+00
+      5c: ee401ba2     	vmla.f64	d17, d16, d18
+      60: eef60b00     	vmov.f64	d16, #5.000000e-01
+      64: ee410ba2     	vmla.f64	d16, d17, d18
+      68: ec510b30     	vmov	r0, r1, d16
+      6c: e28dd008     	add	sp, sp, #8
+      70: e12fff1e     	bx	lr
+
+00000074 <to_int>:
+      74: e24dd004     	sub	sp, sp, #4
+      78: ee000a10     	vmov	s0, r0
+      7c: e58d0000     	str	r0, [sp]
+      80: ed9d0a00     	vldr	s0, [sp]
+      84: eebd0ac0     	vcvt.s32.f32	s0, s0
+      88: ee100a10     	vmov	r0, s0
+      8c: e28dd004     	add	sp, sp, #4
+      90: e12fff1e     	bx	lr
+
+00000094 <from_int>:
+      94: e24dd004     	sub	sp, sp, #4
+      98: e58d0000     	str	r0, [sp]
+      9c: ed9d0a00     	vldr	s0, [sp]
+      a0: eeb80ac0     	vcvt.f32.s32	s0, s0
+      a4: ee100a10     	vmov	r0, s0
+      a8: e28dd004     	add	sp, sp, #4
+      ac: e12fff1e     	bx	lr
+
+000000b0 <widen>:
+      b0: e24dd004     	sub	sp, sp, #4
+      b4: ee000a10     	vmov	s0, r0
+      b8: e58d0000     	str	r0, [sp]
+      bc: ed9d0a00     	vldr	s0, [sp]
+      c0: eef70ac0     	vcvt.f64.f32	d16, s0
+      c4: ec510b30     	vmov	r0, r1, d16
+      c8: e28dd004     	add	sp, sp, #4
+      cc: e12fff1e     	bx	lr
+
+000000d0 <fmax_>:
+      d0: e24dd00c     	sub	sp, sp, #12
+      d4: ee001a10     	vmov	s0, r1
+      d8: ee000a10     	vmov	s0, r0
+      dc: e58d0008     	str	r0, [sp, #8]
+      e0: e58d1004     	str	r1, [sp, #4]
+      e4: ed9d0a02     	vldr	s0, [sp, #8]
+      e8: ed9d1a01     	vldr	s2, [sp, #4]
+      ec: eeb40a41     	vcmp.f32	s0, s2
+      f0: eef1fa10     	vmrs	APSR_nzcv, fpscr
+      f4: da000003     	ble	0x108 <fmax_+0x38>      @ imm = #12
+      f8: eaffffff     	b	0xfc <fmax_+0x2c>       @ imm = #-4
+      fc: ed9d0a02     	vldr	s0, [sp, #8]
+     100: ed8d0a00     	vstr	s0, [sp]
+     104: ea000002     	b	0x114 <fmax_+0x44>      @ imm = #8
+     108: ed9d0a01     	vldr	s0, [sp, #4]
+     10c: ed8d0a00     	vstr	s0, [sp]
+     110: eaffffff     	b	0x114 <fmax_+0x44>      @ imm = #-4
+     114: ed9d0a00     	vldr	s0, [sp]
+     118: ee100a10     	vmov	r0, s0
+     11c: e28dd00c     	add	sp, sp, #12
+     120: e12fff1e     	bx	lr
+
+00000124 <dot>:
+     124: e24dd014     	sub	sp, sp, #20
+     128: e58d0010     	str	r0, [sp, #16]
+     12c: e58d100c     	str	r1, [sp, #12]
+     130: e58d2008     	str	r2, [sp, #8]
+     134: e3a00000     	mov	r0, #0
+     138: e58d0004     	str	r0, [sp, #4]
+     13c: e58d0000     	str	r0, [sp]
+     140: eaffffff     	b	0x144 <dot+0x20>        @ imm = #-4
+     144: e59d0000     	ldr	r0, [sp]
+     148: e59d1008     	ldr	r1, [sp, #8]
+     14c: e1500001     	cmp	r0, r1
+     150: aa00000f     	bge	0x194 <dot+0x70>        @ imm = #60
+     154: eaffffff     	b	0x158 <dot+0x34>        @ imm = #-4
+     158: e59d0010     	ldr	r0, [sp, #16]
+     15c: e59d1000     	ldr	r1, [sp]
+     160: e0800101     	add	r0, r0, r1, lsl #2
+     164: ed901a00     	vldr	s2, [r0]
+     168: e59d000c     	ldr	r0, [sp, #12]
+     16c: e0800101     	add	r0, r0, r1, lsl #2
+     170: ed902a00     	vldr	s4, [r0]
+     174: ed9d0a01     	vldr	s0, [sp, #4]
+     178: ee010a02     	vmla.f32	s0, s2, s4
+     17c: ed8d0a01     	vstr	s0, [sp, #4]
+     180: eaffffff     	b	0x184 <dot+0x60>        @ imm = #-4
+     184: e59d0000     	ldr	r0, [sp]
+     188: e2800001     	add	r0, r0, #1
+     18c: e58d0000     	str	r0, [sp]
+     190: eaffffeb     	b	0x144 <dot+0x20>        @ imm = #-84
+     194: e59d0004     	ldr	r0, [sp, #4]
+     198: e28dd014     	add	sp, sp, #20
+     19c: e12fff1e     	bx	lr
